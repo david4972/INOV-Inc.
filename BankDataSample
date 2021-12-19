@@ -1,0 +1,15 @@
+import sqlite3
+
+conn = sqlite3.connect('data.db')
+
+
+
+# var = int(input("enter pin: "))
+data_check = conn.execute("SELECT name, Type, Pin, Current, Saving, Country, Address FROM InovClients ")
+# res = data_check.fetchall()
+for row in data_check:
+    print("Account Name=", row[0], 
+          "Account Type=", row[1], 
+           "Pin=", row[2], 
+           "Current Balance=", row[3], 
+           "Saving Balance=", row[4])
