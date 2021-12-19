@@ -1,0 +1,34 @@
+import smtplib
+
+# sample-test
+email = input("email: ")
+trans = "100"
+name = "Jim"
+
+sender_email = "monetarytransatlantic@gmail.com"
+rec_email = email
+password = "Forsure34"
+message = "You have received $" + trans + " from " + name
+
+
+if "gmail" in email:
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(sender_email, password)
+    print("login success")
+    server.sendmail(sender_email, rec_email, message)
+
+if "yahoo" in email:
+    fromMy = 'dokoronkwo167@yahoo.com'
+    to = email
+    subj = 'Transaction'
+
+    msg = "From: %s\nTo: %s\nSubject: %s\n\n%s" % (fromMy, to, subj, message)
+
+    username = 'dokoronkwo167@yahoo.com'
+    password2 = "jiegwhlsvpkrpuag"
+    server = smtplib.SMTP("smtp.mail.yahoo.com", 587)
+    server.starttls()
+    server.login(username, password2)
+    server.sendmail(fromMy, to, msg)
+    print('ok the email has sent ')
