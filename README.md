@@ -14,11 +14,10 @@ For more rural areas around the world. We plan on leveraging the SMS/text messag
 
 We are Currently have an Executive Team 
 they are:
-
-David Okoronkwo - co-CEO, Head of Strategy, Interim CTO
-Patrick Crispino - co-CEO, CIO
-Zachary Merrill - Investor Relations, Head of Marketing/Public relations
-Juyon Kim - COO
+~ David Okoronkwo - co-CEO, Head of Strategy, Interim CTO
+~ Patrick Crispino - co-CEO, CIO
+~ Zachary Merrill - Investor Relations, Head of Marketing/Public relations
+~ Juyon Kim - COO
 
 Our Goal - To Advance the global credit system and the way retail and institutional Banking is done, pushing to more automated and efficient financial markets.
 
