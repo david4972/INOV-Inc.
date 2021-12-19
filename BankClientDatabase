@@ -2,6 +2,4 @@ import sqlite3
 
 conn = sqlite3.connect('data.db')
 
-print("table created respectfully")
-
-conn.close()
+print(conn)
