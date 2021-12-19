@@ -2,4 +2,18 @@ import sqlite3
 
 conn = sqlite3.connect('data.db')
 
-print(conn)
+conn.execute('''CREATE TABLE InovClients
+            (name VARCHAR(255),
+            email VARCHAR(255),
+            Pin INT(4),
+            DCL INT(250),
+            Type VARCHAR(255),
+            Current INT(150),
+            Saving INT(150),
+            Address VARCHAR(255),
+            Country VARCHAR(255),
+            Currency VARCHAR(255))''')
+
+print("table created respectfully")
+
+conn.close()
