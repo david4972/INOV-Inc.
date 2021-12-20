@@ -13,7 +13,7 @@ As I hope to build this On a global spectrum, INOV has a feature that would allo
 For more rural areas around the world. We plan on leveraging the SMS/text message to enable more access to capital for global small business growth. 
 
 We are Currently have an Executive Team 
-they are:
+they consisit of:
 ~ David Okoronkwo - co-CEO, Head of Strategy, Interim CTO
 ~ Patrick Crispino - co-CEO, CIO
 ~ Zachary Merrill - Investor Relations, Head of Marketing/Public relations
