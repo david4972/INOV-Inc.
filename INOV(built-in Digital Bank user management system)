@@ -590,7 +590,7 @@ def LoginAccount():
     print("========== (1). Deposit Money ============")
     print("========== (2). Print Bank Statement ============")
     print("========== (3). Loan ============")
-    print("========== (4). transfer money ============")
+    print("========== (4). Send money ============")
     print("========== (5). get new pin ============")
     print("========== (6). ATM ============")
     print("========== (7). Quit ============")
@@ -603,7 +603,7 @@ def LoginAccount():
     if let == "3":
         Loan()
     if let == "4":
-        transfer_within_bank()
+        transactions()
     if let == "5":
         new_pin()
     if let == "6":
@@ -621,7 +621,7 @@ def intro():
     print("========== (3). Deposit Money ============")
     print("========== (4). Print Bank Statement ============")
     print("========== (5). Loan ============")
-    print("========== (6). transfer money ============")
+    print("========== (6). Send money ============")
     print("========== (7). get new pin ============")
     print("========== (8). ATM ============")
     print("========== (9). Currency Exchange ============")
@@ -639,7 +639,7 @@ def intro():
     if letter == "5":
         Loan()
     if letter == "6":
-        transfer_within_bank()
+        transactions()
     if letter == "7":
         new_pin()
     if letter == "8":
