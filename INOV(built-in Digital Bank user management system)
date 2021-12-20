@@ -2,7 +2,6 @@ import smtplib
 import os
 import random
 import sqlite3
-from pyOutlook import OutlookAccount
 from io import StringIO
 
 # main Global Currencies (Yen, USD, EU, Pounds)
