@@ -5,7 +5,7 @@ email = input("email: ")
 trans = "100"
 name = "Jim"
 
-sender_email = "monetarytransatlantic@gmail.com"
+sender_email = "openinternationalbanking@gmail.com"
 rec_email = email
 password = "Forsure34"
 message = "You have received $" + trans + " from " + name
