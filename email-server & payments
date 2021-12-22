@@ -1,34 +1,211 @@
 import smtplib
 
-# sample-test
-email = input("email: ")
-trans = "100"
-name = "Jim"
 
-sender_email = "openinternationalbanking@gmail.com"
-rec_email = email
-password = "Forsure34"
-message = "You have received $" + trans + " from " + name
+def send_mail_for_personal_loan(mw=str, pl=int, c=str):
+    sender_email = "openinternationalbanking@gmail.com"
+    rec_email = mw
+    password = "Forsure34"
+
+    message = "You have just Received a Personal Loan from OIB that has deposited $ " + [
+        {pl}] + "into your " + c + " account."
+
+    if "gmail" in mw:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(sender_email, password)
+        print("login success")
+        server.sendmail(sender_email, rec_email, message)
+
+    if "yahoo" in mw:
+        fromMy = "openbank143@yahoo.com"
+        to = mw
+        subj = 'Personal Loan'
+
+        msg = "From: %s\nTo: %s\nSubject: %s\n\n%s" % (fromMy, to, subj, message)
+
+        username = "openbank143@yahoo.com"
+        password2 = "holiday20!"
+        server = smtplib.SMTP("smtp.mail.yahoo.com", 587)
+        server.starttls()
+        server.login(username, password2)
+        server.sendmail(fromMy, to, msg)
 
 
-if "gmail" in email:
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()
-    server.login(sender_email, password)
-    print("login success")
-    server.sendmail(sender_email, rec_email, message)
+def send_mail_for_business_loan(bl2=int, mt=str, c=str):
+    sender_email = "openinternationalbanking@gmail.com"
+    rec_email = mt
+    password = "Forsure34"
+    message = "You have received a Business loan from OIB that has been deposited  $" + [
+        {bl2}] + "into your " + c + " account"
 
-if "yahoo" in email:
-    fromMy = 'dokoronkwo167@yahoo.com'
-    to = email
-    subj = 'Transaction'
+    if "gmail" in mt:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(sender_email, password)
+        print("login success")
+        server.sendmail(sender_email, rec_email, message)
 
-    msg = "From: %s\nTo: %s\nSubject: %s\n\n%s" % (fromMy, to, subj, message)
+    if "yahoo" in mt:
+        fromMy = "openbank143@yahoo.com"
+        to = mt
+        subj = 'Business Loan'
 
-    username = 'dokoronkwo167@yahoo.com'
-    password2 = "jiegwhlsvpkrpuag"
-    server = smtplib.SMTP("smtp.mail.yahoo.com", 587)
-    server.starttls()
-    server.login(username, password2)
-    server.sendmail(fromMy, to, msg)
-    print('ok the email has sent ')
+        msg = "From: %s\nTo: %s\nSubject: %s\n\n%s" % (fromMy, to, subj, message)
+
+        username = "openbank143@yahoo.com"
+        password2 = "holiday20!"
+        server = smtplib.SMTP("smtp.mail.yahoo.com", 587)
+        server.starttls()
+        server.login(username, password2)
+        server.sendmail(fromMy, to, msg)
+
+
+def send_mail_for_new_pin(p=int, mz=str):
+    msg = "{} this is your new pin Number please, take good care. Feel free to reach out if you encounter any issue"
+    new = (msg.format(p))
+
+    sender_email = "openinternationalbanking@gmail.com"
+    rec_email = mz
+    password = "Forsure34"
+    message = new
+
+    if "gmail" in mz:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(sender_email, password)
+        print("login success")
+        server.sendmail(sender_email, rec_email, message)
+
+    if "yahoo" in mz:
+        fromMy = "openbank143@yahoo.com"
+        to = mz
+        subj = 'New Pin Number'
+
+        msg = "From: %s\nTo: %s\nSubject: %s\n\n%s" % (fromMy, to, subj, message)
+
+        username = "openbank143@yahoo.com"
+        password2 = "holiday20!"
+        server = smtplib.SMTP("smtp.mail.yahoo.com", 587)
+        server.starttls()
+        server.login(username, password2)
+        server.sendmail(fromMy, to, msg)
+        print('ok the email has sent ')
+
+
+def send_mail_for_Transactions(n=str, m=str):
+    email = m
+    trans = "100"
+    name = n
+
+    sender_email = "monetarytransatlantic@gmail.com"
+    rec_email = email
+    password = "Forsure34"
+    message = "You have received $" + trans + " from " + name
+
+    if "gmail" in email:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(sender_email, password)
+        server.sendmail(sender_email, rec_email, message)
+
+    if "yahoo" in email:
+        fromMy = 'dokoronkwo167@yahoo.com'
+        to = email
+        subj = 'Transaction'
+
+        msg = "From: %s\nTo: %s\nSubject: %s\n\n%s" % (fromMy, to, subj, message)
+
+        username = 'dokoronkwo167@yahoo.com'
+        password2 = "jiegwhlsvpkrpuag"
+        server = smtplib.SMTP("smtp.mail.yahoo.com", 587)
+        server.starttls()
+        server.login(username, password2)
+        server.sendmail(fromMy, to, msg)
+
+
+def send_mail_for_new_account(m2=str):
+    sender_email = "openinternationalbanking@gmail.com"
+    rec_email = m2
+    password = "Forsure34"
+    message = "CONGRATS!!! You have just opened a new account with INOV Financials Inc. " \
+              "INOV is a fintech platform " \
+              "that gives users full control over their traditional banking and personal finance." \
+              "To see more things you can do on the go with INOV feel free to check the application."
+
+    if "gmail" in m2:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(sender_email, password)
+        print("login success")
+        server.sendmail(sender_email, rec_email, message)
+
+    if "yahoo" in m2:
+        fromMy = "openbank143@yahoo.com"
+        to = m2
+        subj = 'NEW ACCOUNT!!!!!'
+
+        msg = "From: %s\nTo: %s\nSubject: %s\n\n%s" % (fromMy, to, subj, message)
+
+        username = "openbank143@yahoo.com"
+        password2 = "holiday20!"
+        server = smtplib.SMTP("smtp.mail.yahoo.com", 587)
+        server.starttls()
+        server.login(username, password2)
+        server.sendmail(fromMy, to, msg)
+        print('ok the email has sent ')
+
+
+def send_mail_for_deposits_checking(depo=int, m3=str):
+    sender_email = "openinternationalbanking@gmail.com"
+    rec_email = m3
+    password = "Forsure34"
+    message = "You just made a deposit into your Current account of $ " + [{depo}]
+
+    if "gmail" in m3:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(sender_email, password)
+        print("login success")
+        server.sendmail(sender_email, rec_email, message)
+
+    if "yahoo" in m3:
+        fromMy = "openbank143@yahoo.com"
+        to = m3
+        subj = 'Current account Deposit'
+
+        msg = "From: %s\nTo: %s\nSubject: %s\n\n%s" % (fromMy, to, subj, message)
+
+        username = "openbank143@yahoo.com"
+        password2 = "holiday20!"
+        server = smtplib.SMTP("smtp.mail.yahoo.com", 587)
+        server.starttls()
+        server.login(username, password2)
+        server.sendmail(fromMy, to, msg)
+
+
+def send_mail_for_deposits_saving(depo2=int, m4=str):
+    sender_email = "openinternationalbanking@gmail.com"
+    rec_email = m4
+    password = "Forsure34"
+    message = "You just made a deposit into your savings account of $ " + [{depo2}]
+
+    if "gmail" in m4:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(sender_email, password)
+        print("login success")
+        server.sendmail(sender_email, rec_email, message)
+
+    if "yahoo" in m4:
+        fromMy = "openbank143@yahoo.com"
+        to = m4
+        subj = 'Savings account Deposit'
+
+        msg = "From: %s\nTo: %s\nSubject: %s\n\n%s" % (fromMy, to, subj, message)
+
+        username = "openbank143@yahoo.com"
+        password2 = "holiday20!"
+        server = smtplib.SMTP("smtp.mail.yahoo.com", 587)
+        server.starttls()
+        server.login(username, password2)
+        server.sendmail(fromMy, to, msg)
