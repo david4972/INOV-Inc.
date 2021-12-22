@@ -1,8 +1,7 @@
-import smtplib
-import os
+import EmailSender
+import Transactions
 import random
 import sqlite3
-from forex_python.converter import CurrencyRates
 from io import StringIO
 
 # main Global Currencies (Yen, USD, EU, Pounds)
@@ -13,7 +12,6 @@ conn = db.cursor()
 # main exchange rates (Yen, USD, EU, Pounds)
 
 def Curr_exchange():
-    c = CurrencyRates()
     name = input("please enter the full name your account is in: ")
     pin = input("please enter your account pin: ")
     data_current = conn.execute(
@@ -37,77 +35,17 @@ def Curr_exchange():
     print("(6). JPY")
     curr = input()
     if curr == "1":
-        var1 = "USD"
-        cex1 = c.get_rate('USD', 'USD')
-        cex2 = c.get_rate('USD', 'USD')
-        conn.execute('UPDATE InovClients SET Current=Current/?, Saving=Saving/? Currency=? WHERE name=?',
-                     [cex1, cex2, var1, name])
-        print("You will be charged 1.3% upon this exchange")
-        rate_r = 5
-        conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, name])
-        conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, name])
-        conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
-        db.commit()
+        Transactions.get_CurrencyExchange_USD(name)
     if curr == "2":
-        var2 = "EUR"
-        dex1 = c.get_rate('USD', 'EUR')
-        dex2 = c.get_rate('USD', 'EUR')
-        conn.execute('UPDATE InovClients SET Current=Current/?, Saving=Saving/?, Currency=? WHERE name=?',
-                     [dex1, dex2, var2, name])
-        print("You will be charged 1.3% upon this exchange")
-        rate_r = 5
-        conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, name])
-        conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, name])
-        conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
-        db.commit()
+        Transactions.get_CurrencyExchange_EUR(name)
     if curr == "3":
-        var3 = "GBP"
-        fex3 = c.get_rate('USD', 'GBP')
-        fex4 = c.get_rate('USD', 'GBP')
-        conn.execute('UPDATE InovClients SET Current=Current/?, Saving=Saving/?, Currency=? WHERE name=?',
-                     [fex3, fex4, var3, name])
-        print("You will be charged 1.3% upon this exchange")
-        rate_r = 5
-        conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, name])
-        conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, name])
-        conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
-        db.commit()
+        Transactions.get_CurrencyExchange_GBP(name)
     if curr == "4":
-        var4 = "AUS"
-        gex4 = c.get_rate('USD', 'AUS')
-        gex5 = c.get_rate('USD', 'AUS')
-        conn.execute('UPDATE InovClients SET Current=Current/?, Saving=Saving/?, Currency=? WHERE name=?',
-                     [gex4, gex5,  var4, name])
-        print("You will be charged 1.3% upon this exchange")
-        rate_r = 5
-        conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, name])
-        conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, name])
-        conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
-        db.commit()
+        Transactions.get_CurrencyExchange_AUS(name)
     if curr == "5":
-        var5 = "CNY"
-        hex5 = c.get_rate('USD', 'CNY')
-        hex6 = c.get_rate('USD', 'CNY')
-        conn.execute('UPDATE InovClients SET Current=Current/?, Saving=Saving/?, Currency=? WHERE name=?',
-                     [hex5, hex6, var5, name])
-        print("You will be charged 1.3% upon this exchange")
-        rate_r = 5
-        conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, name])
-        conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, name])
-        conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
-        db.commit()
+        Transactions.get_CurrencyExchange_CNY(name)
     if curr == "6":
-        var6 = "JPY"
-        hex6 = c.get_rate('USD', 'JPY')
-        hex7 = c.get_rate('USD', 'JPY')
-        conn.execute('UPDATE InovClients SET Current=Current/?, Saving=Saving/?, Currency=? WHERE name=?',
-                     [hex6, hex7, var6, name])
-        print("You will be charged 1.3% upon this exchange")
-        rate_r = 5
-        conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, name])
-        conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, name])
-        conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
-        db.commit()
+        Transactions.get_CurrencyExchange_JPY(name)
 
     print("You're exchange has been completed. Enjoy!!! ")
     intro()
@@ -125,43 +63,26 @@ def atm():
         print("Account Type = ", x[1])
 
     print("choose an account to withdraw from: ")
-    print("(1). Current")
+    print("(1). Checking")
     print("(2). Savings")
     print("(3). exit")
 
     var = input()
+
     if var == "1":
-        res2 = data_current.fetchall()
-        for x in res2:
-            print("Account Name = ", x[0])
-            print("Account Type = ", x[1])
-            print("Current Balance = ", x[2])
-            print("Saving Balance = ", x[3])
+        dep = int(input("How much would you like to withdraw today: "))
+        print("You will be charged 1.3% upon withdrawal")
+        rate_r = dep * 0.013
+        Transactions.use_atm_Checking(name, dep, rate_r)
+        print("Money withdrawn, have a great day!")
 
     if var == "2":
-        print("(1). Current")
-        print("(2). Savings")
-        var2 = input()
-        if var2 == "1":
-            dep = int(input("How much would you like to withdraw today: "))
-            print("You will be charged 1.3% upon withdrawal")
-            rate_r = dep * 0.013
-            conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [dep, name])
-            conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, name])
-            conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
-            db.commit()
+        dep = int(input("How much would you like to withdraw today: "))
+        print("You will be charged 1.3% upon withdrawal")
+        rate_r = dep * 0.013
+        Transactions.use_atm_Savings(name, dep, rate_r)
+        print("Money withdrawn, have a great day!")
 
-            print("Money withdrawn, have a great day!")
-
-            if var2 == "2":
-                dep = int(input("How much would you like to withdraw today: "))
-                print("You will be charged 1.3% upon withdrawal")
-                rate_r = dep * 0.013
-                conn.execute('UPDATE InovClients SET Savings=Savings-? WHERE name=?', [dep, name])
-                conn.execute('UPDATE InovClients SET Savings=Savings-? WHERE name=?', [rate_r, name])
-                conn.execute('UPDATE InovClients SET Savings=Savings+? WHERE name=INOV Financials LLC', [rate_r])
-                db.commit()
-                print("Money withdrawn, have a great day!")
     if var == "3":
         intro()
 
@@ -182,44 +103,11 @@ def new_pin():
         print("Country = ", x[5])
 
     new_p = random.randint(1111, 9999)
-    conn.execute('UPDATE InovClients SET Pin=? WHERE email=?', [new_p, email])
-    db.commit()
-
-    msg = "{} this is your new pin Number please, take good care. Feel free to reach out if you encounter any issue"
-    new = (msg.format(new_p))
-
-    sender_email = "openinternationalbanking@gmail.com"
-    rec_email = email
-    password = "Forsure34"
-    message = new
-
-    if "gmail" in email:
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(sender_email, password)
-        print("login success")
-        server.sendmail(sender_email, rec_email, message)
-
-    if "yahoo" in email:
-        fromMy = "openbank143@yahoo.com"
-        to = email
-        subj = 'New Pin Number'
-
-        msg = "From: %s\nTo: %s\nSubject: %s\n\n%s" % (fromMy, to, subj, message)
-
-        username = "openbank143@yahoo.com"
-        password2 = "holiday20!"
-        server = smtplib.SMTP("smtp.mail.yahoo.com", 587)
-        server.starttls()
-        server.login(username, password2)
-        server.sendmail(fromMy, to, msg)
-        print('ok the email has sent ')
-
-
+    Transactions.get_new_pin(email, new_p)
     intro()
 
 
-def transfer_within_bank():
+def transactions():
     name = input("please enter the full name your account is in: ")
     data_current = conn.execute('SELECT name, Type, email, Current, Saving FROM InovClients WHERE name=?',
                                 [name])
@@ -232,12 +120,7 @@ def transfer_within_bank():
 
     name2 = input("what is the email of the person you'll be transferring money to: ")
     trans = int(input("how much will you sending today: "))
-    conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [trans, name])
-    db.commit()
-
-    conn.execute('UPDATE InovClients SET Current=Current+? WHERE email=?', [trans, name2])
-    db.commit()
-
+    Transactions.send_money(trans, name, name2)
     print("transfer made")
     intro()
 
@@ -290,62 +173,32 @@ def Loan():
         print("========== (2). Savings ==========")
         choice = input()
         if choice == "1":
-            conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=?', [Business_loan, name])
-            db.commit()
+            Transactions.get_businessloan_checking(Business_loan, name)
         if choice == "2":
-            conn.execute('UPDATE InovClients SET Saving=Saving+? WHERE name=?', [Business_loan, name])
+            Transactions.get_businessloan_savings(Business_loan, name)
 
-        sender_email = "openinternationalbanking@gmail.com"
-        rec_email = email
-        password = "Forsure34"
-        message = "You have received a Business loan from OIB that has been deposited  $" + [
-            {Business_loan}] + "into your " + choice + " account"
-
-        if "gmail" in email:
-            server = smtplib.SMTP('smtp.gmail.com', 587)
-            server.starttls()
-            server.login(sender_email, password)
-            print("login success")
-            server.sendmail(sender_email, rec_email, message)
-
-        if "yahoo" in email:
-            fromMy = "openbank143@yahoo.com"
-            to = email
-            subj = 'Business Loan'
-
-            msg = "From: %s\nTo: %s\nSubject: %s\n\n%s" % (fromMy, to, subj, message)
-
-            username = "openbank143@yahoo.com"
-            password2 = "holiday20!"
-            server = smtplib.SMTP("smtp.mail.yahoo.com", 587)
-            server.starttls()
-            server.login(username, password2)
-            server.sendmail(fromMy, to, msg)
-
-
-
-        print('ok the email has sent ')
+        EmailSender.send_mail_for_business_loan(Business_loan, email, choice)
 
     if ans == "2":
-        print("Personal loans are given at an interest rate of 2%")
+        print("Personal loans are given at an interest rate of 1.5%")
         print("Loan amounts for range from 5,000 - 100,000")
         personal_loan = int(input("please enter loan amount: "))
         if personal_loan == 5000:
-            r = 0.02
+            r = 0.015
             n = 12
             p = personal_loan * (1 - (1 + r) ^ -n) / r
             result = "Your Loan has been granted Monetary Transatlantic, you will be paying {} monthly over a 12 month " \
                      "period "
             print(result.format(p))
         if 5000 > personal_loan <= 75000:
-            r = 0.02
+            r = 0.015
             n = 24
             p = personal_loan * (1 - (1 + r) ^ -n) / r
             result = "Your Loan has been granted Monetary Transatlantic, you will be paying {} monthly over a 24 month " \
                      "period "
             print(result.format(p))
         if 75000 > personal_loan <= 100000:
-            r = 0.02
+            r = 0.015
             n = 24
             p = personal_loan * (1 - (1 + r) ^ -n) / r
             result = "Your Loan has been granted from Monetary Transatlantic Bank, you will be paying {} monthly over " \
@@ -357,50 +210,17 @@ def Loan():
         print("========== (2). Savings ==========")
         choice = input()
         if choice == "1":
-            conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=?', [personal_loan, name])
-            db.commit()
+            Transactions.get_personalloan_checking(personal_loan, name)
         if choice == "2":
-            conn.execute('UPDATE InovClients SET Saving=Saving+? WHERE name=?', [personal_loan, name])
+            Transactions.get_personalloan_Savings(personal_loan, name)
 
-        sender_email = "openinternationalbanking@gmail.com"
-        rec_email = email
-        password = "Forsure34"
-
-        message = "You have just Received a Personal Loan from OIB that has deposited $ " + [
-            {personal_loan}] + "into your " + choice + " account."
-
-        if "gmail" in email:
-            server = smtplib.SMTP('smtp.gmail.com', 587)
-            server.starttls()
-            server.login(sender_email, password)
-            print("login success")
-            server.sendmail(sender_email, rec_email, message)
-
-        if "yahoo" in email:
-            fromMy = "openbank143@yahoo.com"
-            to = email
-            subj = 'Personal Loan'
-
-            msg = "From: %s\nTo: %s\nSubject: %s\n\n%s" % (fromMy, to, subj, message)
-
-            username = "openbank143@yahoo.com"
-            password2 = "holiday20!"
-            server = smtplib.SMTP("smtp.mail.yahoo.com", 587)
-            server.starttls()
-            server.login(username, password2)
-            server.sendmail(fromMy, to, msg)
-            print('ok the email has sent ')
-
-
-
-    os.system("say 'Process finished'")
     intro()
 
 
 def BankStatement():
     pin = input("please enter the pin your account is in: ")
     data_current = conn.execute('SELECT Pin, name, Type, Current, Saving, Address, Country, Currency FROM InovClients'
-                                'WHERE name=?' [pin])
+                                'WHERE name=?'[pin])
     res = data_current.fetchall()
     for x in res:
         print("Account Name = ", x[1])
@@ -408,8 +228,6 @@ def BankStatement():
         print("Savings Balance = ", x[3])
         print("Current Balance = ", x[4])
         print("Currency held = ", x[7])
-
-
 
     # intro()
 
@@ -432,70 +250,14 @@ def Deposit():
 
     if ans == "1":
         dep = int(input("How much would you like to deposit today: "))
-        conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=?', [dep, name])
-        db.commit()
+        Transactions.enter_deposit_Checking(name, dep)
         print("deposit has been made")
-        sender_email = "openinternationalbanking@gmail.com"
-        rec_email = email
-        password = "Forsure34"
-        message = "You just made a deposit into your Current account of $ " + [{dep}]
-
-        if "gmail" in email:
-            server = smtplib.SMTP('smtp.gmail.com', 587)
-            server.starttls()
-            server.login(sender_email, password)
-            print("login success")
-            server.sendmail(sender_email, rec_email, message)
-
-        if "yahoo" in email:
-            fromMy = "openbank143@yahoo.com"
-            to = email
-            subj = 'Current account Deposit'
-
-            msg = "From: %s\nTo: %s\nSubject: %s\n\n%s" % (fromMy, to, subj, message)
-
-            username = "openbank143@yahoo.com"
-            password2 = "holiday20!"
-            server = smtplib.SMTP("smtp.mail.yahoo.com", 587)
-            server.starttls()
-            server.login(username, password2)
-            server.sendmail(fromMy, to, msg)
-
 
     if ans == "2":
         dep = int(input("How much would you like to deposit today: "))
-        conn.execute('UPDATE InovClients SET Saving=Saving+? WHERE name=?', [dep, name])
-        db.commit()
-        os.system("say 'deposit has been made'")
-        sender_email = "openinternationalbanking@gmail.com"
-        rec_email = email
-        password = "Forsure34"
-        message = "You just made a deposit into your savings account of $ " + [{dep}]
+        Transactions.enter_deposit_Savings(name, dep)
+        print("deposit has been made")
 
-        if "gmail" in email:
-            server = smtplib.SMTP('smtp.gmail.com', 587)
-            server.starttls()
-            server.login(sender_email, password)
-            print("login success")
-            server.sendmail(sender_email, rec_email, message)
-
-        if "yahoo" in email:
-            fromMy = "openbank143@yahoo.com"
-            to = email
-            subj = 'Savings account Deposit'
-
-            msg = "From: %s\nTo: %s\nSubject: %s\n\n%s" % (fromMy, to, subj, message)
-
-            username = "openbank143@yahoo.com"
-            password2 = "holiday20!"
-            server = smtplib.SMTP("smtp.mail.yahoo.com", 587)
-            server.starttls()
-            server.login(username, password2)
-            server.sendmail(fromMy, to, msg)
-
-
-
-    print('ok the email has sent ')
     intro()
 
 
@@ -552,38 +314,6 @@ def OpenAccount():
         print("info saved to database")
         print("Account created")
 
-        sender_email = "openinternationalbanking@gmail.com"
-        rec_email = email
-        password = "Forsure34"
-        message = "CONGRATS!!! You have just opened a new account with INOV Financials Inc. " \
-                  "INOV is a fintech platform " \
-                  "that gives users full control over their traditional banking and personal finance." \
-                  "To see more things you can do on the go with INOV feel free to check the application."
-
-        if "gmail" in email:
-            server = smtplib.SMTP('smtp.gmail.com', 587)
-            server.starttls()
-            server.login(sender_email, password)
-            print("login success")
-            server.sendmail(sender_email, rec_email, message)
-
-        if "yahoo" in email:
-            fromMy = "openbank143@yahoo.com"
-            to = email
-            subj = 'NEW ACCOUNT!!!!!'
-
-            msg = "From: %s\nTo: %s\nSubject: %s\n\n%s" % (fromMy, to, subj, message)
-
-            username = "openbank143@yahoo.com"
-            password2 = "holiday20!"
-            server = smtplib.SMTP("smtp.mail.yahoo.com", 587)
-            server.starttls()
-            server.login(username, password2)
-            server.sendmail(fromMy, to, msg)
-            print('ok the email has sent ')
-
-
-
         intro()
 
 
@@ -634,7 +364,7 @@ def intro():
     print("========== (3). Deposit Money ====================== (8). ATM ============")
     print("========== (4). Print Bank Statement ====================== (9). Currency Exchange ============")
     print("========== (5). Loan ====================== (10). Quit ============")
-    print("************************************************************") 
+    print("************************************************************")
     letter = input()
     if letter == "1":
         OpenAccount()
@@ -660,3 +390,4 @@ def intro():
 
 if __name__ == '__main__':
     intro()
+
