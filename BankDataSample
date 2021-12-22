@@ -1,15 +1,50 @@
-import sqlite3
+from sqlalchemy import create_engine
 
-conn = sqlite3.connect('data.db')
+db_connect = create_engine('sqlite:///data.db')
 
 
+def getCountry():
+    conn = db_connect.connect()
+    sort = conn.execute("select name, Country from InovClients ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Clients Country of Residence")
+    print(result)
 
-# var = int(input("enter pin: "))
-data_check = conn.execute("SELECT name, Type, Pin, Current, Saving, Country, Address FROM InovClients ")
-# res = data_check.fetchall()
-for row in data_check:
-    print("Account Name=", row[0], 
-          "Account Type=", row[1], 
-           "Pin=", row[2], 
-           "Current Balance=", row[3], 
-           "Saving Balance=", row[4])
+
+def getPIN():
+    conn = db_connect.connect()
+    sort = conn.execute("select name, Pin from InovClients ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Pins of clients:")
+    print(result)
+
+
+def getDCL():
+    conn = db_connect.connect()
+    sort = conn.execute("select name, DCL from InovClients ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Digital credit of clients:")
+    print(result)
+
+
+def getCurrency():
+    conn = db_connect.connect()
+    sort = conn.execute("select name, Currency from InovClients ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Domestic currencies of clients:")
+    print(result)
+
+
+def getAddress():
+    conn = db_connect.connect()
+    sort = conn.execute("select name, Currency from InovClients ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Domestic currencies of clients:")
+    print(result)
+
+
+if __name__ == '__main__':
+    getCountry()
+    getCurrency()
+    getPIN()
+    getDCL()
