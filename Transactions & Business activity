@@ -1,0 +1,167 @@
+from sqlalchemy import create_engine
+from forex_python.converter import CurrencyRates
+
+db_connect = create_engine('sqlite:///data.db')
+
+
+def enter_deposit_Checking(x=str, y=int):
+    conn = db_connect.connect()
+    conn.execute("UPDATE InovClients SET Current=Current+? WHERE name=?", [y, x])
+    conn.commit()
+
+
+def enter_deposit_Savings(x=str, y=int):
+    conn = db_connect.connect()
+    conn.execute("UPDATE InovClients SET Saving=Saving+? WHERE name=?", [y, x])
+    conn.commit()
+
+
+def use_atm_Checking(d=str, f=int, r=int):
+    conn = db_connect.connect()
+    conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [f, d])
+    conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [r, d])
+    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [r])
+    db_connect.commit()
+
+
+def use_atm_Savings(d=str, f=int, r=int):
+    conn = db_connect.connect()
+    conn.execute('UPDATE InovClients SET Saving=Saving-? WHERE name=?', [f, d])
+    conn.execute('UPDATE InovClients SET Saving=Saving-? WHERE name=?', [r, d])
+    conn.execute('UPDATE InovClients SET Saving=Saving+? WHERE name=INOV Financials Inc.', [r])
+    conn.commit()
+
+
+def get_new_pin(n=str, z=int):
+    conn = db_connect.connect()
+    conn.execute('UPDATE InovClients SET Pin=? WHERE email=?', [z, n])
+    conn.commit()
+
+
+def send_money(t=int, n1=str, n2=str):
+    conn = db_connect.connect()
+    conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [t, n1])
+    conn.commit()
+
+    conn.execute('UPDATE InovClients SET Current=Current+? WHERE email=?', [t, n2])
+    conn.commit()
+
+
+def get_businessloan_checking(bl1=int, n3=str):
+    conn = db_connect.connect()
+    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=?', [bl1, n3])
+    conn.commit()
+
+
+def get_businessloan_savings(bl2=int, n4=str):
+    conn = db_connect.connect()
+    conn.execute('UPDATE InovClients SET Saving=Saving+? WHERE name=?', [bl2, n4])
+    conn.commit()
+
+
+def get_personalloan_checking(bl3=int, n5=str):
+    conn = db_connect.connect()
+    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=?', [bl3, n5])
+    conn.commit()
+
+
+def get_personalloan_Savings(bl4=int, n6=str):
+    conn = db_connect.connect()
+    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=?', [bl4, n6])
+    conn.commit()
+
+
+def get_CurrencyExchange_USD(gov=str):
+    conn = db_connect.connect()
+    c = CurrencyRates()
+    var1 = "USD"
+    cex1 = c.get_rate('USD', 'USD')
+    cex2 = c.get_rate('USD', 'USD')
+    conn.execute('UPDATE InovClients SET Current=Current/?, Saving=Saving/? Currency=? WHERE name=?',
+                 [cex1, cex2, var1, gov])
+    print("You will be charged 1.3% upon this exchange")
+    rate_r = 5
+    conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, gov])
+    conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, gov])
+    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
+    conn.commit()
+
+
+def get_CurrencyExchange_EUR(gov2=str):
+    conn = db_connect.connect()
+    c = CurrencyRates()
+    var2 = "EUR"
+    dex1 = c.get_rate('USD', 'EUR')
+    dex2 = c.get_rate('USD', 'EUR')
+    conn.execute('UPDATE InovClients SET Current=Current/?, Saving=Saving/?, Currency=? WHERE name=?',
+                 [dex1, dex2, var2, gov2])
+    print("You will be charged 1.3% upon this exchange")
+    rate_r = 5
+    conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, gov2])
+    conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, gov2])
+    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
+    conn.commit()
+
+
+def get_CurrencyExchange_GBP(gov3=str):
+    conn = db_connect.connect()
+    c = CurrencyRates()
+    var3 = "GBP"
+    fex3 = c.get_rate('USD', 'GBP')
+    fex4 = c.get_rate('USD', 'GBP')
+    conn.execute('UPDATE InovClients SET Current=Current/?, Saving=Saving/?, Currency=? WHERE name=?',
+                 [fex3, fex4, var3, gov3])
+    print("You will be charged 1.3% upon this exchange")
+    rate_r = 5
+    conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, gov3])
+    conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, gov3])
+    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
+    conn.commit()
+
+
+def get_CurrencyExchange_AUS(gov4=str):
+    conn = db_connect.connect()
+    c = CurrencyRates()
+    var4 = "AUS"
+    gex4 = c.get_rate('USD', 'AUS')
+    gex5 = c.get_rate('USD', 'AUS')
+    conn.execute('UPDATE InovClients SET Current=Current/?, Saving=Saving/?, Currency=? WHERE name=?',
+                 [gex4, gex5, var4, gov4])
+    print("You will be charged 1.3% upon this exchange")
+    rate_r = 5
+    conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, gov4])
+    conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, gov4])
+    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
+    conn.commit()
+
+
+def get_CurrencyExchange_CNY(gov5=str):
+    conn = db_connect.connect()
+    c = CurrencyRates()
+    var5 = "CNY"
+    hex5 = c.get_rate('USD', 'CNY')
+    hex6 = c.get_rate('USD', 'CNY')
+    conn.execute('UPDATE InovClients SET Current=Current/?, Saving=Saving/?, Currency=? WHERE name=?',
+                 [hex5, hex6, var5, gov5])
+    print("You will be charged 1.3% upon this exchange")
+    rate_r = 5
+    conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, gov5])
+    conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, gov5])
+    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
+    conn.commit()
+
+
+def get_CurrencyExchange_JPY(gov6=str):
+    conn = db_connect.connect()
+    c = CurrencyRates()
+    var6 = "JPY"
+    hex6 = c.get_rate('USD', 'JPY')
+    hex7 = c.get_rate('USD', 'JPY')
+    conn.execute('UPDATE InovClients SET Current=Current/?, Saving=Saving/?, Currency=? WHERE name=?',
+                 [hex6, hex7, var6, gov6])
+    print("You will be charged 1.3% upon this exchange")
+    rate_r = 5
+    conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, gov6])
+    conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, gov6])
+    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
+    conn.commit()
