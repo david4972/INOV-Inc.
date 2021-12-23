@@ -121,6 +121,7 @@ def transactions():
     name2 = input("what is the email of the person you'll be transferring money to: ")
     trans = int(input("how much will you sending today: "))
     Transactions.send_money(trans, name, name2)
+    EmailSender.send_mail_for_Transactions(name, name2)
     print("transfer made")
     intro()
 
@@ -229,7 +230,7 @@ def BankStatement():
         print("Current Balance = ", x[4])
         print("Currency held = ", x[7])
 
-    # intro()
+    intro()
 
 
 def Deposit():
@@ -252,11 +253,13 @@ def Deposit():
         dep = int(input("How much would you like to deposit today: "))
         Transactions.enter_deposit_Checking(name, dep)
         print("deposit has been made")
-
+        EmailSender.send_mail_for_deposits_checking(dep, name)
+        
     if ans == "2":
         dep = int(input("How much would you like to deposit today: "))
         Transactions.enter_deposit_Savings(name, dep)
         print("deposit has been made")
+        EmailSender.send_mail_for_deposits_saving(dep, name)
 
     intro()
 
