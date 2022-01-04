@@ -10,7 +10,7 @@ A reason for the card being desingned like this is due to a coined term i develo
 We would automate the way people build credit and pay off more serious payments such as mortgage, short and long term loan payments. We compute a form of measurement which determines each individual depositor's credit score and properly assigns each individual a loan we feel they can pay off more with no issue. 
 
 As I hope to build this On a global spectrum, INOV has a feature that would allow ease for consumers and travelers accross the world will need to access different forms of currency and convert their cash accounts to the currency of their choice in real time and pay at a low cost removing the excess trouble of attaining currencies upon international activities. 
-For more rural areas around the world. We plan on leveraging the SMS/text message to enable more access to capital for global small business growth. 
+For more rural areas around the world. We plan on leveraging the SMS/text message to enable more access to capital for domestic and global SME growth. 
 
 We are Currently have an Executive Team 
 they consisit of:
