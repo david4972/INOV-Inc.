@@ -15,7 +15,7 @@ For more rural areas around the world. We plan on leveraging the SMS/text messag
 We are Currently have an Executive Team 
 they consisit of:
 ~ David Okoronkwo - Head of Strategy, CTO
-~ Patrick Crispino - co-CEO, CIO
+~ Patrick Crispino - CEO, CIO
 ~ Zachary Merrill - Investor Relations, Head of Marketing/Public relations
 ~ Juyon Kim - COO
 
