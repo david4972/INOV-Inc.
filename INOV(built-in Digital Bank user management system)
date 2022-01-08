@@ -275,7 +275,8 @@ def OpenAccount():
         email = str(input('please enter an email: '))
         addy = str(input('enter address: '))
         pin = random.randint(11111, 99999)
-        h_value = id(first_name)
+        c_value = Fernet.generate_key()
+        Crypt = c_value
         Country = str(input('What country are you in: '))
         Currency = str(input('What is your currency: '))
         print('What type of account would you like to open: ')
@@ -299,7 +300,7 @@ def OpenAccount():
               "VALUES ( " \
               "?, " \
               "?, ?, ?, ?, ?, ?, ?, ?, ?) "
-        val = (Account_name, email, pin, h_value, type, current, savings, addy, Country, Currency)
+        val = (Account_name, email, pin, Crypt, type, current, savings, addy, Country, Currency)
         db.execute(sql, val)
         db.commit()
         print("Would you like to open another account ? yes/no")
@@ -312,7 +313,7 @@ def OpenAccount():
             dclNo = '{} this is your secured credit number, this number will be your main account charged with most ' \
                     'transactions you make.' \
                     'This is to ensure safer payment and build a more secure wall around your credit.'
-            print(dclNo.format(h_value))
+            print(dclNo.format(Crypt))
 
         print("info saved to database")
         print("Account created")
