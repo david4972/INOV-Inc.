@@ -3,6 +3,7 @@ import Transactions
 import random
 import sqlite3
 from io import StringIO
+from cryptography.fernet import Fernet
 
 # main Global Currencies (Yen, USD, EU, Pounds)
 db = sqlite3.connect('data.db')
