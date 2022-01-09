@@ -1,19 +1,22 @@
 from sqlalchemy import create_engine
 from forex_python.converter import CurrencyRates
+import sqlite3
 
 db_connect = create_engine('sqlite:///data.db')
+db = sqlite3.connect('transactions.db')
+dub = db.cursor()
 
 
 def enter_deposit_Checking(x=str, y=int):
     conn = db_connect.connect()
     conn.execute("UPDATE InovClients SET Current=Current+? WHERE name=?", [y, x])
-    conn.commit()
+    conn.close()
 
 
 def enter_deposit_Savings(x=str, y=int):
     conn = db_connect.connect()
     conn.execute("UPDATE InovClients SET Saving=Saving+? WHERE name=?", [y, x])
-    conn.commit()
+    conn.close()
 
 
 def use_atm_Checking(d=str, f=int, r=int):
@@ -21,7 +24,7 @@ def use_atm_Checking(d=str, f=int, r=int):
     conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [f, d])
     conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [r, d])
     conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [r])
-    db_connect.commit()
+    conn.close()
 
 
 def use_atm_Savings(d=str, f=int, r=int):
@@ -29,22 +32,22 @@ def use_atm_Savings(d=str, f=int, r=int):
     conn.execute('UPDATE InovClients SET Saving=Saving-? WHERE name=?', [f, d])
     conn.execute('UPDATE InovClients SET Saving=Saving-? WHERE name=?', [r, d])
     conn.execute('UPDATE InovClients SET Saving=Saving+? WHERE name=INOV Financials Inc.', [r])
-    conn.commit()
+    conn.close()
 
 
 def get_new_pin(n=str, z=int):
     conn = db_connect.connect()
     conn.execute('UPDATE InovClients SET Pin=? WHERE email=?', [z, n])
-    conn.commit()
+    conn.close()
 
 
 def send_money(t=int, n1=str, n2=str):
     conn = db_connect.connect()
     conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [t, n1])
-    conn.commit()
+    conn.close()
 
     conn.execute('UPDATE InovClients SET Current=Current+? WHERE email=?', [t, n2])
-    conn.commit()
+    conn.close()
 
 
 def get_businessloan_checking(bl1=int, n3=str):
@@ -56,7 +59,7 @@ def get_businessloan_checking(bl1=int, n3=str):
 def get_businessloan_savings(bl2=int, n4=str):
     conn = db_connect.connect()
     conn.execute('UPDATE InovClients SET Saving=Saving+? WHERE name=?', [bl2, n4])
-    conn.commit()
+    conn.close()
 
 
 def get_personalloan_checking(bl3=int, n5=str):
@@ -68,7 +71,7 @@ def get_personalloan_checking(bl3=int, n5=str):
 def get_personalloan_Savings(bl4=int, n6=str):
     conn = db_connect.connect()
     conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=?', [bl4, n6])
-    conn.commit()
+    conn.close()
 
 
 def get_CurrencyExchange_USD(gov=str):
@@ -80,11 +83,11 @@ def get_CurrencyExchange_USD(gov=str):
     conn.execute('UPDATE InovClients SET Current=Current/?, Saving=Saving/? Currency=? WHERE name=?',
                  [cex1, cex2, var1, gov])
     print("You will be charged 1.3% upon this exchange")
-    rate_r = 5
+    rate_r = 1.50
     conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, gov])
     conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, gov])
     conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
-    conn.commit()
+    conn.close()
 
 
 def get_CurrencyExchange_EUR(gov2=str):
@@ -96,11 +99,11 @@ def get_CurrencyExchange_EUR(gov2=str):
     conn.execute('UPDATE InovClients SET Current=Current/?, Saving=Saving/?, Currency=? WHERE name=?',
                  [dex1, dex2, var2, gov2])
     print("You will be charged 1.3% upon this exchange")
-    rate_r = 5
+    rate_r = 1.50
     conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, gov2])
     conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, gov2])
     conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
-    conn.commit()
+    conn.close()
 
 
 def get_CurrencyExchange_GBP(gov3=str):
@@ -112,11 +115,11 @@ def get_CurrencyExchange_GBP(gov3=str):
     conn.execute('UPDATE InovClients SET Current=Current/?, Saving=Saving/?, Currency=? WHERE name=?',
                  [fex3, fex4, var3, gov3])
     print("You will be charged 1.3% upon this exchange")
-    rate_r = 5
+    rate_r = 1.50
     conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, gov3])
     conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, gov3])
     conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
-    conn.commit()
+    conn.close()
 
 
 def get_CurrencyExchange_AUS(gov4=str):
@@ -128,11 +131,11 @@ def get_CurrencyExchange_AUS(gov4=str):
     conn.execute('UPDATE InovClients SET Current=Current/?, Saving=Saving/?, Currency=? WHERE name=?',
                  [gex4, gex5, var4, gov4])
     print("You will be charged 1.3% upon this exchange")
-    rate_r = 5
+    rate_r = 1.50
     conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, gov4])
     conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, gov4])
     conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
-    conn.commit()
+    conn.close()
 
 
 def get_CurrencyExchange_CNY(gov5=str):
@@ -144,11 +147,11 @@ def get_CurrencyExchange_CNY(gov5=str):
     conn.execute('UPDATE InovClients SET Current=Current/?, Saving=Saving/?, Currency=? WHERE name=?',
                  [hex5, hex6, var5, gov5])
     print("You will be charged 1.3% upon this exchange")
-    rate_r = 5
+    rate_r = 1.50
     conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, gov5])
     conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, gov5])
     conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
-    conn.commit()
+    conn.close()
 
 
 def get_CurrencyExchange_JPY(gov6=str):
@@ -160,8 +163,238 @@ def get_CurrencyExchange_JPY(gov6=str):
     conn.execute('UPDATE InovClients SET Current=Current/?, Saving=Saving/?, Currency=? WHERE name=?',
                  [hex6, hex7, var6, gov6])
     print("You will be charged 1.3% upon this exchange")
-    rate_r = 5
+    rate_r = 1.50
     conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, gov6])
     conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, gov6])
     conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
-    conn.commit()
+    conn.close()
+
+
+def global_transfers(region=int, val=int, curname=str, curname2=str, cur=str, cur2=str, name=str, name2=str):
+    c = CurrencyRates()
+    # North American Region
+    if region == "1":
+        if curname == "US Dollar" and curname2 == "Canadian Dollar":
+            reg = "North America"
+            cur = 'USD'
+            cur2 = 'CAD'
+            link = c.convert(cur2, cur, val)
+            send_money(link, name, name2)
+            data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, " \
+                        "?) "
+            data_src = (name, link, reg, cur2)
+            dub.execute(data_link, data_src)
+            db.commit()
+            print("Transaction complete")
+    if region == "1":
+        if curname == "US Dollar" and curname2 == "Peso":
+            reg = "North America"
+            cur = 'USD'
+            cur2 = 'MXN'
+            link = c.convert(cur2, cur, val)
+            send_money(link, name, name2)
+            data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, " \
+                        "?) "
+            data_src = (name, link, reg, cur2)
+            dub.execute(data_link, data_src)
+            db.commit()
+            print("Transaction complete")
+    if region == "1":
+        if curname == "Canadian dollar" and curname2 == "US dollar":
+            reg = "North America"
+            cur = 'CAD'
+            cur2 = 'USD'
+            link = c.convert(cur2, cur, val)
+            send_money(link, name, name2)
+            data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, " \
+                        "?) "
+            data_src = (name, link, reg, cur2)
+            dub.execute(data_link, data_src)
+            db.commit()
+            print("Transaction complete")
+    if region == "1":
+        if curname == "Canadian dollar" and curname2 == "Peso":
+            reg = "North America"
+            cur = 'CAD'
+            cur2 = 'MXN'
+            link = c.convert(cur2, cur, val)
+            send_money(link, name, name2)
+            data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, " \
+                        "?) "
+            data_src = (name, link, reg, cur2)
+            dub.execute(data_link, data_src)
+            db.commit()
+            print("Transaction complete")
+    if region == "1":
+        if curname == "Peso" and curname2 == "Canadian dollar":
+            reg = "North America"
+            cur = 'MXN'
+            cur2 = 'CAD'
+            link = c.convert(cur2, cur, val)
+            send_money(link, name, name2)
+            data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, " \
+                        "?) "
+            data_src = (name, link, reg, cur2)
+            dub.execute(data_link, data_src)
+            db.commit()
+            print("Transaction complete")
+    if region == "1":
+        if curname == "Peso" and curname2 == "US dollar":
+            reg = "North America"
+            cur = 'MXN'
+            cur2 = 'USD'
+            link = c.convert(cur2, cur, val)
+            send_money(link, name, name2)
+            data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, " \
+                        "?) "
+            data_src = (name, link, reg, cur2)
+            dub.execute(data_link, data_src)
+            db.commit()
+            print("Transaction complete")
+    # South American Region
+    if region == "2":
+        if curname == "US dollar" and curname2 == "Argentine Peso":
+            reg = "South America"
+            cur = 'USD'
+            cur2 = 'ARS'
+            link = c.convert(cur2, cur, val)
+            send_money(link, name, name2)
+            data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, ?)"
+            data_src = (name, link, reg, cur2)
+            dub.execute(data_link, data_src)
+            db.commit()
+        if curname == "US dollar" and curname2 == "Bolivian Boliviano":
+            reg = "South America"
+            cur = 'USD'
+            cur2 = 'BOB'
+            link = c.convert(cur2, cur, val)
+            send_money(link, name, name2)
+            data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, ?)"
+            data_src = (name, link, reg, cur2)
+            dub.execute(data_link, data_src)
+            db.commit()
+        if curname == "US dollar" and curname2 == "Brazilian Real":
+            reg = "South America"
+            cur = 'USD'
+            cur2 = 'BRL'
+            link = c.convert(cur2, cur, val)
+            send_money(link, name, name2)
+            data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, ?)"
+            data_src = (name, link, reg, cur2)
+            dub.execute(data_link, data_src)
+            db.commit()
+        if curname == "US dollar" and curname2 == "Chilean Peso":
+            reg = "South America"
+            cur = 'USD'
+            cur2 = 'CLP'
+            link = c.convert(cur2, cur, val)
+            send_money(link, name, name2)
+            data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, ?)"
+            data_src = (name, link, reg, cur2)
+            dub.execute(data_link, data_src)
+            db.commit()
+        if curname == "US dollar" and curname2 == "Colombian Peso":
+            reg = "South America"
+            cur = 'USD'
+            cur2 = 'COP'
+            link = c.convert(cur2, cur, val)
+            send_money(link, name, name2)
+            data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, ?)"
+            data_src = (name, link, reg, cur2)
+            dub.execute(data_link, data_src)
+            db.commit()
+        if curname == "US dollar" and curname2 == "Colombian Peso":
+            reg = "South America"
+            cur = 'USD'
+            cur2 = 'COP'
+            link = c.convert(cur2, cur, val)
+            send_money(link, name, name2)
+            data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, ?)"
+            data_src = (name, link, reg, cur2)
+            dub.execute(data_link, data_src)
+            db.commit()
+        if curname == "US dollar" and curname2 == "Peruvian Sol":
+            reg = "South America"
+            cur = 'USD'
+            cur2 = 'PEN'
+            link = c.convert(cur2, cur, val)
+            send_money(link, name, name2)
+            data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, ?)"
+            data_src = (name, link, reg, cur2)
+            dub.execute(data_link, data_src)
+            db.commit()
+        if curname == "US dollar" and curname2 == "Ecuador":
+            reg = "South America"
+            # cur = 'USD'
+            # cur2 = 'PEN'
+            # link = c.convert(cur2, cur, val)
+            send_money(val, name, name2)
+            data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, ?)"
+            data_src = (name, val, reg, cur2)
+            dub.execute(data_link, data_src)
+            db.commit()
+        if curname == "US dollar" and curname2 == "Venezuelan Bolívar Soberano":
+            reg = "South America"
+            cur = 'USD'
+            cur2 = 'VES'
+            link = c.convert(cur2, cur, val)
+            send_money(link, name, name2)
+            data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, ?)"
+            data_src = (name, link, reg, cur2)
+            dub.execute(data_link, data_src)
+            db.commit()
+        if curname == "US dollar" and curname2 == "Uruguayan Peso":
+            reg = "South America"
+            cur = 'USD'
+            cur2 = 'UYU'
+            link = c.convert(cur2, cur, val)
+            send_money(link, name, name2)
+            data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, ?)"
+            data_src = (name, link, reg, cur2)
+            dub.execute(data_link, data_src)
+            db.commit()
+    if region == "3":
+        reg = "Europe"
+        link = c.convert(cur2, cur, val)
+        send_money(link, name, name2)
+        data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, ?)"
+        data_src = (name, link, reg, cur2)
+        dub.execute(data_link, data_src)
+        db.commit()
+    if region == "4":
+        reg = "Africa"
+        link = c.convert(cur2, cur, val)
+        send_money(link, name, name2)
+        data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, ?)"
+        data_src = (name, link, reg, cur2)
+        dub.execute(data_link, data_src)
+        db.commit()
+    if region == "5":
+        reg = "Asia"
+        link = c.convert(cur2, cur, val)
+        send_money(link, name, name2)
+        data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, ?)"
+        data_src = (name, link, reg, cur2)
+        dub.execute(data_link, data_src)
+        db.commit()
+    if region == "6":
+        reg = "Caribbean"
+        link = c.convert(cur2, cur, val)
+        send_money(link, name, name2)
+        data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, ?)"
+        data_src = (name, link, reg, cur2)
+        dub.execute(data_link, data_src)
+        db.commit()
+    if region == "7":
+        reg = "Central America"
+        link = c.convert(cur2, cur, val)
+        send_money(link, name, name2)
+        data_link = "INSERT INTO BankTransactions (name, Value, Region, Currency) VALUES (?, ?, ?, ?)"
+        data_src = (name, link, reg, cur2)
+        dub.execute(data_link, data_src)
+        db.commit()
+
+
+
+
+
