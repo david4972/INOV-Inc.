@@ -315,9 +315,9 @@ def OpenAccount():
         else:
             pinNo = '{}  this is a generated pin number that will be used to manage your account.'
             print(pinNo.format(pin))
-            dclNo = '{} this is your secured credit number, this number will be your main account charged with most ' \
+            dclNo = '{} this is your secured credit code for your Virtual Credit Card, this will be your main account charged with most ' \
                     'transactions you make.' \
-                    'This is to ensure safer payment and build a more secure wall around your credit.'
+                    'This is to ensure safer payment and Security of your account, Please memorize the last 6 digits.'
             print(dclNo.format(Crypt))
 
         print("info saved to database")
