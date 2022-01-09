@@ -4,6 +4,7 @@ import random
 import sqlite3
 from io import StringIO
 from cryptography.fernet import Fernet
+
 # main Global Currencies (Yen, USD, EU, Pounds)
 db = sqlite3.connect('data.db')
 conn = db.cursor()
@@ -14,7 +15,7 @@ conn = db.cursor()
 def Curr_exchange():
     name = input("please enter the full name your account is in: ")
     Crypt = input("please enter last Six Digits of your DCL: ")
-    data_current = conn.execute("SELECT name, Pin FROM customers WHERE DCL Like '%?%'", [Crypt])
+    data_current = conn.execute("SELECT name, Pin FROM InovClients WHERE DCL Like '%?%'", [Crypt])
     res = data_current.fetchall()
     for x in res:
         print("Account Name = ", x[0])
@@ -51,7 +52,7 @@ def Curr_exchange():
 def atm():
     name = input("please enter the full name your account is in: ")
     Crypt = input("please enter last Six Digits of your DCL: ")
-    data_current = conn.execute("SELECT name, Pin FROM customers WHERE DCL Like '%?%'", [Crypt])
+    data_current = conn.execute("SELECT name, Pin FROM InovClients WHERE DCL Like '%?%'", [Crypt])
     res = data_current.fetchall()
     for x in res:
         print("Account Name = ", x[0])
@@ -85,27 +86,41 @@ def atm():
 def new_pin():
     name = input("please enter the full name your account is in: ")
     email = input("please enter the email your account is in: ")
-    data_current = conn.execute(
-        'SELECT name, Type, email, Current, Saving, Address, Country FROM InovClients WHERE email=?',
-        [name])
+    Crypt = input("please enter your full DCL: ")
+    data_current = conn.execute("SELECT name, Type, DCL, IF(DCL=?, RIGHT, WRONG) FROM InovClients ", [Crypt])
     res = data_current.fetchall()
     for x in res:
         print("Account Name = ", x[0])
         print("Account Type = ", x[1])
-        print("Current Balance = ", x[2])
-        print("Saving Balance = ", x[3])
-        print("Address = ", x[4])
-        print("Country = ", x[5])
-
     new_p = random.randint(1111, 9999)
     Transactions.get_new_pin(email, new_p)
+    new_Crypt()
+
+
+def new_Crypt():
+    name = input("please enter the full name your account is in: ")
+    email = input("please enter the email your account is in: ")
+    data_current = conn.execute("SELECT name, Type, email FROM InovClients WHERE  Like '%?%'", [email])
+    res = data_current.fetchall()
+    for x in res:
+        print("Account Name = ", x[0])
+        print("Account Type = ", x[1])
+    c_value = Fernet.generate_key()
+    Crypt = c_value
+    dclNo = '{} this is your secured credit number, this number will be your main account charged with most ' \
+            'transactions you make.' \
+            'This is to ensure safer payment and build a more secure wall around your credit.'
+    print(dclNo.format(Crypt))
+    conn.execute('UPDATE InovClients SET DCL=? WHERE name=?', [Crypt, name])
+    conn.close()
+    EmailSender.send_mail_for_new_Crypt(Crypt, email)
     intro()
-
-
+    
+    
 def transactions():
     name = input("please enter the full name your account is in: ")
     Crypt = input("please enter last Six Digits of your DCL: ")
-    data_current = conn.execute("SELECT name, Pin FROM customers WHERE DCL Like '%?%'", [Crypt])
+    data_current = conn.execute("SELECT name, Pin FROM InovClients WHERE DCL Like '%?%'", [Crypt])
     res = data_current.fetchall()
     for x in res:
         print("Account Name = ", x[0])
@@ -133,7 +148,7 @@ def Loan():
     name = input("please enter the full name your account is in: ")
     email = input("please enter the email your account is in: ")
     Crypt = input("please enter last Six Digits of your DCL: ")
-    data_current = conn.execute("SELECT name, Pin FROM customers WHERE DCL Like '%?%'", [Crypt])
+    data_current = conn.execute("SELECT name, Pin FROM InovClients WHERE DCL Like '%?%'", [Crypt])
     res = data_current.fetchall()
     for x in res:
         print("Account Name = ", x[0])
@@ -223,9 +238,8 @@ def Loan():
 
 
 def BankStatement():
-    pin = input("please enter the pin your account is in: ")
-    data_current = conn.execute('SELECT Pin, name, Type, Current, Saving, Address, Country, Currency FROM InovClients'
-                                'WHERE name=?'[pin])
+    Crypt = input("please enter last Six Digits of your DCL: ")
+    data_current = conn.execute("SELECT name, Type, Current, Saving, Currency FROM InovClients WHERE DCL Like '%?%'", [Crypt])
     res = data_current.fetchall()
     for x in res:
         print("Account Name = ", x[1])
@@ -241,7 +255,7 @@ def Deposit():
     name = input("please enter the full name your account is in: ")
     email = input("please enter email: ")
     Crypt = input("please enter last Six Digits of your DCL: ")
-    data_current = conn.execute("SELECT name, Pin FROM customers WHERE DCL Like '%?%'", [Crypt])
+    data_current = conn.execute("SELECT name, Pin FROM InovClients WHERE DCL Like '%?%'", [Crypt])
     res = data_current.fetchall()
     for x in res:
         print("Account Name = ", x[0])
@@ -315,9 +329,9 @@ def OpenAccount():
         else:
             pinNo = '{}  this is a generated pin number that will be used to manage your account.'
             print(pinNo.format(pin))
-            dclNo = '{} this is your secured credit code for your Virtual Credit Card, this will be your main account charged with most ' \
+            dclNo = '{} this is your secured credit number, this number will be your main account charged with most ' \
                     'transactions you make.' \
-                    'This is to ensure safer payment and Security of your account, Please memorize the last 6 digits.'
+                    'This is to ensure safer payment and build a more secure wall around your credit.'
             print(dclNo.format(Crypt))
 
         print("info saved to database")
@@ -328,10 +342,10 @@ def OpenAccount():
 
 def LoginAccount():
     print("welcome")
-    n = str(input("please enter name account is in: "))
-    pin = int(input("please enter pin: "))
-    data_check = conn.execute('SELECT * FROM InovClients WHERE Pin=?, WHERE name=?', [pin, n])
-    res = data_check.fetchall()
+    Crypt = input("please enter last Six Digits of your DCL: ")
+    data_current = conn.execute("SELECT name, Type, Current, Saving, Currency FROM InovClients WHERE DCL Like '%?%'",
+                                [Crypt])
+    res = data_current.fetchall()
     for x in res:
         print(x)
 
@@ -396,4 +410,3 @@ def intro():
 
 if __name__ == '__main__':
     intro()
-
