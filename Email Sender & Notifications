@@ -61,8 +61,40 @@ def send_mail_for_business_loan(bl2=int, mt=str, c=str):
 
 
 def send_mail_for_new_pin(p=int, mz=str):
-    msg = "{} this is your new pin Number please, take good care. Feel free to reach out if you encounter any issue"
+    msg = "{} this is your Temporary password. Please use it to login and get a new DCL"
     new = (msg.format(p))
+
+    sender_email = "openinternationalbanking@gmail.com"
+    rec_email = mz
+    password = "Forsure34"
+    message = new
+
+    if "gmail" in mz:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(sender_email, password)
+        print("login success")
+        server.sendmail(sender_email, rec_email, message)
+
+    if "yahoo" in mz:
+        fromMy = "openbank143@yahoo.com"
+        to = mz
+        subj = 'New Pin Number'
+
+        msg = "From: %s\nTo: %s\nSubject: %s\n\n%s" % (fromMy, to, subj, message)
+
+        username = "openbank143@yahoo.com"
+        password2 = "holiday20!"
+        server = smtplib.SMTP("smtp.mail.yahoo.com", 587)
+        server.starttls()
+        server.login(username, password2)
+        server.sendmail(fromMy, to, msg)
+        print('ok the email has sent ')
+
+
+def send_mail_for_new_Crypt(Cryp=int, mz=str):
+    msg = "{} this is your Digital Credit Code Please memorize the last 6 digits"
+    new = (msg.format(Cryp))
 
     sender_email = "openinternationalbanking@gmail.com"
     rec_email = mz
