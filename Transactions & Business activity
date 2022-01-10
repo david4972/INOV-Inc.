@@ -9,68 +9,68 @@ dub = db.cursor()
 
 def enter_deposit_Checking(x=str, y=int):
     conn = db_connect.connect()
-    conn.execute("UPDATE InovClients SET Current=Current+? WHERE name=?", [y, x])
+    conn.execute("UPDATE InovClientsData SET Current=Current+? WHERE name=?", [y, x])
     conn.close()
 
 
 def enter_deposit_Savings(x=str, y=int):
     conn = db_connect.connect()
-    conn.execute("UPDATE InovClients SET Saving=Saving+? WHERE name=?", [y, x])
+    conn.execute("UPDATE InovClientsData SET Saving=Saving+? WHERE name=?", [y, x])
     conn.close()
 
 
 def use_atm_Checking(d=str, f=int, r=int):
     conn = db_connect.connect()
-    conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [f, d])
-    conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [r, d])
-    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [r])
+    conn.execute('UPDATE InovClientsData SET Current=Current-? WHERE name=?', [f, d])
+    conn.execute('UPDATE InovClientsData SET Current=Current-? WHERE name=?', [r, d])
+    conn.execute('UPDATE InovClientsData SET Current=Current+? WHERE name=INOV Financials Inc.', [r])
     conn.close()
 
 
 def use_atm_Savings(d=str, f=int, r=int):
     conn = db_connect.connect()
-    conn.execute('UPDATE InovClients SET Saving=Saving-? WHERE name=?', [f, d])
-    conn.execute('UPDATE InovClients SET Saving=Saving-? WHERE name=?', [r, d])
-    conn.execute('UPDATE InovClients SET Saving=Saving+? WHERE name=INOV Financials Inc.', [r])
+    conn.execute('UPDATE InovClientsData SET Saving=Saving-? WHERE name=?', [f, d])
+    conn.execute('UPDATE InovClientsData SET Saving=Saving-? WHERE name=?', [r, d])
+    conn.execute('UPDATE InovClientsData SET Saving=Saving+? WHERE name=INOV Financials Inc.', [r])
     conn.close()
 
 
 def get_new_pin(n=str, z=int):
     conn = db_connect.connect()
-    conn.execute('UPDATE InovClients SET Pin=? WHERE email=?', [z, n])
+    conn.execute('UPDATE InovClientsData SET Pin=? WHERE email=?', [z, n])
     conn.close()
 
 
 def send_money(t=int, n1=str, n2=str):
     conn = db_connect.connect()
-    conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [t, n1])
+    conn.execute('UPDATE InovClientsData SET Current=Current-? WHERE name=?', [t, n1])
     conn.close()
 
-    conn.execute('UPDATE InovClients SET Current=Current+? WHERE email=?', [t, n2])
+    conn.execute('UPDATE InovClientsData SET Current=Current+? WHERE email=?', [t, n2])
     conn.close()
 
 
 def get_businessloan_checking(bl1=int, n3=str):
     conn = db_connect.connect()
-    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=?', [bl1, n3])
+    conn.execute('UPDATE InovClientsData SET Current=Current+? WHERE name=?', [bl1, n3])
     conn.commit()
 
 
 def get_businessloan_savings(bl2=int, n4=str):
     conn = db_connect.connect()
-    conn.execute('UPDATE InovClients SET Saving=Saving+? WHERE name=?', [bl2, n4])
+    conn.execute('UPDATE InovClientsData SET Saving=Saving+? WHERE name=?', [bl2, n4])
     conn.close()
 
 
 def get_personalloan_checking(bl3=int, n5=str):
     conn = db_connect.connect()
-    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=?', [bl3, n5])
+    conn.execute('UPDATE InovClientsData SET Current=Current+? WHERE name=?', [bl3, n5])
     conn.commit()
 
 
 def get_personalloan_Savings(bl4=int, n6=str):
     conn = db_connect.connect()
-    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=?', [bl4, n6])
+    conn.execute('UPDATE InovClientsData SET Current=Current+? WHERE name=?', [bl4, n6])
     conn.close()
 
 
@@ -84,9 +84,9 @@ def get_CurrencyExchange_USD(gov=str):
                  [cex1, cex2, var1, gov])
     print("You will be charged 1.3% upon this exchange")
     rate_r = 1.50
-    conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, gov])
-    conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, gov])
-    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
+    conn.execute('UPDATE InovClientsData SET Current=Current-? WHERE name=?', [rate_r, gov])
+    conn.execute('UPDATE InovClientsData SET Current=Savings-? WHERE name=?', [rate_r, gov])
+    conn.execute('UPDATE InovClientsData SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
     conn.close()
 
 
@@ -100,9 +100,9 @@ def get_CurrencyExchange_EUR(gov2=str):
                  [dex1, dex2, var2, gov2])
     print("You will be charged 1.3% upon this exchange")
     rate_r = 1.50
-    conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, gov2])
-    conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, gov2])
-    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
+    conn.execute('UPDATE InovClientsData SET Current=Current-? WHERE name=?', [rate_r, gov2])
+    conn.execute('UPDATE InovClientsData SET Current=Savings-? WHERE name=?', [rate_r, gov2])
+    conn.execute('UPDATE InovClientsData SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
     conn.close()
 
 
@@ -116,9 +116,9 @@ def get_CurrencyExchange_GBP(gov3=str):
                  [fex3, fex4, var3, gov3])
     print("You will be charged 1.3% upon this exchange")
     rate_r = 1.50
-    conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, gov3])
-    conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, gov3])
-    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
+    conn.execute('UPDATE InovClientsData SET Current=Current-? WHERE name=?', [rate_r, gov3])
+    conn.execute('UPDATE InovClientsData SET Current=Savings-? WHERE name=?', [rate_r, gov3])
+    conn.execute('UPDATE InovClientsData SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
     conn.close()
 
 
@@ -132,9 +132,9 @@ def get_CurrencyExchange_AUS(gov4=str):
                  [gex4, gex5, var4, gov4])
     print("You will be charged 1.3% upon this exchange")
     rate_r = 1.50
-    conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, gov4])
-    conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, gov4])
-    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
+    conn.execute('UPDATE InovClientsData SET Current=Current-? WHERE name=?', [rate_r, gov4])
+    conn.execute('UPDATE InovClientsData SET Current=Savings-? WHERE name=?', [rate_r, gov4])
+    conn.execute('UPDATE InovClientsData SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
     conn.close()
 
 
@@ -148,9 +148,9 @@ def get_CurrencyExchange_CNY(gov5=str):
                  [hex5, hex6, var5, gov5])
     print("You will be charged 1.3% upon this exchange")
     rate_r = 1.50
-    conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, gov5])
-    conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, gov5])
-    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
+    conn.execute('UPDATE InovClientsData SET Current=Current-? WHERE name=?', [rate_r, gov5])
+    conn.execute('UPDATE InovClientsData SET Current=Savings-? WHERE name=?', [rate_r, gov5])
+    conn.execute('UPDATE InovClientsData SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
     conn.close()
 
 
@@ -164,9 +164,9 @@ def get_CurrencyExchange_JPY(gov6=str):
                  [hex6, hex7, var6, gov6])
     print("You will be charged 1.3% upon this exchange")
     rate_r = 1.50
-    conn.execute('UPDATE InovClients SET Current=Current-? WHERE name=?', [rate_r, gov6])
-    conn.execute('UPDATE InovClients SET Current=Savings-? WHERE name=?', [rate_r, gov6])
-    conn.execute('UPDATE InovClients SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
+    conn.execute('UPDATE InovClientsData SET Current=Current-? WHERE name=?', [rate_r, gov6])
+    conn.execute('UPDATE InovClientsData SET Current=Savings-? WHERE name=?', [rate_r, gov6])
+    conn.execute('UPDATE InovClientsData SET Current=Current+? WHERE name=INOV Financials Inc.', [rate_r])
     conn.close()
 
 
