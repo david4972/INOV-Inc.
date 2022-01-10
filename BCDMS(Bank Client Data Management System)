@@ -3,9 +3,16 @@ from sqlalchemy import create_engine
 db_connect = create_engine('sqlite:///data.db')
 
 
+def get_access(cryp=str):
+    conn = db_connect.connect()
+    sort = conn.execute("select name, Type, Current, Saving, Currency from InovClientsData WHERE SDC=?", cryp)
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print(result)
+
+
 def getCountry():
     conn = db_connect.connect()
-    sort = conn.execute("select name, Country from InovClients ")
+    sort = conn.execute("select name, Country from InovClientsData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
     print("Clients Country of Residence")
     print(result)
@@ -13,7 +20,7 @@ def getCountry():
 
 def getPIN():
     conn = db_connect.connect()
-    sort = conn.execute("select name, Pin from InovClients ")
+    sort = conn.execute("select name, SDC from InovClientsData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
     print("Pins of clients:")
     print(result)
@@ -21,7 +28,7 @@ def getPIN():
 
 def getDCL():
     conn = db_connect.connect()
-    sort = conn.execute("select name, DCL from InovClients ")
+    sort = conn.execute("select name, DCL from InovClientsData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
     print("Digital credit of clients:")
     print(result)
@@ -29,7 +36,7 @@ def getDCL():
 
 def getCurrency():
     conn = db_connect.connect()
-    sort = conn.execute("select name, Currency from InovClients ")
+    sort = conn.execute("select name, Currency from InovClientsData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
     print("Domestic currencies of clients:")
     print(result)
@@ -37,14 +44,33 @@ def getCurrency():
 
 def getAddress():
     conn = db_connect.connect()
-    sort = conn.execute("select name, Currency from InovClients ")
+    sort = conn.execute("select name, Currency from InovClientsData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
     print("Domestic currencies of clients:")
     print(result)
 
 
+def getCurrentBalance():
+    conn = db_connect.connect()
+    sort = conn.execute("select name, Current from InovClientsData ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Current Balance of clients:")
+    print(result)
+
+
+def getSavingBalance():
+    conn = db_connect.connect()
+    sort = conn.execute("select name, Saving from InovClientsData ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Savings Balance of clients:")
+    print(result)
+
+
 if __name__ == '__main__':
+    # get_access()
     getCountry()
     getCurrency()
     getPIN()
     getDCL()
+    getCurrentBalance()
+    getSavingBalance()
