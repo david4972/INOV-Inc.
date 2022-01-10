@@ -2,11 +2,11 @@ import sqlite3
 
 conn = sqlite3.connect('data.db')
 
-conn.execute('''CREATE TABLE InovClients
+conn.execute('''CREATE TABLE InovClientsData
             (name VARCHAR(255),
             email VARCHAR(255),
-            Pin INT(4),
-            DCL INT(250),
+            SDC VARCHAR(255),
+            DCL  VARCHAR(250),
             Type VARCHAR(255),
             Current INT(150),
             Saving INT(150),
