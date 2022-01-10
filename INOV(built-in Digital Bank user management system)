@@ -1,3 +1,4 @@
+import BDMS
 import EmailSender
 import Transactions
 import random
@@ -14,15 +15,8 @@ conn = db.cursor()
 
 def Curr_exchange():
     name = input("please enter the full name your account is in: ")
-    Crypt = input("please enter last Six Digits of your DCL: ")
-    data_current = conn.execute("SELECT name, Pin FROM InovClients WHERE DCL Like '%?%'", [Crypt])
-    res = data_current.fetchall()
-    for x in res:
-        print("Account Name = ", x[0])
-        print("Account Type = ", x[1])
-        print("Current = ", x[2])
-        print("Saving = ", x[3])
-        print("Currency = ", x[4])
+    Crypt = input("please enter your Credit code: ")
+    BDMS.get_access(Crypt)
 
     print("which currency would you like to use today")
     print("(1). USD")
@@ -51,12 +45,8 @@ def Curr_exchange():
 
 def atm():
     name = input("please enter the full name your account is in: ")
-    Crypt = input("please enter last Six Digits of your DCL: ")
-    data_current = conn.execute("SELECT name, Pin FROM InovClients WHERE DCL Like '%?%'", [Crypt])
-    res = data_current.fetchall()
-    for x in res:
-        print("Account Name = ", x[0])
-        print("Account Type = ", x[1])
+    Crypt = input("please enter your Credit code: ")
+    BDMS.get_access(Crypt)
 
     print("choose an account to withdraw from: ")
     print("(1). Checking")
@@ -86,8 +76,8 @@ def atm():
 def new_pin():
     name = input("please enter the full name your account is in: ")
     email = input("please enter the email your account is in: ")
-    Crypt = input("please enter your full DCL: ")
-    data_current = conn.execute("SELECT name, Type, DCL, IF(DCL=?, RIGHT, WRONG) FROM InovClients ", [Crypt])
+    C_va = input("please enter your Full Credit code: ")
+    data_current = conn.execute("SELECT name, Type FROM InovClientsData WHERE DCL=?", [C_va])
     res = data_current.fetchall()
     for x in res:
         print("Account Name = ", x[0])
@@ -99,34 +89,28 @@ def new_pin():
 
 def new_Crypt():
     name = input("please enter the full name your account is in: ")
-    email = input("please enter the email your account is in: ")
-    data_current = conn.execute("SELECT name, Type, email FROM InovClients WHERE  Like '%?%'", [email])
+    email = input("please enter your email: ")
+    data_current = conn.execute("SELECT name, Type FROM InovClientsData WHERE email=?", [email])
     res = data_current.fetchall()
     for x in res:
         print("Account Name = ", x[0])
         print("Account Type = ", x[1])
     c_value = Fernet.generate_key()
-    Crypt = c_value
-    dclNo = '{} this is your secured credit number, this number will be your main account charged with most ' \
+    Crypt = c_value[:5]
+    dclNo = '{} this is your secured credit code, this number will be your main account charged with most ' \
             'transactions you make.' \
             'This is to ensure safer payment and build a more secure wall around your credit.'
     print(dclNo.format(Crypt))
-    conn.execute('UPDATE InovClients SET DCL=? WHERE name=?', [Crypt, name])
+    conn.execute('UPDATE InovClientsData SET DCL=? WHERE name=?', [Crypt, name])
     conn.close()
     EmailSender.send_mail_for_new_Crypt(Crypt, email)
     intro()
-    
-    
+
+
 def transactions():
     name = input("please enter the full name your account is in: ")
-    Crypt = input("please enter last Six Digits of your DCL: ")
-    data_current = conn.execute("SELECT name, Pin FROM InovClients WHERE DCL Like '%?%'", [Crypt])
-    res = data_current.fetchall()
-    for x in res:
-        print("Account Name = ", x[0])
-        print("Account Type = ", x[1])
-        print("Current Balance = ", x[2])
-        print("Saving Balance = ", x[3])
+    Crypt = input("please enter your Credit code: ")
+    BDMS.get_access(Crypt)
 
     print("Will you be making an International transfer today: ")
     print("(1).Yes")
@@ -147,16 +131,8 @@ def transactions():
 def Loan():
     name = input("please enter the full name your account is in: ")
     email = input("please enter the email your account is in: ")
-    Crypt = input("please enter last Six Digits of your DCL: ")
-    data_current = conn.execute("SELECT name, Pin FROM InovClients WHERE DCL Like '%?%'", [Crypt])
-    res = data_current.fetchall()
-    for x in res:
-        print("Account Name = ", x[0])
-        print("Account Type = ", x[1])
-        print("Current Balance = ", x[2])
-        print("Saving Balance = ", x[3])
-        print("Address = ", x[4])
-        print("Country = ", x[5])
+    Crypt = input("please enter your Credit code: ")
+    BDMS.get_access(Crypt)
 
     print("please choose loan")
     print("========== (1). Business ==========")
@@ -238,30 +214,17 @@ def Loan():
 
 
 def BankStatement():
-    Crypt = input("please enter last Six Digits of your DCL: ")
-    data_current = conn.execute("SELECT name, Type, Current, Saving, Currency FROM InovClients WHERE DCL Like '%?%'", [Crypt])
-    res = data_current.fetchall()
-    for x in res:
-        print("Account Name = ", x[1])
-        print("Account Type = ", x[2])
-        print("Savings Balance = ", x[3])
-        print("Current Balance = ", x[4])
-        print("Currency held = ", x[7])
+    Crypt = input("please enter your Credit code: ")
+    BDMS.get_access(Crypt)
 
     intro()
 
 
 def Deposit():
     name = input("please enter the full name your account is in: ")
-    email = input("please enter email: ")
-    Crypt = input("please enter last Six Digits of your DCL: ")
-    data_current = conn.execute("SELECT name, Pin FROM InovClients WHERE DCL Like '%?%'", [Crypt])
-    res = data_current.fetchall()
-    for x in res:
-        print("Account Name = ", x[0])
-        print("Account Type = ", x[1])
-        print("Savings Balance = ", x[2])
-        print("Current Balance = ", x[3])
+    # email = input("please enter email: ")
+    Crypt = input("please enter your Credit code: ")
+    BDMS.get_access(Crypt)
 
     print("choose an account to deposit into: ")
     print("========== (1). Current ==========")
@@ -272,13 +235,13 @@ def Deposit():
         dep = int(input("How much would you like to deposit today: "))
         Transactions.enter_deposit_Checking(name, dep)
         print("deposit has been made")
-        EmailSender.send_mail_for_deposits_checking(dep, email)
+        # EmailSender.send_mail_for_deposits_checking(dep, email)
 
     if ans == "2":
         dep = int(input("How much would you like to deposit today: "))
         Transactions.enter_deposit_Savings(name, dep)
         print("deposit has been made")
-        EmailSender.send_mail_for_deposits_saving(dep, email)
+        # EmailSender.send_mail_for_deposits_saving(dep, email)
 
     intro()
 
@@ -293,9 +256,8 @@ def OpenAccount():
         Account_name = concat.getvalue()
         email = str(input('please enter an email: '))
         addy = str(input('enter address: '))
-        pin = random.randint(11111, 99999)
         c_value = Fernet.generate_key()
-        Crypt = c_value
+        Crypt = c_value[:5]
         Country = str(input('What country are you in: '))
         Currency = str(input('What is your currency: '))
         print('What type of account would you like to open: ')
@@ -315,11 +277,11 @@ def OpenAccount():
         if savings > 5000 or savings < 0:
             print("deposit does not meet requirement, try again")
             OpenAccount()
-        sql = "INSERT INTO InovClients (name, email, Pin, DCL, Type, Current, Saving, Address, Country, Currency) " \
+        sql = "INSERT INTO InovClientsData (name, email, SDC, DCL, Type, Current, Saving, Address, Country, Currency) " \
               "VALUES ( " \
               "?, " \
               "?, ?, ?, ?, ?, ?, ?, ?, ?) "
-        val = (Account_name, email, pin, Crypt, type, current, savings, addy, Country, Currency)
+        val = (Account_name, email, Crypt, c_value, type, current, savings, addy, Country, Currency)
         db.execute(sql, val)
         db.commit()
         print("Would you like to open another account ? yes/no")
@@ -327,11 +289,12 @@ def OpenAccount():
         if ans == "yes":
             OpenAccount()
         else:
-            pinNo = '{}  this is a generated pin number that will be used to manage your account.'
-            print(pinNo.format(pin))
+            pinNo = '{}  this is a generated code that will be used to manage your account for Securitization.'
+            print(pinNo.format(c_value))
             dclNo = '{} this is your secured credit number, this number will be your main account charged with most ' \
                     'transactions you make.' \
-                    'This is to ensure safer payment and build a more secure wall around your credit.'
+                    'This is to ensure safer payment and build a more secure wall around your credit. Please memorize ' \
+                    'these first five digits. '
             print(dclNo.format(Crypt))
 
         print("info saved to database")
@@ -342,12 +305,8 @@ def OpenAccount():
 
 def LoginAccount():
     print("welcome")
-    Crypt = input("please enter last Six Digits of your DCL: ")
-    data_current = conn.execute("SELECT name, Type, Current, Saving, Currency FROM InovClients WHERE DCL Like '%?%'",
-                                [Crypt])
-    res = data_current.fetchall()
-    for x in res:
-        print(x)
+    Crypt = input("please enter your Credit code: ")
+    BDMS.get_access(Crypt)
 
     print("choose a letter to move on or quit")
     print("========== (1). Deposit Money ============")
