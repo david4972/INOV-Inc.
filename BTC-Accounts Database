@@ -1,0 +1,20 @@
+import sqlite3
+
+conn = sqlite3.connect('BTCdata.db')
+
+conn.execute('''CREATE TABLE InovClientsCrypto
+            (name VARCHAR(255),
+            email VARCHAR(255),
+            number INT(255),
+            SDC INT(255),
+            DCL  INT(250),
+            BTC INT(255),
+            USD INT(255),
+            EU INT(255),
+            GBP INT(255),
+            CNY INT(255),
+            Country VARCHAR(255))''')
+
+print("table created respectfully")
+
+conn.close()
