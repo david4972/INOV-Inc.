@@ -1,0 +1,247 @@
+from sqlalchemy import create_engine
+from forex_python.bitcoin import BtcConverter
+import sqlite3
+import CBDMS
+import random
+
+conn_connect = create_engine('sqlite:///data.db')
+conn = sqlite3.connect('data.db')
+con = conn.cursor()
+db_connect = create_engine('sqlite:///BTCdata.db')
+db = sqlite3.connect('BTCdata.db')
+dub = db.cursor()
+
+
+def get_new_Login(n=str):
+    new_p = random.randint(11111111111111111111, 99999999999999999999)
+    pin_accnt = new_p[:6]
+    dub.execute('UPDATE InovClientsCrypto SET SDC=? WHERE name=?', [pin_accnt, n])
+    dub.execute('UPDATE InovClientsCrypto SET DCL=? WHERE name=?', [new_p, n])
+    pinNo = '{}  this is a generated code that will be used to manage your account for Securitization.'
+    print(pinNo.format(new_p))
+    dclNo = '{} this is your secured credit number, this number will be your main account charged with most ' \
+            'transactions you make.' \
+            'This is to ensure safer payment and build a more secure wall around your credit. Please memorize ' \
+            'these first five digits. '
+    print(dclNo.format(pin_accnt))
+    dub.close()
+
+
+def open_accnt_BTC(name=str, email=str, ph=int, sdc=int, dcl=int, Btcamt=int, cou=str):
+    b = BtcConverter()
+    BTC_USD = b.convert_btc_to_cur(Btcamt, 'USD')
+    BTC_EU = b.convert_btc_to_cur(Btcamt, 'EUR')
+    BTC_GBP = b.convert_btc_to_cur(Btcamt, 'GBP')
+    BTC_CNY = b.convert_btc_to_cur(Btcamt, 'CNY')
+    read_data = "INSERT INTO InovClientsCrypto (name, email, number, SDC, DCL, BTC, USD, EU, GBP, CNY, Country) " \
+                "VALUES ( " \
+                "?, " \
+                "?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
+    val = (name, email, ph, sdc, dcl, Btcamt, BTC_USD, BTC_EU, BTC_GBP, BTC_CNY, cou)
+    dub.execute(read_data, val)
+    dub.close()
+
+
+def open_accnt2_BTC(name=str, cryp=str, ph=int, sdc=int, dcl=int, Btcamt=int):
+    CBDMS.get_access_INOVBANKACCNT(cryp)
+    con.execute("INSERT INTO InovClientsCrypto(name, email, Country) SELECT name, email, Country FROM InovClientsData"
+                "WHERE SDC=?", [cryp])
+    b = BtcConverter()
+    BTC_USD = b.convert_btc_to_cur(Btcamt, 'USD')
+    BTC_EU = b.convert_btc_to_cur(Btcamt, 'EUR')
+    BTC_GBP = b.convert_btc_to_cur(Btcamt, 'GBP')
+    BTC_CNY = b.convert_btc_to_cur(Btcamt, 'CNY')
+    dub.execute('UPDATE InovClientsCrypto SET number=? WHERE name=?', [ph, name])
+    dub.execute('UPDATE InovClientsCrypto SET SDC=? WHERE name=?', [sdc, name])
+    dub.execute('UPDATE InovClientsCrypto SET DCL=? WHERE name=?', [dcl, name])
+    dub.execute('UPDATE InovClientsCrypto SET BTC=? WHERE name=?', [Btcamt, name])
+    dub.execute('UPDATE InovClientsCrypto SET USD=? WHERE name=?', [BTC_USD, name])
+    dub.execute('UPDATE InovClientsCrypto SET EU=? WHERE name=?', [BTC_EU, name])
+    dub.execute('UPDATE InovClientsCrypto SET GBP=? WHERE name=?', [BTC_GBP, name])
+    dub.execute('UPDATE InovClientsCrypto SET CNY=? WHERE name=?', [BTC_CNY, name])
+    con.close()
+    dub.close()
+
+
+def enter_deposit_Checking_BTC(pin=int, btc=int):
+    b = BtcConverter()
+    BTC_USD = b.convert_btc_to_cur(btc, 'USD')
+    BTC_EU = b.convert_btc_to_cur(btc, 'EUR')
+    BTC_GBP = b.convert_btc_to_cur(btc, 'GBP')
+    BTC_CNY = b.convert_btc_to_cur(btc, 'CNY')
+    dub.execute("UPDATE InovClientsCrypto SET BTC=BTC+? WHERE name=?", [btc, pin])
+    dub.execute("UPDATE InovClientsCrypto SET USD=USD+? WHERE name=?", [BTC_USD, pin])
+    dub.execute("UPDATE InovClientsCrypto SET EU=EU+? WHERE name=?", [BTC_EU, pin])
+    dub.execute("UPDATE InovClientsCrypto SET GBP=GBP+? WHERE name=?", [BTC_GBP, pin])
+    dub.execute("UPDATE InovClientsCrypto SET CNY=CNY+? WHERE name=?", [BTC_CNY, pin])
+    dub.close()
+
+
+def enter_deposit_Checking_USD(pin=int, usd=int):
+    b = BtcConverter()
+    btc_val = b.convert_to_btc(usd, 'USD')
+    BTC_EU = b.convert_btc_to_cur(btc_val, 'EUR')
+    BTC_GBP = b.convert_btc_to_cur(btc_val, 'GBP')
+    BTC_CNY = b.convert_btc_to_cur(btc_val, 'CNY')
+    dub.execute("UPDATE InovClientsCrypto SET BTC=BTC+? WHERE SDC=?", [btc_val, pin])
+    dub.execute("UPDATE InovClientsCrypto SET USD=USD+? WHERE SDC=?", [usd, pin])
+    dub.execute("UPDATE InovClientsCrypto SET EU=EU+? WHERE SDC=?", [BTC_EU, pin])
+    dub.execute("UPDATE InovClientsCrypto SET GBP=GBP+? WHERE SDC=?", [BTC_GBP, pin])
+    dub.execute("UPDATE InovClientsCrypto SET CNY=CNY+? WHERE SDC=?", [BTC_CNY, pin])
+    dub.close()
+
+
+def enter_deposit_Checking_EU(pin=int, eu=int):
+    b = BtcConverter()
+    btc_val = b.convert_to_btc(eu, 'EUR')
+    BTC_USD = b.convert_btc_to_cur(btc_val, 'USD')
+    BTC_GBP = b.convert_btc_to_cur(btc_val, 'GBP')
+    BTC_CNY = b.convert_btc_to_cur(btc_val, 'CNY')
+    dub.execute("UPDATE InovClientsCrypto SET BTC=BTC+? WHERE SDC=?", [btc_val, pin])
+    dub.execute("UPDATE InovClientsCrypto SET USD=USD+? WHERE SDC=?", [BTC_USD, pin])
+    dub.execute("UPDATE InovClientsCrypto SET EU=EU+? WHERE SDC=?", [eu, pin])
+    dub.execute("UPDATE InovClientsCrypto SET GBP=GBP+? WHERE SDC=?", [BTC_GBP, pin])
+    dub.execute("UPDATE InovClientsCrypto SET CNY=CNY+? WHERE SDC=?", [BTC_CNY, pin])
+    dub.close()
+
+
+def enter_deposit_Checking_GBP(pin=int, gbp=int):
+    b = BtcConverter()
+    btc_val = b.convert_to_btc(gbp, 'GBP')
+    BTC_USD = b.convert_btc_to_cur(btc_val, 'USD')
+    BTC_EU = b.convert_btc_to_cur(btc_val, 'EUR')
+    BTC_CNY = b.convert_btc_to_cur(btc_val, 'CNY')
+    dub.execute("UPDATE InovClientsCrypto SET BTC=BTC+? WHERE SDC=?", [btc_val, pin])
+    dub.execute("UPDATE InovClientsCrypto SET USD=USD+? WHERE SDC=?", [BTC_USD, pin])
+    dub.execute("UPDATE InovClientsCrypto SET EU=EU+? WHERE SDC=?", [BTC_EU, pin])
+    dub.execute("UPDATE InovClientsCrypto SET GBP=GBP+? WHERE SDC=?", [gbp, pin])
+    dub.execute("UPDATE InovClientsCrypto SET CNY=CNY+? WHERE SDC=?", [BTC_CNY, pin])
+    dub.close()
+
+
+def enter_deposit_Checking_CNY(pin=int, cny=int):
+    b = BtcConverter()
+    btc_val = b.convert_to_btc(cny, 'CNY')
+    BTC_USD = b.convert_btc_to_cur(btc_val, 'USD')
+    BTC_EU = b.convert_btc_to_cur(btc_val, 'EUR')
+    BTC_GBP = b.convert_btc_to_cur(btc_val, 'GBP')
+
+    dub.execute("UPDATE InovClientsCrypto SET BTC=BTC+? WHERE SDC=?", [btc_val, pin])
+    dub.execute("UPDATE InovClientsCrypto SET USD=USD+? WHERE SDC=?", [BTC_USD, pin])
+    dub.execute("UPDATE InovClientsCrypto SET EU=EU+? WHERE SDC=?", [BTC_EU, pin])
+    dub.execute("UPDATE InovClientsCrypto SET GBP=GBP+? WHERE SDC=?", [BTC_GBP, pin])
+    dub.execute("UPDATE InovClientsCrypto SET CNY=CNY+? WHERE SDC=?", [cny, pin])
+    dub.close()
+
+
+def use_atm_Checking(name=str, f=int):
+    r = 0.03
+    b = BtcConverter()
+    fa = (f * r)
+    fp = (fa + f)
+    fy = (fp - f)
+    # Amount withdrew
+    BTC_USD = b.convert_btc_to_cur(f, 'USD')
+    BTC_EU = b.convert_btc_to_cur(f, 'EUR')
+    BTC_GBP = b.convert_btc_to_cur(f, 'GBP')
+    BTC_CNY = b.convert_btc_to_cur(f, 'CNY')
+    # service fee charged
+    BTC_USD_Rate = b.convert_btc_to_cur(fy, 'USD')
+    BTC_EU_Rate = b.convert_btc_to_cur(fy, 'EUR')
+    BTC_GBP_Rate = b.convert_btc_to_cur(fy, 'GBP')
+    BTC_CNY_Rate = b.convert_btc_to_cur(fy, 'CNY')
+    # Atm Withdrawal
+    dub.execute('UPDATE InovClientsCrypto SET BTC=BTC-? WHERE name=?', [f, name])
+    dub.execute("UPDATE InovClientsCrypto SET USD=USD-? WHERE name=?", [BTC_USD, name])
+    dub.execute("UPDATE InovClientsCrypto SET EU=EU-? WHERE name=?", [BTC_EU, name])
+    dub.execute("UPDATE InovClientsCrypto SET GBP=GBP-? WHERE name=?", [BTC_GBP, name])
+    dub.execute("UPDATE InovClientsCrypto SET CNY=CNY-? WHERE name=?", [BTC_CNY, name])
+    # dub.execute('UPDATE InovClientsCrypto SET BTC=BTC-? WHERE name=?', [r, name])
+    # Service fee transaction
+    dub.execute('UPDATE InovClientsCrypto SET BTC=BTC-? WHERE name=INOVCrypto', [fy, name])
+    dub.execute("UPDATE InovClientsCrypto SET USD=USD-? WHERE name=INOVCrypto", [BTC_USD_Rate, name])
+    dub.execute("UPDATE InovClientsCrypto SET EU=EU-? WHERE name=INOVCrypto", [BTC_EU_Rate, name])
+    dub.execute("UPDATE InovClientsCrypto SET GBP=GBP-? WHERE name=INOVCrypto", [BTC_GBP_Rate, name])
+    dub.execute("UPDATE InovClientsCrypto SET CNY=CNY-? WHERE name=INOVCrypto", [BTC_CNY_Rate, name])
+
+    # dub.execute('UPDATE InovClientsData SET Current=Current+? WHERE name=INOV Financials Inc.', [r])
+    dub.close()
+
+
+def get_new_pin(n=str):
+    new_p = random.randint(11111111111111111111, 99999999999999999999)
+    pin_accnt = new_p[:6]
+    dub.execute('UPDATE InovClientsCrypto SET DCL=? WHERE name=?', [new_p, n])
+    dub.execute('UPDATE InovClientsCrypto SET SDC=? WHERE name=?', [pin_accnt, n])
+    pinNo = '{}  this is a generated code that will be used to manage your account for Securitization.'
+    print(pinNo.format(new_p))
+    dclNo = '{} this is your secured credit number, this number will be your main account charged with most ' \
+            'transactions you make.' \
+            'This is to ensure safer payment and build a more secure wall around your credit. Please memorize ' \
+            'these six digits. '
+    print(dclNo.format(pin_accnt))
+    dub.close()
+
+
+def send_money_BTC(bt=int, n1=str, n2=str):
+    dub.execute('UPDATE InovClientsCrypto SET BTC=BTC-? WHERE name=?', [bt, n1])
+
+    dub.execute('UPDATE InovClientsCrypto SET BTC=BTC+? WHERE name=?', [bt, n2])
+    dub.close()
+
+
+def send_money_USD(t=int, n1=str, n2=str):
+    b = BtcConverter()
+    USD_BTC = b.convert_to_btc(t, 'USD')
+    dub.execute('UPDATE InovClientsCrypto SET BTC=BTC-? WHERE name=?', [USD_BTC, n1])
+    dub.execute('UPDATE InovClientsCrypto SET USD=USD-? WHERE name=?', [t, n1])
+
+    dub.execute('UPDATE InovClientsCrypto SET BTC=BTC+? WHERE name=?', [USD_BTC, n2])
+    dub.execute('UPDATE InovClientsCrypto SET USD=USD+? WHERE name=?', [t, n2])
+    dub.close()
+
+
+def send_money_EU(t=int, n1=str, n2=str):
+    b = BtcConverter()
+    EU_BTC = b.convert_to_btc(t, 'EUR')
+    dub.execute('UPDATE InovClientsCrypto SET BTC=BTC-? WHERE name=?', [EU_BTC, n1])
+    dub.execute('UPDATE InovClientsCrypto SET USD=USD-? WHERE name=?', [t, n1])
+
+    dub.execute('UPDATE InovClientsCrypto SET BTC=BTC+? WHERE name=?', [EU_BTC, n2])
+    dub.execute('UPDATE InovClientsCrypto SET USD=USD+? WHERE name=?', [t, n2])
+    dub.close()
+
+
+def send_money_GBP(t=int, n1=str, n2=str):
+    b = BtcConverter()
+    GBP_BTC = b.convert_to_btc(t, 'GBP')
+    dub.execute('UPDATE InovClientsCrypto SET BTC=BTC-? WHERE name=?', [GBP_BTC, n1])
+    dub.execute('UPDATE InovClientsCrypto SET USD=USD-? WHERE name=?', [t, n1])
+
+    dub.execute('UPDATE InovClientsCrypto SET BTC=BTC+? WHERE name=?', [GBP_BTC, n2])
+    dub.execute('UPDATE InovClientsCrypto SET USD=USD+? WHERE name=?', [t, n2])
+    dub.close()
+
+
+def send_money_CNY(t=int, n1=str, n2=str):
+    b = BtcConverter()
+    CNY_BTC = b.convert_to_btc(t, 'CNY')
+    dub.execute('UPDATE InovClientsCrypto SET BTC=BTC-? WHERE name=?', [CNY_BTC, n1])
+    dub.execute('UPDATE InovClientsCrypto SET USD=USD-? WHERE name=?', [t, n1])
+
+    dub.execute('UPDATE InovClientsCrypto SET BTC=BTC+? WHERE name=?', [CNY_BTC, n2])
+    dub.execute('UPDATE InovClientsCrypto SET USD=USD+? WHERE name=?', [t, n2])
+    dub.close()
+
+
+def get_current_prices():
+    b = BtcConverter()
+    USD_price = b.get_latest_price('USD')
+    EU_price = b.get_latest_price('EUR')
+    GBP_price = b.get_latest_price('GBP')
+    CNY_price = b.get_latest_price('CNY')
+    print("Latest prices:")
+    print(USD_price)
+    print(EU_price)
+    print(GBP_price)
+    print(CNY_price)
