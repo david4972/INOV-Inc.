@@ -1,0 +1,28 @@
+import INOVCrypto
+import IFP
+
+
+def MainIntro():
+    print("Welcome to INOV Financials! We are a digital bank that offers retail and /"
+          "Institutional Banking services using technology for safer encryption and /"
+          "storage of bank accounts and transactions. We also offer Virtual Credit Cards/"
+          "Safely encrypted through Cryptography Code. We shortened the digits to Five for easier/"
+          "remembrance and usage. This enables faster and more efficient service. Enjoy!")
+    Pick_one()
+
+
+def Pick_one():
+    print("At INOV, We offer both banking accounts for cryptocurrency(Bitcoin) and regular Denominated currencies./"
+          "Please choose as you'd Like./"
+          "Crypto or Regular?")
+    print("1. Regular")
+    print("2. Crypto")
+    po = input()
+    if po == "1":
+        IFP.intro()
+    else:
+        INOVCrypto.paragraph()
+
+
+if __name__ == '__main__':
+    MainIntro()
