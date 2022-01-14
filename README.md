@@ -57,11 +57,11 @@ b'bpv2K'
 and receive a newly generated ID that will be put back into the linkage of the account.
 
 We are Currently have an Executive Team they consist of: 
-David Okoronkwo - President, CTO 
-Patrick Crispino - CEO 
-Zachary Merrill - Investor Relations 
-Juyon Kim - COO
-Our Mission - To Advance the global credit, retail and institutional Banking system, pushing to more automated and efficient financial services.
+- David Okoronkwo - President, CTO 
+- Patrick Crispino - CEO 
+- Zachary Merrill - Investor Relations 
+- Juyon Kim - COO
+- Our Mission - To Advance the global credit, retail and institutional Banking system, pushing to more automated and efficient financial services.
 
 
 
