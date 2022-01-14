@@ -10,8 +10,10 @@ We provide Software for:
 My name is David Okoronkwo. I am a Finance Major and Economics Minor at Quinnipiac University in Hamden, Connecticut. Over the past year, Three of my friends and I began working on INOV.
 
 INTRO 
+
 We have developed a program which we call the DCCS. It is the Digital Credit Code System which we believe will improve the services of the already in place credit/debit card. We use the existing technology of Cryptography which uses generated computer codes for safe encryption of data and other valuable software.
 VIRTUAL CREDIT/DEBIT CARD PROCESSING
+
 Virtual Credit/Debit card infrastructure could pose to be the next frontier for Fin-tech and the Whole Finance Sector. The Scale at which it could provide proper financial services across the globe is something I believe should be looked deeply into for R&D and Investment from the Private and Public sector. Through the enablement of high end technology such as AI (Artificial Intelligence) and much improved GUI (Graphical User Interfaces) we can properly build Digitized Infrastructures that can be scaled Globally at low cost.
 
 DCCS
