@@ -1,10 +1,9 @@
+
 import BDMS
-import EmailSender
-import Transactions
+import DCCS
 import random
 import sqlite3
-from io import StringIO
-from cryptography.fernet import Fernet
+
 
 # main Global Currencies (Yen, USD, EU, Pounds)
 db = sqlite3.connect('data.db')
@@ -27,17 +26,17 @@ def Curr_exchange():
     print("(6). JPY")
     curr = input()
     if curr == "1":
-        Transactions.get_CurrencyExchange_USD(name)
+        DCCS.get_CurrencyExchange_USD(name)
     if curr == "2":
-        Transactions.get_CurrencyExchange_EUR(name)
+        DCCS.get_CurrencyExchange_EUR(name)
     if curr == "3":
-        Transactions.get_CurrencyExchange_GBP(name)
+        DCCS.get_CurrencyExchange_GBP(name)
     if curr == "4":
-        Transactions.get_CurrencyExchange_AUS(name)
+        DCCS.get_CurrencyExchange_AUS(name)
     if curr == "5":
-        Transactions.get_CurrencyExchange_CNY(name)
+        DCCS.get_CurrencyExchange_CNY(name)
     if curr == "6":
-        Transactions.get_CurrencyExchange_JPY(name)
+        DCCS.get_CurrencyExchange_JPY(name)
 
     print("You're exchange has been completed. Enjoy!!! ")
     intro()
@@ -59,14 +58,14 @@ def atm():
         dep = int(input("How much would you like to withdraw today: "))
         print("You will be charged 1.3% upon withdrawal")
         rate_r = dep * 0.013
-        Transactions.use_atm_Checking(name, dep, rate_r)
+        DCCS.use_atm_Checking(name, dep, rate_r)
         print("Money withdrawn, have a great day!")
 
     if var == "2":
         dep = int(input("How much would you like to withdraw today: "))
         print("You will be charged 1.3% upon withdrawal")
         rate_r = dep * 0.013
-        Transactions.use_atm_Savings(name, dep, rate_r)
+        DCCS.use_atm_Savings(name, dep, rate_r)
         print("Money withdrawn, have a great day!")
 
     if var == "3":
@@ -75,7 +74,7 @@ def atm():
 
 def new_pin():
     name = input("please enter the full name your account is in: ")
-    email = input("please enter the email your account is in: ")
+    # email = input("please enter the email your account is in: ")
     C_va = input("please enter your Full Credit code: ")
     data_current = conn.execute("SELECT name, Type FROM InovClientsData WHERE DCL=?", [C_va])
     res = data_current.fetchall()
@@ -83,28 +82,8 @@ def new_pin():
         print("Account Name = ", x[0])
         print("Account Type = ", x[1])
     new_p = random.randint(1111, 9999)
-    Transactions.get_new_pin(email, new_p)
-    new_Crypt()
-
-
-def new_Crypt():
-    name = input("please enter the full name your account is in: ")
-    email = input("please enter your email: ")
-    data_current = conn.execute("SELECT name, Type FROM InovClientsData WHERE email=?", [email])
-    res = data_current.fetchall()
-    for x in res:
-        print("Account Name = ", x[0])
-        print("Account Type = ", x[1])
-    c_value = Fernet.generate_key()
-    Crypt = c_value[:5]
-    dclNo = '{} this is your secured credit code, this number will be your main account charged with most ' \
-            'transactions you make.' \
-            'This is to ensure safer payment and build a more secure wall around your credit.'
-    print(dclNo.format(Crypt))
-    conn.execute('UPDATE InovClientsData SET DCL=? WHERE name=?', [Crypt, name])
-    conn.close()
-    EmailSender.send_mail_for_new_Crypt(Crypt, email)
-    intro()
+    DCCS.get_new_pin(name, new_p)
+    DCCS.new_Crypt()
 
 
 def transactions():
@@ -120,10 +99,10 @@ def transactions():
     if ans == "1":
         print()
     if ans == "2":
-        name2 = input("what is the email of the person you'll be transferring money to: ")
+        name2 = input("what is the name of the person you'll be transferring money to: ")
         trans = int(input("how much will you sending today: "))
-        Transactions.send_money(trans, name, name2)
-        EmailSender.send_mail_for_Transactions(name, name2)
+        DCCS.send_money(trans, name, name2)
+        # EmailSender.send_mail_for_Transactions(name, name2)
         print("transfer made")
         intro()
 
@@ -133,83 +112,7 @@ def Loan():
     email = input("please enter the email your account is in: ")
     Crypt = input("please enter your Credit code: ")
     BDMS.get_access(Crypt)
-
-    print("please choose loan")
-    print("========== (1). Business ==========")
-    print("========== (2). Personal ==========")
-    ans = input()
-
-    if ans == "1":
-        print("Business loans are given at an interest rate of 3% to 7%")
-        print("Loans amount for businesses range from 10,000 - 550,000")
-        Business_loan = int(input("please enter loan amount: "))
-        if Business_loan == 100000:
-            r = 0.03
-            n = 12
-            p = Business_loan * (1 - (1 + r) ^ -n) / r
-            result = "Your Loan has been granted, you will be paying {} monthly over a 12 month period"
-            print(result.format(p))
-        if 100000 > Business_loan <= 250000:
-            r = 0.05
-            n = 36
-            p = Business_loan * (1 - (1 + r) ^ -n) / r
-            result = "Your Loan has been granted, you will be paying {} monthly over a 36 month period"
-            print(result.format(p))
-        if 250000 > Business_loan <= 550000:
-            r = 0.07
-            n = 60
-            p = Business_loan * (1 - (1 + r) ^ -n) / r
-            result = "Your Loan has been granted, you will be paying {} monthly over a 60 month period"
-            print(result.format(p))
-
-        print("Where would you like to deposit this loan")
-        print("========== (1). Current ==========")
-        print("========== (2). Savings ==========")
-        choice = input()
-        if choice == "1":
-            Transactions.get_businessloan_checking(Business_loan, name)
-        if choice == "2":
-            Transactions.get_businessloan_savings(Business_loan, name)
-
-        EmailSender.send_mail_for_business_loan(Business_loan, email, choice)
-
-    if ans == "2":
-        print("Personal loans are given at an interest rate of 1.5%")
-        print("Loan amounts for range from 5,000 - 100,000")
-        personal_loan = int(input("please enter loan amount: "))
-        if personal_loan == 5000:
-            r = 0.015
-            n = 12
-            p = personal_loan * (1 - (1 + r) ^ -n) / r
-            result = "Your Loan has been granted Monetary Transatlantic, you will be paying {} monthly over a 12 month " \
-                     "period "
-            print(result.format(p))
-        if 5000 > personal_loan <= 75000:
-            r = 0.015
-            n = 24
-            p = personal_loan * (1 - (1 + r) ^ -n) / r
-            result = "Your Loan has been granted Monetary Transatlantic, you will be paying {} monthly over a 24 month " \
-                     "period "
-            print(result.format(p))
-        if 75000 > personal_loan <= 100000:
-            r = 0.015
-            n = 24
-            p = personal_loan * (1 - (1 + r) ^ -n) / r
-            result = "Your Loan has been granted from Monetary Transatlantic Bank, you will be paying {} monthly over " \
-                     "a " \
-                     "36 month period "
-            print(result.format(p))
-        print("Where would you like to deposit this loan")
-        print("========== (1). Current ==========")
-        print("========== (2). Savings ==========")
-        choice = input()
-        if choice == "1":
-            Transactions.get_personalloan_checking(personal_loan, name)
-        if choice == "2":
-            Transactions.get_personalloan_Savings(personal_loan, name)
-
-        EmailSender.send_mail_for_personal_loan(email, personal_loan, choice)
-
+    DCCS.loan_system(name, email)
     intro()
 
 
@@ -233,13 +136,13 @@ def Deposit():
 
     if ans == "1":
         dep = int(input("How much would you like to deposit today: "))
-        Transactions.enter_deposit_Checking(name, dep)
+        DCCS.enter_deposit_Checking(name, dep)
         print("deposit has been made")
         # EmailSender.send_mail_for_deposits_checking(dep, email)
 
     if ans == "2":
         dep = int(input("How much would you like to deposit today: "))
-        Transactions.enter_deposit_Savings(name, dep)
+        DCCS.enter_deposit_Savings(name, dep)
         print("deposit has been made")
         # EmailSender.send_mail_for_deposits_saving(dep, email)
 
@@ -248,58 +151,18 @@ def Deposit():
 
 def OpenAccount():
     while True:
-        first_name = str(input('please enter your first name: '))
-        last_name = str(input('please enter your last name: '))
-        concat = StringIO()
-        concat.write(first_name)
-        concat.write(last_name)
-        Account_name = concat.getvalue()
+        full_name = str(input('please enter your full name: '))
+        Account_name = full_name
         email = str(input('please enter an email: '))
         addy = str(input('enter address: '))
-        c_value = Fernet.generate_key()
-        Crypt = c_value[:5]
         Country = str(input('What country are you in: '))
         Currency = str(input('What is your currency: '))
         print('What type of account would you like to open: ')
         print('please choose')
-        print('Business')
-        print('Personal')
-        type = str(input())
-        current = int(input('How much do you want to deposit into this account p.s. no min deposit required max '
-                            'deposit is '
-                            '3000: '))
-        if current > 3000 or current < 0:
-            print("deposit does not meet requirement, try again")
-            OpenAccount()
-        savings = int(input('How much do you want to deposit into this account p.s. no min deposit required max '
-                            'deposit is '
-                            '5000: '))
-        if savings > 5000 or savings < 0:
-            print("deposit does not meet requirement, try again")
-            OpenAccount()
-        sql = "INSERT INTO InovClientsData (name, email, SDC, DCL, Type, Current, Saving, Address, Country, Currency) " \
-              "VALUES ( " \
-              "?, " \
-              "?, ?, ?, ?, ?, ?, ?, ?, ?) "
-        val = (Account_name, email, Crypt, c_value, type, current, savings, addy, Country, Currency)
-        db.execute(sql, val)
-        db.commit()
-        print("Would you like to open another account ? yes/no")
-        ans = input()
-        if ans == "yes":
-            OpenAccount()
-        else:
-            pinNo = '{}  this is a generated code that will be used to manage your account for Securitization.'
-            print(pinNo.format(c_value))
-            dclNo = '{} this is your secured credit number, this number will be your main account charged with most ' \
-                    'transactions you make.' \
-                    'This is to ensure safer payment and build a more secure wall around your credit. Please memorize ' \
-                    'these first five digits. '
-            print(dclNo.format(Crypt))
-
-        print("info saved to database")
-        print("Account created")
-
+        print('1. Credit and Debit account')
+        print('2. Credit or Debit')
+        Accnt_type = input()
+        DCCS.create_accnt(Account_name, email, addy, Country, Currency, Accnt_type)
         intro()
 
 
