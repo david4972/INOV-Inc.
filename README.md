@@ -5,7 +5,7 @@ We provide Software for:
 - Domestic & International transactions
 - Formal Crypto Banking
 - Lending 
-- Checking and Savings Account 
+- Checking and Savings Account Management 
 
 My name is David Okoronkwo. I am a Finance Major and Economics Minor at Quinnipiac University in Hamden, Connecticut. Over the past year, Three of my friends and I began working on INOV.
 
