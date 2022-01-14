@@ -61,7 +61,8 @@ We are Currently have an Executive Team they consist of:
 - Patrick Crispino - CEO 
 - Zachary Merrill - Investor Relations 
 - Juyon Kim - COO
-- Our Mission - To Advance the global credit, retail and institutional Banking system, pushing to more automated and efficient financial services.
+
+Our Mission - To Advance the global credit, retail and institutional Banking system, pushing to more automated and efficient financial services.
 
 
 
