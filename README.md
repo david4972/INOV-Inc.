@@ -54,7 +54,7 @@ b'bpv2KFz3YOfLECe4kUreAVN68zCp3CRdDD4oOgBZJMA='
 
 This is the second code:
 b'bpv2K' 
-and receive a newly generated ID that will be put back into the linkage of the account.
+
 
 We are Currently have an Executive Team they consist of: 
 - David Okoronkwo - President, CTO 
