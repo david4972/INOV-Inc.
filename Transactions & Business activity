@@ -1,10 +1,105 @@
 from sqlalchemy import create_engine
 from forex_python.converter import CurrencyRates
 import sqlite3
+from cryptography.fernet import Fernet
+import IFP
+import EmailSender
 
 db_connect = create_engine('sqlite:///data.db')
 db = sqlite3.connect('transactions.db')
 dub = db.cursor()
+
+
+def create_accnt(accnt_name=str, email=str, addy=str, cou=str, cur=str, Accnt_type=str):
+    c_value = Fernet.generate_key()
+    Crypt = c_value[:5]
+    if Accnt_type == "1":
+        Accnt_type1 = 'Credit account'
+        Accnt_type2 = 'Debit account'
+        Credit_Checking_amt = int(input('How much do you want to deposit into your Credit Checkings account p.s. no '
+                                        'min deposit '
+                                        'required max '
+                                        'deposit is '
+                                        '3000: '))
+        if Credit_Checking_amt > 3000 or Credit_Checking_amt < 0:
+            print("deposit does not meet requirement, try again")
+            IFP.OpenAccount()
+        Credit_Savings_amt = int(
+            input('How much do you want to deposit into your Credit Savings account p.s. no min deposit '
+                  'required max '
+                  'deposit is '
+                  '5000: '))
+        if Credit_Savings_amt > 5000 or Credit_Savings_amt < 0:
+            print("deposit does not meet requirement, try again")
+            IFP.OpenAccount()
+        Debit_Checking_amt = int(input('How much do you want to deposit into your Debit Checkings account p.s. no '
+                                       'min deposit '
+                                       'required max '
+                                       'deposit is '
+                                       '3000: '))
+        if Debit_Checking_amt > 3000 or Debit_Checking_amt < 0:
+            print("deposit does not meet requirement, try again")
+            IFP.OpenAccount()
+        Debit_Savings_amt = int(
+            input('How much do you want to deposit into your Debit Savings account p.s. no min deposit '
+                  'required max '
+                  'deposit is '
+                  '5000: '))
+        if Debit_Savings_amt > 5000 or Debit_Savings_amt < 0:
+            print("deposit does not meet requirement, try again")
+            IFP.OpenAccount()
+        read_data = "INSERT INTO InovClientsJointAccountData (name, email, SDC, DCL, CreditAccount, CreditChecking, " \
+                    "CreditSaving, DebitAccount, " \
+                    "DebitChecking, " \
+                    "DebitSaving, Address, Country, " \
+                    "Currency) " \
+                    "VALUES ( " \
+                    "?, " \
+                    "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
+        val = (accnt_name, email, Crypt, c_value, Accnt_type1, Credit_Checking_amt, Credit_Savings_amt, Accnt_type2,
+               Debit_Checking_amt, Debit_Savings_amt, addy, cou, cur)
+        db.execute(read_data, val)
+        db.close()
+        dclNo = '{} this is your secured credit number, this number will be your main account charged with most ' \
+                'transactions you make.' \
+                'This is to ensure safer payment and build a more secure wall around your credit. Please memorize ' \
+                'these first five digits. '
+        print(dclNo.format(Crypt))
+        print("Account created")
+    if Accnt_type == "2":
+        print("please choose which account you'd like to create")
+        print("1. Credit")
+        print("2. Debit")
+        accnt_type = input()
+        if accnt_type == "1":
+            a_type1 = "Credit Account"
+            current = int(input('How much do you want to deposit into this account p.s. no min deposit required max '
+                                'deposit is '
+                                '3000: '))
+            if current > 3000 or current < 0:
+                print("deposit does not meet requirement, try again")
+                IFP.OpenAccount()
+            savings = int(input('How much do you want to deposit into this account p.s. no min deposit required max '
+                                'deposit is '
+                                '5000: '))
+            if savings > 5000 or savings < 0:
+                print("deposit does not meet requirement, try again")
+                IFP.OpenAccount()
+            sql = "INSERT INTO InovClientsData (name, email, SDC, DCL, Type, Current, Saving, Address, Country, " \
+                  "Currency) " \
+                  "VALUES ( " \
+                  "?, " \
+                  "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
+            val = (accnt_name, email, Crypt, c_value, a_type1, current, savings, addy, cou, cur)
+            db.execute(sql, val)
+            db.close()
+            dclNo = '{} this is your secured credit number, this number will be your main account charged with most ' \
+                    'transactions you make.' \
+                    'This is to ensure safer payment and build a more secure wall around your credit. Please memorize ' \
+                    'these first five digits. '
+            print(dclNo.format(Crypt))
+            print("Account created")
+
 
 
 def enter_deposit_Checking(x=str, y=int):
@@ -44,16 +139,15 @@ def get_new_pin(n=str, z=int):
 def send_money(t=int, n1=str, n2=str):
     conn = db_connect.connect()
     conn.execute('UPDATE InovClientsData SET Current=Current-? WHERE name=?', [t, n1])
-    conn.close()
 
-    conn.execute('UPDATE InovClientsData SET Current=Current+? WHERE email=?', [t, n2])
+    conn.execute('UPDATE InovClientsData SET Current=Current+? WHERE name=?', [t, n2])
     conn.close()
 
 
 def get_businessloan_checking(bl1=int, n3=str):
     conn = db_connect.connect()
     conn.execute('UPDATE InovClientsData SET Current=Current+? WHERE name=?', [bl1, n3])
-    conn.commit()
+    conn.close()
 
 
 def get_businessloan_savings(bl2=int, n4=str):
@@ -395,6 +489,39 @@ def global_transfers(region=int, val=int, curname=str, curname2=str, cur=str, cu
         db.commit()
 
 
+def loan_system(name=str, email=str):
+    print("Personal loans are given at an interest rate of 1.5%")
+    print("Loan amounts for range from 5,000 - 100,000")
+    personal_loan = int(input("please enter loan amount: "))
+    if personal_loan == 5000:
+        r = 0.015
+        n = 12
+        p = personal_loan * (1 - (1 + r) ^ -n) / r
+        result = "Your Loan has been granted INOV, you will be paying {} monthly over a 12 month " \
+                 "period "
+        print(result.format(p))
+    if 5000 > personal_loan <= 75000:
+        r = 0.015
+        n = 24
+        p = personal_loan * (1 - (1 + r) ^ -n) / r
+        result = "Your Loan has been granted INOV, you will be paying {} monthly over a 24 month " \
+                 "period "
+        print(result.format(p))
+    if 75000 > personal_loan <= 100000:
+        r = 0.015
+        n = 24
+        p = personal_loan * (1 - (1 + r) ^ -n) / r
+        result = "Your Loan has been granted from Monetary Transatlantic Bank, you will be paying {} monthly over " \
+                 "a " \
+                 "36 month period "
+        print(result.format(p))
+    print("Where would you like to deposit this loan")
+    print("========== (1). Current ==========")
+    print("========== (2). Savings ==========")
+    choice = input()
+    if choice == "1":
+        get_personalloan_checking(personal_loan, name)
+    if choice == "2":
+        get_personalloan_Savings(personal_loan, name)
 
-
-
+    EmailSender.send_mail_for_personal_loan(email, personal_loan, choice)
