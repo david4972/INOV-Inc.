@@ -24,6 +24,7 @@ The DCCS would allow Financial institutions to more accurately calculate credit 
 APPLICABLE BUILD 
 
 When a Credit/Debit account is made, Each account will produce a generated Cryptography code that will be split into two separate codes and linked to the account of every individual depositor. 
+
 The First Code will look like this:
 b'bpv2KFz3YOfLECe4kUreAVN68zCp3CRdDD4oOgBZJMA='
 
