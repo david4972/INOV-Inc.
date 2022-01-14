@@ -43,6 +43,7 @@ If/when an account is breached, the system would pull up the depositor account b
 ENTER FIRST CODE
 
 The depositor will be taken to a new page where they would be asked to login by putting in the full original generated Code. 
+
 This is the Code that will be required:
 b'bpv2KFz3YOfLECe4kUreAVN68zCp3CRdDD4oOgBZJMA='
 
