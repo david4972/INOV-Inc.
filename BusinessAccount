@@ -1,12 +1,13 @@
 import sqlite3
 
-conn = sqlite3.connect('data.db')
+conn = sqlite3.connect('BusinessAccntdata.db')
 
 conn.execute('''CREATE TABLE InovClientsBusinessData
             (name VARCHAR(255),
             email VARCHAR(255),
             SDC VARCHAR(255),
             DCL  VARCHAR(250),
+            Type  VARCHAR(250),
             Credit VARCHAR(255),
             Checking INT(150),
             Saving INT(150),
