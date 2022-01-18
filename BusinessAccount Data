@@ -2,7 +2,7 @@ import sqlite3
 
 conn = sqlite3.connect('BusinessAccntdata.db')
 
-conn.execute('''CREATE TABLE InovClientsBusinessData
+conn.execute('''CREATE TABLE InovClientsBusiness
             (name VARCHAR(255),
             email VARCHAR(255),
             SDC VARCHAR(255),
