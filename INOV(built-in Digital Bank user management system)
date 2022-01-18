@@ -16,7 +16,7 @@ conn = db.cursor()
 def Curr_exchange():
     name = input("please enter the full name your account is in: ")
     Crypt = input("please enter your Credit code: ")
-    BDMS.get_access(Crypt)
+    BDMS.get_PersonalAccnt_access(Crypt)
 
     print("which currency would you like to use today")
     print("(1). USD")
@@ -46,31 +46,16 @@ def Curr_exchange():
 def atm():
     name = input("please enter the full name your account is in: ")
     Crypt = input("please enter your Credit code: ")
-    BDMS.get_access(Crypt)
+    BDMS.get_PersonalAccnt_access(Crypt)
 
     print("choose an account to withdraw from: ")
     print("(1). Checking")
     print("(2). Savings")
     print("(3). exit")
-
     var = input()
+    DCCS.atm_option(name, var)
 
-    if var == "1":
-        dep = int(input("How much would you like to withdraw today: "))
-        print("You will be charged 1.3% upon withdrawal")
-        rate_r = dep * 0.013
-        DCCS.use_atm_Checking(name, dep, rate_r)
-        print("Money withdrawn, have a great day!")
-
-    if var == "2":
-        dep = int(input("How much would you like to withdraw today: "))
-        print("You will be charged 1.3% upon withdrawal")
-        rate_r = dep * 0.013
-        DCCS.use_atm_Savings(name, dep, rate_r)
-        print("Money withdrawn, have a great day!")
-
-    if var == "3":
-        intro()
+    
 
 
 def new_pin():
@@ -90,36 +75,32 @@ def new_pin():
 def transactions():
     name = input("please enter the full name your account is in: ")
     Crypt = input("please enter your Credit code: ")
-    BDMS.get_access(Crypt)
+    BDMS.get_PersonalAccnt_access(Crypt)
 
-    print("Will you be making an International transfer today: ")
-    print("(1).Yes")
-    print("(2).No")
-    ans = input()
-
-    if ans == "1":
-        print()
-    if ans == "2":
-        name2 = input("what is the name of the person you'll be transferring money to: ")
-        trans = int(input("how much will you sending today: "))
-        DCCS.send_money(trans, name, name2)
-        # EmailSender.send_mail_for_Transactions(name, name2)
-        print("transfer made")
-        intro()
+    name2 = input("what is the name of the person you'll be transferring money to: ")
+    trans = int(input("how much will you sending today: "))
+    DCCS.send_money(trans, name, name2)
+    # EmailSender.send_mail_for_Transactions(name, name2)
+    print("transfer made")
+    intro()
 
 
 def Loan():
     name = input("please enter the full name your account is in: ")
     email = input("please enter the email your account is in: ")
     Crypt = input("please enter your Credit code: ")
-    BDMS.get_access(Crypt)
-    DCCS.loan_system(name, email)
+    BDMS.get_PersonalAccnt_access(Crypt)
+    print("please choose the type of Loan you want to get")
+    print("1.Business")
+    print("2.Personal")
+    ans = input()
+    DCCS.loan_option(name, email, ans)
     intro()
 
 
 def BankStatement():
     Crypt = input("please enter your Credit code: ")
-    BDMS.get_access(Crypt)
+    BDMS.get_PersonalAccnt_access(Crypt)
 
     intro()
 
@@ -128,26 +109,13 @@ def Deposit():
     name = input("please enter the full name your account is in: ")
     # email = input("please enter email: ")
     Crypt = input("please enter your Credit code: ")
-    BDMS.get_access(Crypt)
+    BDMS.get_PersonalAccnt_access(Crypt)
 
     print("choose an account to deposit into: ")
     print("========== (1). Current ==========")
     print("========== (2). Savings ==========")
     ans = input()
 
-    if ans == "1":
-        dep = int(input("How much would you like to deposit today: "))
-        DCCS.enter_deposit_Checking(name, dep)
-        print("deposit has been made")
-        # EmailSender.send_mail_for_deposits_checking(dep, email)
-
-    if ans == "2":
-        dep = int(input("How much would you like to deposit today: "))
-        DCCS.enter_deposit_Savings(name, dep)
-        print("deposit has been made")
-        # EmailSender.send_mail_for_deposits_saving(dep, email)
-
-    intro()
 
 
 def OpenAccount():
@@ -170,7 +138,7 @@ def OpenAccount():
 def LoginAccount():
     print("welcome")
     Crypt = input("please enter your Credit code: ")
-    BDMS.get_access(Crypt)
+    BDMS.get_PersonalAccnt_access(Crypt)
 
     print("choose a letter to move on or quit")
     print("========== (1). Deposit Money ============")
