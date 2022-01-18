@@ -10,9 +10,47 @@ db = sqlite3.connect('transactions.db')
 dub = db.cursor()
 
 
-def create_accnt(accnt_name=str, email=str, addy=str, cou=str, cur=str, Accnt_type=str):
+def create_accnt_option(accnt_name2=str, email2=str, addy2=str, cou2=str, cur2=str, Ans=str):
     c_value = Fernet.generate_key()
     Crypt = c_value[:5]
+    if Ans == "1":
+        a_type1 = "Credit"
+        Credit_Checking_amt = int(input('How much do you want to deposit into your Credit Checkings account p.s. no '
+                                        'min deposit '
+                                        'required max '
+                                        'deposit is '
+                                        '3000: '))
+        if Credit_Checking_amt > 3000 or Credit_Checking_amt < 0:
+            print("deposit does not meet requirement, try again")
+            IFP.OpenAccount()
+        Credit_Savings_amt = int(
+            input('How much do you want to deposit into your Credit Savings account p.s. no min deposit '
+                  'required max '
+                  'deposit is '
+                  '5000: '))
+        if Credit_Savings_amt > 5000 or Credit_Savings_amt < 0:
+            print("deposit does not meet requirement, try again")
+            IFP.OpenAccount()
+        read_data = "INSERT INTO InovClientsBusinessData (name, email, SDC, DCL, Credit, Checking, Saving, Address, " \
+                    "Country, " \
+                    "Currency) " \
+                    "VALUES ( " \
+                    "?, " \
+                    "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
+        val = (accnt_name2, email2, Crypt, c_value, a_type1, Credit_Checking_amt, Credit_Savings_amt, addy2, cou2, cur2)
+        db.execute(read_data, val)
+        db.close()
+    if Ans == "2":
+        create_accnt(accnt_name2, email2, addy2, cou2, cur2)
+
+
+def create_accnt(accnt_name=str, email=str, addy=str, cou=str, cur=str):
+    c_value = Fernet.generate_key()
+    Crypt = c_value[:5]
+    print('please choose')
+    print('1. Credit and Debit account')
+    print('2. Credit or Debit')
+    Accnt_type = input()
     if Accnt_type == "1":
         Accnt_type1 = 'Credit account'
         Accnt_type2 = 'Debit account'
@@ -101,7 +139,6 @@ def create_accnt(accnt_name=str, email=str, addy=str, cou=str, cur=str, Accnt_ty
             print("Account created")
 
 
-
 def enter_deposit_Checking(x=str, y=int):
     conn = db_connect.connect()
     conn.execute("UPDATE InovClientsData SET Current=Current+? WHERE name=?", [y, x])
@@ -132,8 +169,30 @@ def use_atm_Savings(d=str, f=int, r=int):
 
 def get_new_pin(n=str, z=int):
     conn = db_connect.connect()
-    conn.execute('UPDATE InovClientsData SET Pin=? WHERE email=?', [z, n])
+    conn.execute('UPDATE InovClientsData SET SDC=? WHERE name=?', [z, n])
     conn.close()
+
+
+def new_Crypt():
+    conn = db_connect.connect()
+    name = input("please enter the full name your account is in: ")
+    pin = input("please enter your temporary pin: ")
+    data_current = conn.execute("SELECT name, Type FROM InovClientsData WHERE SDC=?", [pin])
+    res = data_current.fetchall()
+    for x in res:
+        print("Account Name = ", x[0])
+        print("Account Type = ", x[1])
+    c_value = Fernet.generate_key()
+    Crypt = c_value[:5]
+    dclNo = '{} this is your secured credit code, this number will be your main account charged with most ' \
+            'transactions you make.' \
+            'This is to ensure safer payment and build a more secure wall around your credit.'
+    print(dclNo.format(Crypt))
+    conn.execute('UPDATE InovClientsData SET DCL=? WHERE name=?', [c_value, name])
+    conn.execute('UPDATE InovClientsData SET SDC=? WHERE name=?', [Crypt, name])
+    conn.close()
+    # EmailSender.send_mail_for_new_Crypt(Crypt, email)
+    IFP.intro()
 
 
 def send_money(t=int, n1=str, n2=str):
