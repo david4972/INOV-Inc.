@@ -148,6 +148,22 @@ def create_accnt(accnt_name=str, email=str, addy=str, cou=str, cur=str):
             print("Account created")
 
 
+def enter_deposit_option(name=str, ans=str):
+    if ans == "1":
+        dep = int(input("How much would you like to deposit today: "))
+        enter_deposit_Checking(name, dep)
+        print("deposit has been made")
+        # EmailSender.send_mail_for_deposits_checking(dep, email)
+
+    if ans == "2":
+        dep = int(input("How much would you like to deposit today: "))
+        enter_deposit_Savings(name, dep)
+        print("deposit has been made")
+        # EmailSender.send_mail_for_deposits_saving(dep, email)
+
+    IFP.intro()
+
+
 def enter_deposit_Checking(x=str, y=int):
     # Personal Credit/Debit Account
     data_d.execute("UPDATE InovClientsData SET Current=Current+? WHERE name=?", [y, x])
@@ -170,6 +186,25 @@ def enter_deposit_Savings(x=str, y=int):
     data_d.close()
     pcd.close()
     cd.close()
+
+
+def atm_option(name=str, var=str):
+    if var == "1":
+        dep = int(input("How much would you like to withdraw today: "))
+        print("You will be charged 1.3% upon withdrawal")
+        rate_r = dep * 0.013
+        use_atm_Checking(name, dep, rate_r)
+        print("Money withdrawn, have a great day!")
+
+    if var == "2":
+        dep = int(input("How much would you like to withdraw today: "))
+        print("You will be charged 1.3% upon withdrawal")
+        rate_r = dep * 0.013
+        use_atm_Savings(name, dep, rate_r)
+        print("Money withdrawn, have a great day!")
+
+    if var == "3":
+        IFP.intro()
 
 
 def use_atm_Checking(d=str, f=int, r=int):
@@ -781,6 +816,13 @@ def global_transfers(region=int, val=int, curname=str, curname2=str, cur=str, cu
         data_src = (name, link, reg, cur2)
         dub.execute(data_link, data_src)
         db.commit()
+
+
+def loan_option(n=str, em=str, ans=str):
+    if ans == "1":
+        Business_loan_system(n, em)
+    else:
+        personal_loan_system(n, em)
 
 
 def personal_loan_system(name=str, email=str):
