@@ -15,20 +15,20 @@ def create_accnt_option(accnt_name2=str, email2=str, addy2=str, cou2=str, cur2=s
     Crypt = c_value[:5]
     if Ans == "1":
         a_type1 = "Credit"
-        Credit_Checking_amt = int(input('How much do you want to deposit into your Credit Checkings account p.s. no '
-                                        'min deposit '
+        Credit_Checking_amt = int(input('How much do you want to deposit into your Credit Checkings account p.s. '
+                                        'min deposit is. 50,000 '
                                         'required max '
                                         'deposit is '
-                                        '3000: '))
-        if Credit_Checking_amt > 3000 or Credit_Checking_amt < 0:
+                                        '100,000: '))
+        if Credit_Checking_amt > 100000 or Credit_Checking_amt < 50000:
             print("deposit does not meet requirement, try again")
             IFP.OpenAccount()
         Credit_Savings_amt = int(
-            input('How much do you want to deposit into your Credit Savings account p.s. no min deposit '
+            input('How much do you want to deposit into your Credit Savings account p.s. min deposit is 150,000'
                   'required max '
                   'deposit is '
-                  '5000: '))
-        if Credit_Savings_amt > 5000 or Credit_Savings_amt < 0:
+                  '500,000: '))
+        if Credit_Savings_amt > 500000 or Credit_Savings_amt < 150000:
             print("deposit does not meet requirement, try again")
             IFP.OpenAccount()
         read_data = "INSERT INTO InovClientsBusinessData (name, email, SDC, DCL, Credit, Checking, Saving, Address, " \
@@ -58,32 +58,32 @@ def create_accnt(accnt_name=str, email=str, addy=str, cou=str, cur=str):
                                         'min deposit '
                                         'required max '
                                         'deposit is '
-                                        '3000: '))
-        if Credit_Checking_amt > 3000 or Credit_Checking_amt < 0:
+                                        '5,000: '))
+        if Credit_Checking_amt > 5000 or Credit_Checking_amt < 0:
             print("deposit does not meet requirement, try again")
             IFP.OpenAccount()
         Credit_Savings_amt = int(
             input('How much do you want to deposit into your Credit Savings account p.s. no min deposit '
                   'required max '
                   'deposit is '
-                  '5000: '))
-        if Credit_Savings_amt > 5000 or Credit_Savings_amt < 0:
+                  '15,000: '))
+        if Credit_Savings_amt > 15000 or Credit_Savings_amt < 0:
             print("deposit does not meet requirement, try again")
             IFP.OpenAccount()
         Debit_Checking_amt = int(input('How much do you want to deposit into your Debit Checkings account p.s. no '
                                        'min deposit '
                                        'required max '
                                        'deposit is '
-                                       '3000: '))
-        if Debit_Checking_amt > 3000 or Debit_Checking_amt < 0:
+                                       '5,000: '))
+        if Debit_Checking_amt > 5000 or Debit_Checking_amt < 0:
             print("deposit does not meet requirement, try again")
             IFP.OpenAccount()
         Debit_Savings_amt = int(
             input('How much do you want to deposit into your Debit Savings account p.s. no min deposit '
                   'required max '
                   'deposit is '
-                  '5000: '))
-        if Debit_Savings_amt > 5000 or Debit_Savings_amt < 0:
+                  '15,000: '))
+        if Debit_Savings_amt > 15000 or Debit_Savings_amt < 0:
             print("deposit does not meet requirement, try again")
             IFP.OpenAccount()
         read_data = "INSERT INTO InovClientsJointAccountData (name, email, SDC, DCL, CreditAccount, CreditChecking, " \
@@ -113,14 +113,14 @@ def create_accnt(accnt_name=str, email=str, addy=str, cou=str, cur=str):
             a_type1 = "Credit Account"
             current = int(input('How much do you want to deposit into this account p.s. no min deposit required max '
                                 'deposit is '
-                                '3000: '))
-            if current > 3000 or current < 0:
+                                '5,000: '))
+            if current > 5000 or current < 0:
                 print("deposit does not meet requirement, try again")
                 IFP.OpenAccount()
             savings = int(input('How much do you want to deposit into this account p.s. no min deposit required max '
                                 'deposit is '
-                                '5000: '))
-            if savings > 5000 or savings < 0:
+                                '15,000: '))
+            if savings > 15000 or savings < 0:
                 print("deposit does not meet requirement, try again")
                 IFP.OpenAccount()
             sql = "INSERT INTO InovClientsData (name, email, SDC, DCL, Type, Current, Saving, Address, Country, " \
