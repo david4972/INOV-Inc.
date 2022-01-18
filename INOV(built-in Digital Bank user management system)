@@ -1,4 +1,5 @@
 
+
 import BDMS
 import DCCS
 import random
@@ -159,10 +160,10 @@ def OpenAccount():
         Currency = str(input('What is your currency: '))
         print('What type of account would you like to open: ')
         print('please choose')
-        print('1. Credit and Debit account')
-        print('2. Credit or Debit')
-        Accnt_type = input()
-        DCCS.create_accnt(Account_name, email, addy, Country, Currency, Accnt_type)
+        print('1. Business')
+        print('2. Personal')
+        ans = input()
+        DCCS.create_accnt_option(Account_name, email, addy, Country, Currency, ans)
         intro()
 
 
