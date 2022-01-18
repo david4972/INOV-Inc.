@@ -41,7 +41,7 @@ def create_accnt_option(accnt_name2=str, email2=str, addy2=str, cou2=str, cur2=s
         if Credit_Savings_amt > 500000 or Credit_Savings_amt < 150000:
             print("deposit does not meet requirement, try again")
             IFP.OpenAccount()
-        read_data = "INSERT INTO InovClientsBusinessData (name, email, SDC, DCL, Type, Credit, Checking, Saving, " \
+        read_data = "INSERT INTO InovClientsBusiness (name, email, SDC, DCL, Type, Credit, Checking, Saving, " \
                     "Address, " \
                     "Country, " \
                     "Currency) " \
@@ -174,7 +174,7 @@ def enter_deposit_Checking(x=str, y=int):
     # Personal Credit & Debit Account
     pcd.execute("UPDATE InovClientsJointAccountData SET DebitChecking=DebitChecking+? WHERE name=?", [y, x])
     # Business Credit Account
-    cd.execute("UPDATE InovClientsBusinessData SET Checking=Checking+? WHERE name=?", [y, x])
+    cd.execute("UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=?", [y, x])
     data_d.close()
     pcd.close()
     cd.close()
@@ -186,7 +186,7 @@ def enter_deposit_Savings(x=str, y=int):
     # Personal Credit & Debit Account
     pcd.execute("UPDATE InovClientsJointAccountData SET DebitSaving=DebitSaving+? WHERE name=?", [y, x])
     # Business Credit Account
-    cd.execute("UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=?", [y, x])
+    cd.execute("UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=?", [y, x])
     data_d.close()
     pcd.close()
     cd.close()
@@ -215,11 +215,11 @@ def use_atm_Checking(d=str, f=int, r=int):
     # Personal Credit/Debit Account
     data_d.execute('UPDATE InovClientsData SET Current=Current-? WHERE name=?', [f, d])
     data_d.execute('UPDATE InovClientsData SET Current=Current-? WHERE name=?', [r, d])
-    cd.execute('UPDATE InovClientsBusinessData SET Checking=Checking+? WHERE name=INOV Bank.', [r])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=INOV Bank.', [r])
     # Personal Credit & Debit Account
     pcd.execute("UPDATE InovClientsJointAccountData SET DebitChecking=DebitChecking-? WHERE name=?", [f, d])
     pcd.execute('UPDATE InovClientsJointAccountData SET DebitChecking=DebitChecking-? WHERE name=?', [r, d])
-    cd.execute('UPDATE InovClientsBusinessData SET Checking=Checking+? WHERE name=INOV Bank.', [r])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=INOV Bank.', [r])
     data_d.close()
     pcd.close()
     cd.close()
@@ -229,11 +229,11 @@ def use_atm_Savings(d=str, f=int, r=int):
     # Personal Credit/Debit Account
     data_d.execute('UPDATE InovClientsData SET Saving=Saving-? WHERE name=?', [f, d])
     data_d.execute('UPDATE InovClientsData SET Saving=Saving-? WHERE name=?', [r, d])
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=INOV Bank.', [r])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=INOV Bank.', [r])
     # Personal Credit & Debit Account
     pcd.execute("UPDATE InovClientsJointAccountData SET DebitChecking=DebitChecking-? WHERE name=?", [f, d])
     pcd.execute('UPDATE InovClientsJointAccountData SET DebitChecking=DebitChecking-? WHERE name=?', [r, d])
-    cd.execute('UPDATE InovClientsBusinessData SET Checking=Checking+? WHERE name=INOV Bank.', [r])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=INOV Bank.', [r])
     data_d.close()
     pcd.close()
     cd.close()
@@ -243,19 +243,32 @@ def get_new_pin(n=str, z=int):
     # Personal Credit/Debit Account
     data_d.execute('UPDATE InovClientsData SET SDC=? WHERE name=?', [z, n])
     # Personal Credit & Debit Account
-    pcd.execute('UPDATE InovClientsData SET SDC=? WHERE name=?', [z, n])
+    pcd.execute('UPDATE InovClientsJointAccountData SET SDC=? WHERE name=?', [z, n])
     # Business Credit Account
-    cd.execute('UPDATE InovClientsData SET SDC=? WHERE name=?', [z, n])
+    cd.execute('UPDATE InovClientsBusiness SET SDC=? WHERE name=?', [z, n])
     data_d.close()
     pcd.close()
     cd.close()
 
 
 def new_Crypt():
-    conn = db_connect.connect()
+    # conn = db_connect.connect()
     name = input("please enter the full name your account is in: ")
     pin = input("please enter your temporary pin: ")
-    data_current = conn.execute("SELECT name, Type FROM InovClientsData WHERE SDC=?", [pin])
+    # Personal Credit/Debit Account
+    data_current = data_d.execute("SELECT name, Type FROM InovClientsData WHERE SDC=?", [pin])
+    res = data_current.fetchall()
+    for x in res:
+        print("Account Name = ", x[0])
+        print("Account Type = ", x[1])
+    # Personal Credit & Debit Account
+    data_current2 = pcd.execute("SELECT name, Type FROM InovClientsJointAccountData WHERE SDC=?", [pin])
+    res = data_current2.fetchall()
+    for x in res:
+        print("Account Name = ", x[0])
+        print("Account Type = ", x[1])
+    # Business Credit Account
+    data_current = cd.execute("SELECT name, Type FROM InovClientsBusiness WHERE SDC=?", [pin])
     res = data_current.fetchall()
     for x in res:
         print("Account Name = ", x[0])
@@ -270,11 +283,11 @@ def new_Crypt():
     data_d.execute('UPDATE InovClientsData SET DCL=? WHERE name=?', [c_value, name])
     data_d.execute('UPDATE InovClientsData SET SDC=? WHERE name=?', [Crypt, name])
     # Personal Credit & Debit Account
-    pcd.execute('UPDATE InovClientsData SET DCL=? WHERE name=?', [c_value, name])
-    pcd.execute('UPDATE InovClientsData SET SDC=? WHERE name=?', [Crypt, name])
+    pcd.execute('UPDATE InovClientsJointAccountData SET DCL=? WHERE name=?', [c_value, name])
+    pcd.execute('UPDATE InovClientsJointAccountData SET SDC=? WHERE name=?', [Crypt, name])
     # Business Credit Account
-    cd.execute('UPDATE InovClientsData SET DCL=? WHERE name=?', [c_value, name])
-    cd.execute('UPDATE InovClientsData SET SDC=? WHERE name=?', [Crypt, name])
+    cd.execute('UPDATE InovClientsBusiness SET DCL=? WHERE name=?', [c_value, name])
+    cd.execute('UPDATE InovClientsBusiness SET SDC=? WHERE name=?', [Crypt, name])
     data_d.close()
     pcd.close()
     cd.close()
@@ -290,20 +303,20 @@ def send_money(t=int, n1=str, n2=str):
     pcd.execute('UPDATE InovClientsJointAccountData SET DebitChecking=DebitChecking-? WHERE name=?', [t, n1])
     pcd.execute('UPDATE InovClientsJointAccountData SET DebitChecking=DebitChecking+? WHERE name=?', [t, n2])
     # Business Credit Account
-    cd.execute('UPDATE InovClientsBusinessData SET Checking=Checking-? WHERE name=?', [t, n1])
-    cd.execute('UPDATE InovClientsBusinessData SET Checking=Checking+? WHERE name=?', [t, n2])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking-? WHERE name=?', [t, n1])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=?', [t, n2])
     data_d.close()
     pcd.close()
     cd.close()
 
 
 def get_businessloan_checking(bl1=int, n3=str):
-    cd.execute('UPDATE InovClientsBusinessData SET Checking=Checking+? WHERE name=?', [bl1, n3])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=?', [bl1, n3])
     cd.close()
 
 
 def get_businessloan_savings(bl2=int, n4=str):
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=?', [bl2, n4])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=?', [bl2, n4])
     cd.close()
 
 
@@ -333,8 +346,8 @@ def get_CurrencyExchange_USD(gov=str):
     rate_r = 1.50
     data_d.execute('UPDATE InovClientsData SET Current=Current-? WHERE name=?', [rate_r, gov])
     data_d.execute('UPDATE InovClientsData SET Saving=Saving-? WHERE name=?', [rate_r, gov])
-    cd.execute('UPDATE InovClientsBusinessData SET Current=Current+? WHERE name=INOV Bank.', [rate_r])
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Current=Current+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
     data_d.close()
     cd.close()
     # Personal Credit & Debit Account
@@ -349,21 +362,21 @@ def get_CurrencyExchange_USD(gov=str):
     pcd.execute('UPDATE InovClientsJointAccountData SET DebitChecking=DebitChecking-? WHERE name=?', [rate_r, gov])
     pcd.execute('UPDATE InovClientsJointAccountData SET CreditSaving=CreditSaving-? WHERE name=?', [rate_r, gov])
     pcd.execute('UPDATE InovClientsJointAccountData SET DebitSaving=DebitSaving-? WHERE name=?', [rate_r, gov])
-    cd.execute('UPDATE InovClientsBusinessData SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
     pcd.close()
     cd.close()
     # Business Credit Account
-    cd.execute('UPDATE InovClientsJointAccountData SET Checking=CreditChecking/?, Saving=CreditSaving/?, '
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking/?, Saving=Saving/?, '
                'Currency=? '
                'WHERE name=?',
                [cex1, cex2, var1, gov])
     print("You will be charged 1.3% upon this exchange")
     rate_r = 1.50
-    cd.execute('UPDATE InovClientsJointAccountData SET Checking=Checking-? WHERE name=?', [rate_r, gov])
-    cd.execute('UPDATE InovClientsJointAccountData SET Saving=Saving-? WHERE name=?', [rate_r, gov])
-    cd.execute('UPDATE InovClientsBusinessData SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking-? WHERE name=?', [rate_r, gov])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving-? WHERE name=?', [rate_r, gov])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
     cd.close()
 
 
@@ -379,8 +392,8 @@ def get_CurrencyExchange_EUR(gov2=str):
     rate_r = 1.50
     data_d.execute('UPDATE InovClientsData SET Current=Current-? WHERE name=?', [rate_r, gov2])
     data_d.execute('UPDATE InovClientsData SET Saving=Saving-? WHERE name=?', [rate_r, gov2])
-    cd.execute('UPDATE InovClientsBusinessData SET Current=Current+? WHERE name=INOV Bank.', [rate_r])
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
     data_d.close()
     cd.close()
     # Personal Credit & Debit Account
@@ -395,21 +408,21 @@ def get_CurrencyExchange_EUR(gov2=str):
     pcd.execute('UPDATE InovClientsJointAccountData SET DebitChecking=DebitChecking-? WHERE name=?', [rate_r, gov2])
     pcd.execute('UPDATE InovClientsJointAccountData SET CreditSaving=CreditSaving-? WHERE name=?', [rate_r, gov2])
     pcd.execute('UPDATE InovClientsJointAccountData SET DebitSaving=DebitSaving-? WHERE name=?', [rate_r, gov2])
-    cd.execute('UPDATE InovClientsBusinessData SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
     pcd.close()
     cd.close()
     # Business Credit Account
-    cd.execute('UPDATE InovClientsJointAccountData SET Checking=CreditChecking/?, Saving=CreditSaving/?, '
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking/?, Saving=Saving/?, '
                'Currency=? '
                'WHERE name=?',
                [dex1, dex2, var2, gov2])
     print("You will be charged 1.3% upon this exchange")
     rate_r = 1.50
-    cd.execute('UPDATE InovClientsJointAccountData SET Checking=Checking-? WHERE name=?', [rate_r, gov2])
-    cd.execute('UPDATE InovClientsJointAccountData SET Saving=Saving-? WHERE name=?', [rate_r, gov2])
-    cd.execute('UPDATE InovClientsBusinessData SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking-? WHERE name=?', [rate_r, gov2])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving-? WHERE name=?', [rate_r, gov2])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
     cd.close()
 
 
@@ -425,8 +438,8 @@ def get_CurrencyExchange_GBP(gov3=str):
     rate_r = 1.50
     data_d.execute('UPDATE InovClientsData SET Current=Current-? WHERE name=?', [rate_r, gov3])
     data_d.execute('UPDATE InovClientsData SET Saving=Saving-? WHERE name=?', [rate_r, gov3])
-    cd.execute('UPDATE InovClientsBusinessData SET Current=Current+? WHERE name=INOV Bank.', [rate_r])
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Current=Current+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
     data_d.close()
     cd.close()
     # Personal Credit & Debit Account
@@ -441,21 +454,21 @@ def get_CurrencyExchange_GBP(gov3=str):
     pcd.execute('UPDATE InovClientsJointAccountData SET DebitChecking=DebitChecking-? WHERE name=?', [rate_r, gov3])
     pcd.execute('UPDATE InovClientsJointAccountData SET CreditSaving=CreditSaving-? WHERE name=?', [rate_r, gov3])
     pcd.execute('UPDATE InovClientsJointAccountData SET DebitSaving=DebitSaving-? WHERE name=?', [rate_r, gov3])
-    cd.execute('UPDATE InovClientsBusinessData SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
     pcd.close()
     cd.close()
     # Business Credit Account
-    cd.execute('UPDATE InovClientsJointAccountData SET Checking=CreditChecking/?, Saving=CreditSaving/?, '
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking/?, Saving=Saving/?, '
                'Currency=? '
                'WHERE name=?',
                [fex3, fex4, var3, gov3])
     print("You will be charged 1.3% upon this exchange")
     rate_r = 1.50
-    cd.execute('UPDATE InovClientsJointAccountData SET Checking=Checking-? WHERE name=?', [rate_r, gov3])
-    cd.execute('UPDATE InovClientsJointAccountData SET Saving=Saving-? WHERE name=?', [rate_r, gov3])
-    cd.execute('UPDATE InovClientsBusinessData SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking-? WHERE name=?', [rate_r, gov3])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving-? WHERE name=?', [rate_r, gov3])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
     cd.close()
 
 
@@ -471,8 +484,8 @@ def get_CurrencyExchange_AUS(gov4=str):
     rate_r = 1.50
     data_d.execute('UPDATE InovClientsData SET Current=Current-? WHERE name=?', [rate_r, gov4])
     data_d.execute('UPDATE InovClientsData SET Saving=Saving-? WHERE name=?', [rate_r, gov4])
-    cd.execute('UPDATE InovClientsBusinessData SET Current=Current+? WHERE name=INOV Bank.', [rate_r])
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Current=Current+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
     data_d.close()
     cd.close()
     # Personal Credit & Debit Account
@@ -487,8 +500,8 @@ def get_CurrencyExchange_AUS(gov4=str):
     pcd.execute('UPDATE InovClientsJointAccountData SET DebitChecking=DebitChecking-? WHERE name=?', [rate_r, gov4])
     pcd.execute('UPDATE InovClientsJointAccountData SET CreditSaving=CreditSaving-? WHERE name=?', [rate_r, gov4])
     pcd.execute('UPDATE InovClientsJointAccountData SET DebitSaving=DebitSaving-? WHERE name=?', [rate_r, gov4])
-    cd.execute('UPDATE InovClientsBusinessData SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
     pcd.close()
     cd.close()
     # Business Credit Account
@@ -500,8 +513,8 @@ def get_CurrencyExchange_AUS(gov4=str):
     rate_r = 1.50
     cd.execute('UPDATE InovClientsJointAccountData SET Checking=Checking-? WHERE name=?', [rate_r, gov4])
     cd.execute('UPDATE InovClientsJointAccountData SET Saving=Saving-? WHERE name=?', [rate_r, gov4])
-    cd.execute('UPDATE InovClientsBusinessData SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
     cd.close()
 
 
@@ -517,8 +530,8 @@ def get_CurrencyExchange_CNY(gov5=str):
     rate_r = 1.50
     data_d.execute('UPDATE InovClientsData SET Current=Current-? WHERE name=?', [rate_r, gov5])
     data_d.execute('UPDATE InovClientsData SET Saving=Saving-? WHERE name=?', [rate_r, gov5])
-    cd.execute('UPDATE InovClientsBusinessData SET Current=Current+? WHERE name=INOV Bank.', [rate_r])
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Current=Current+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
     data_d.close()
     cd.close()
     # Personal Credit & Debit Account
@@ -533,8 +546,8 @@ def get_CurrencyExchange_CNY(gov5=str):
     pcd.execute('UPDATE InovClientsJointAccountData SET DebitChecking=DebitChecking-? WHERE name=?', [rate_r, gov5])
     pcd.execute('UPDATE InovClientsJointAccountData SET CreditSaving=CreditSaving-? WHERE name=?', [rate_r, gov5])
     pcd.execute('UPDATE InovClientsJointAccountData SET DebitSaving=DebitSaving-? WHERE name=?', [rate_r, gov5])
-    cd.execute('UPDATE InovClientsBusinessData SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
     pcd.close()
     cd.close()
     # Business Credit Account
@@ -546,8 +559,8 @@ def get_CurrencyExchange_CNY(gov5=str):
     rate_r = 1.50
     cd.execute('UPDATE InovClientsJointAccountData SET Checking=Checking-? WHERE name=?', [rate_r, gov5])
     cd.execute('UPDATE InovClientsJointAccountData SET Saving=Saving-? WHERE name=?', [rate_r, gov5])
-    cd.execute('UPDATE InovClientsBusinessData SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
     cd.close()
 
 
@@ -563,8 +576,8 @@ def get_CurrencyExchange_JPY(gov6=str):
     rate_r = 1.50
     data_d.execute('UPDATE InovClientsData SET Current=Current-? WHERE name=?', [rate_r, gov6])
     data_d.execute('UPDATE InovClientsData SET Saving=Saving-? WHERE name=?', [rate_r, gov6])
-    cd.execute('UPDATE InovClientsBusinessData SET Current=Current+? WHERE name=INOV Bank.', [rate_r])
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Current=Current+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
     data_d.close()
     cd.close()
     # Personal Credit & Debit Account
@@ -579,8 +592,8 @@ def get_CurrencyExchange_JPY(gov6=str):
     pcd.execute('UPDATE InovClientsJointAccountData SET DebitChecking=DebitChecking-? WHERE name=?', [rate_r, gov6])
     pcd.execute('UPDATE InovClientsJointAccountData SET CreditSaving=CreditSaving-? WHERE name=?', [rate_r, gov6])
     pcd.execute('UPDATE InovClientsJointAccountData SET DebitSaving=DebitSaving-? WHERE name=?', [rate_r, gov6])
-    cd.execute('UPDATE InovClientsBusinessData SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
     pcd.close()
     cd.close()
     # Business Credit Account
@@ -592,8 +605,8 @@ def get_CurrencyExchange_JPY(gov6=str):
     rate_r = 1.50
     cd.execute('UPDATE InovClientsJointAccountData SET Checking=Checking-? WHERE name=?', [rate_r, gov6])
     cd.execute('UPDATE InovClientsJointAccountData SET Saving=Saving-? WHERE name=?', [rate_r, gov6])
-    cd.execute('UPDATE InovClientsBusinessData SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
-    cd.execute('UPDATE InovClientsBusinessData SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=INOV Bank.', [rate_r])
+    cd.execute('UPDATE InovClientsBusiness SET Saving=Saving+? WHERE name=INOV Bank.', [rate_r])
     cd.close()
 
 
