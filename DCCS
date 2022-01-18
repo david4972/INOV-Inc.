@@ -24,6 +24,7 @@ def create_accnt_option(accnt_name2=str, email2=str, addy2=str, cou2=str, cur2=s
     Crypt = c_value[:5]
     if Ans == "1":
         a_type1 = "Credit"
+        business_type = input("what Industry does your business operate in:")
         Credit_Checking_amt = int(input('How much do you want to deposit into your Credit Checkings account p.s. '
                                         'min deposit is. 50,000 '
                                         'required max '
@@ -40,13 +41,16 @@ def create_accnt_option(accnt_name2=str, email2=str, addy2=str, cou2=str, cur2=s
         if Credit_Savings_amt > 500000 or Credit_Savings_amt < 150000:
             print("deposit does not meet requirement, try again")
             IFP.OpenAccount()
-        read_data = "INSERT INTO InovClientsBusinessData (name, email, SDC, DCL, Credit, Checking, Saving, Address, " \
+        read_data = "INSERT INTO InovClientsBusinessData (name, email, SDC, DCL, Type, Credit, Checking, Saving, " \
+                    "Address, " \
                     "Country, " \
                     "Currency) " \
                     "VALUES ( " \
                     "?, " \
-                    "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
-        val = (accnt_name2, email2, Crypt, c_value, a_type1, Credit_Checking_amt, Credit_Savings_amt, addy2, cou2, cur2)
+                    "?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
+        val = (
+            accnt_name2, email2, Crypt, c_value, business_type, a_type1, Credit_Checking_amt, Credit_Savings_amt, addy2,
+            cou2, cur2)
         cd.execute(read_data, val)
         cd.close()
     if Ans == "2":
