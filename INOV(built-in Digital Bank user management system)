@@ -55,7 +55,7 @@ def atm():
     var = input()
     DCCS.atm_option(name, var)
 
-    
+
 
 
 def new_pin():
@@ -115,6 +115,8 @@ def Deposit():
     print("========== (1). Current ==========")
     print("========== (2). Savings ==========")
     ans = input()
+    DCCS.enter_deposit_option(name, ans)
+    intro()
 
 
 
