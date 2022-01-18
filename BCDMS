@@ -1,16 +1,18 @@
 from sqlalchemy import create_engine
+import sqlite3
 
+# Personal Credit/Debit Account Database
 db_connect = create_engine('sqlite:///data.db')
 
 
-def get_access(cryp=str):
+def get_PersonalAccnt_access(cryp=str):
     conn = db_connect.connect()
     sort = conn.execute("select name, Type, Current, Saving, Currency from InovClientsData WHERE SDC=?", cryp)
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
     print(result)
 
 
-def getCountry():
+def get_PersonalAccnt_Country():
     conn = db_connect.connect()
     sort = conn.execute("select name, Country from InovClientsData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
@@ -18,7 +20,7 @@ def getCountry():
     print(result)
 
 
-def getPIN():
+def get_PersonalAccnt_PIN():
     conn = db_connect.connect()
     sort = conn.execute("select name, SDC from InovClientsData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
@@ -26,7 +28,7 @@ def getPIN():
     print(result)
 
 
-def getDCL():
+def get_PersonalAccnt_DCL():
     conn = db_connect.connect()
     sort = conn.execute("select name, DCL from InovClientsData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
@@ -34,7 +36,7 @@ def getDCL():
     print(result)
 
 
-def getCurrency():
+def get_PersonalAccnt_Currency():
     conn = db_connect.connect()
     sort = conn.execute("select name, Currency from InovClientsData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
@@ -42,7 +44,7 @@ def getCurrency():
     print(result)
 
 
-def getAddress():
+def get_PersonalAccnt_Address():
     conn = db_connect.connect()
     sort = conn.execute("select name, Currency from InovClientsData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
@@ -50,7 +52,7 @@ def getAddress():
     print(result)
 
 
-def getCurrentBalance():
+def get_PersonalAccnt_CurrentBalance():
     conn = db_connect.connect()
     sort = conn.execute("select name, Current from InovClientsData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
@@ -58,7 +60,7 @@ def getCurrentBalance():
     print(result)
 
 
-def getSavingBalance():
+def get_PersonalAccnt_SavingBalance():
     conn = db_connect.connect()
     sort = conn.execute("select name, Saving from InovClientsData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
@@ -66,11 +68,113 @@ def getSavingBalance():
     print(result)
 
 
+# Business Credit Account Database
+cd_connect = sqlite3.connect('BusinessAccntdata.db')
+cd = cd_connect
+
+
+def get_BusinessAccnt_access(cryp=str):
+    sort = cd.execute("select name, Credit, Checking, Saving, Currency from InovClientsBusinessData WHERE SDC=?", cryp)
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print(result)
+
+
+def get_BusinessAccnt_Country():
+    sort = cd.execute("select name, Country from InovClientsData ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Clients Country of Residence")
+    print(result)
+
+
+def get_BusinessAccnt_PIN():
+    # conn = db_connect.connect()
+    sort = cd.execute("select name, SDC from InovClientsData ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Pins of clients:")
+    print(result)
+
+
+def get_BusinessAccnt_DCL():
+    # conn = db_connect.connect()
+    sort = cd.execute("select name, DCL from InovClientsData ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Digital credit of clients:")
+    print(result)
+
+
+def get_BusinessAccnt_Currency():
+    # conn = db_connect.connect()
+    sort = cd.execute("select name, Currency from InovClientsData ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Domestic currencies of clients:")
+    print(result)
+
+
+def get_BusinessAccnt_Address():
+    # conn = db_connect.connect()
+    sort = cd.execute("select name, Currency from InovClientsData ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Domestic currencies of clients:")
+    print(result)
+
+
+def get_BusinessAccnt_CurrentBalance():
+    # conn = db_connect.connect()
+    sort = cd.execute("select name, Current from InovClientsData ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Current Balance of clients:")
+    print(result)
+
+
+def get_BusinessAccnt_SavingBalance():
+    # conn = db_connect.connect()
+    sort = cd.execute("select name, Saving from InovClientsData ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Savings Balance of clients:")
+    print(result)
+
+
+# Transactions Database
+db = sqlite3.connect('transactions.db')
+dub = db.cursor()
+
+
+def get_all_Transactions():
+    sort = db.execute("select name, Value, Region, Currency from BankTransactions ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("All Transaction Information:")
+    print(result)
+
+
+def Intro():
+    print("Please choose")
+    print("1. Personal Account")
+    print("2. Business Account")
+    print("3. Transactions")
+    print("4. Quit")
+
+    ans = input()
+    if ans == "1":
+        get_PersonalAccnt_Country()
+        get_PersonalAccnt_PIN()
+        get_PersonalAccnt_DCL()
+        get_PersonalAccnt_Currency()
+        get_PersonalAccnt_Address()
+        get_PersonalAccnt_CurrentBalance()
+        get_PersonalAccnt_SavingBalance()
+    if ans == "2":
+        get_BusinessAccnt_Country()
+        get_BusinessAccnt_PIN()
+        get_BusinessAccnt_DCL()
+        get_BusinessAccnt_Currency()
+        get_BusinessAccnt_Address()
+        get_BusinessAccnt_CurrentBalance()
+        get_BusinessAccnt_SavingBalance()
+    if ans == "3":
+        get_all_Transactions()
+    if ans == "4":
+        exit()
+
+
 if __name__ == '__main__':
-    # get_access()
-    getCountry()
-    getCurrency()
-    getPIN()
-    getDCL()
-    getCurrentBalance()
-    getSavingBalance()
+    Intro()
