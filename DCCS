@@ -1,22 +1,43 @@
-from sqlalchemy import create_engine
+# from sqlalchemy import create_engine
 from forex_python.converter import CurrencyRates
 import sqlite3
 from cryptography.fernet import Fernet
 import IFP
 import EmailSender
+import BDMS
 
 # Personal Credit/Debit Account Database
-db_connect = create_engine('sqlite:///data.db')
-data_d = db_connect
+db_connect = sqlite3.connect('data.db')
+data_d = db_connect.cursor()
 # Personal Credit & Debit Account Database
 pcd_connect = sqlite3.connect('JointAccountdata.db')
-pcd = pcd_connect
+pcd = pcd_connect.cursor()
 # Business Credit Account Database
 cd_connect = sqlite3.connect('BusinessAccntdata.db')
-cd = cd_connect
+cd = cd_connect.cursor()
 # Transactions Database
 db = sqlite3.connect('transactions.db')
 dub = db.cursor()
+
+
+def login_to_accnt(name=str, crypt=str, ans=str):
+    if ans == "1":
+        BDMS.get_BusinessAccnt_access(name, crypt)
+    if ans == "2":
+        BDMS.get_PersonalAccnt_access(name, crypt)
+    if ans == "3":
+        BDMS.get_PersonaljointAccnt_access(name, crypt)
+
+
+def delete_accnt(ans=str, n=str, e=str):
+    if ans == "1":
+        BDMS.delete_Personal_accnt(n, e)
+    elif ans == "2":
+        BDMS.delete_Personaljoint_accnt(n, e)
+    else:
+        BDMS.delete_Business_accnt(n, e)
+    print("Account deleted")
+    IFP.intro()
 
 
 def create_accnt_option(accnt_name2=str, email2=str, addy2=str, cou2=str, cur2=str, Ans=str):
@@ -52,6 +73,12 @@ def create_accnt_option(accnt_name2=str, email2=str, addy2=str, cou2=str, cur2=s
             accnt_name2, email2, Crypt, c_value, business_type, a_type1, Credit_Checking_amt, Credit_Savings_amt, addy2,
             cou2, cur2)
         cd.execute(read_data, val)
+        dclNo = '{} this is your secured credit number, this number will be your main account charged with most ' \
+                'transactions you make.' \
+                'This is to ensure safer payment and build a more secure wall around your credit. Please memorize ' \
+                'these first five digits. '
+        print(dclNo.format(Crypt))
+        print("Account created")
         cd.close()
     if Ans == "2":
         create_accnt(accnt_name2, email2, addy2, cou2, cur2)
