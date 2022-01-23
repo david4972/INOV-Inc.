@@ -1,5 +1,7 @@
 
 
+# This is a sample Python script.
+
 import BDMS
 import DCCS
 import random
@@ -139,33 +141,42 @@ def OpenAccount():
 
 def LoginAccount():
     print("welcome")
+    name = input("please enter your name: ")
     Crypt = input("please enter your Credit code: ")
-    BDMS.get_PersonalAccnt_access(Crypt)
-
-    print("choose a letter to move on or quit")
-    print("========== (1). Deposit Money ============")
-    print("========== (2). Print Bank Statement ============")
-    print("========== (3). Loan ============")
-    print("========== (4). Send money ============")
-    print("========== (5). get new pin ============")
-    print("========== (6). ATM ============")
-    print("========== (7). Quit ============")
-    print("************************************************************")
-    let = input()
-    if let == "1":
-        Deposit()
-    if let == "2":
-        BankStatement()
-    if let == "3":
-        Loan()
-    if let == "4":
-        transactions()
-    if let == "5":
-        new_pin()
-    if let == "6":
-        atm()
-    if let == "7":
-        exit()
+    print("which account do you have")
+    print("1. Business")
+    print("2. Personal Credit/Debit")
+    print("3. Personal Credit&Debit")
+    ans = input()
+    DCCS.login_to_accnt(name, Crypt, ans)
+    read_input = input()
+    if read_input == "Login successful":
+        print("choose a letter to move on or quit")
+        print("========== (1). Deposit Money ============")
+        print("========== (2). Print Bank Statement ============")
+        print("========== (3). Loan ============")
+        print("========== (4). Send money ============")
+        print("========== (5). get new pin ============")
+        print("========== (6). ATM ============")
+        print("========== (7). Quit ============")
+        print("************************************************************")
+        let = input()
+        if let == "1":
+            Deposit()
+        if let == "2":
+            BankStatement()
+        if let == "3":
+            Loan()
+        if let == "4":
+            transactions()
+        if let == "5":
+            new_pin()
+        if let == "6":
+            atm()
+        if let == "7":
+            exit()
+    else:
+        LoginAccount()
 
 
 def intro():
