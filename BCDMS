@@ -1,15 +1,22 @@
 from sqlalchemy import create_engine
-import sqlite3
+# import sqlite3
 
 # Personal Credit/Debit Account Database
 db_connect = create_engine('sqlite:///data.db')
 
 
-def get_PersonalAccnt_access(cryp=str):
+def delete_Personal_accnt(name=str, email=str):
     conn = db_connect.connect()
-    sort = conn.execute("select name, Type, Current, Saving, Currency from InovClientsData WHERE SDC=?", cryp)
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print(result)
+    conn.execute("DELETE from InovClientsData WHERE name=?, email=?", name, email)
+    conn.close()
+    print("account deleted")
+
+
+def get_PersonalAccnt_access(name=str, cryp=str):
+    conn = db_connect.connect()
+    sort = conn.execute('SELECT name, SDC, IIF(name=?, SDC=?, \'Login successful\', \'login failed\') FROM '
+                        'InovClientsData;', name, cryp)
+    print(sort)
 
 
 def get_PersonalAccnt_Country():
@@ -69,82 +76,166 @@ def get_PersonalAccnt_SavingBalance():
 
 
 # Business Credit Account Database
-cd_connect = sqlite3.connect('BusinessAccntdata.db')
-cd = cd_connect
+cd_connect = create_engine('sqlite:///BusinessAccntdata.db')
 
 
-def get_BusinessAccnt_access(cryp=str):
-    sort = cd.execute("select name, Credit, Checking, Saving, Currency from InovClientsBusinessData WHERE SDC=?", cryp)
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print(result)
+
+def get_BusinessAccnt_access(name=str, cryp=str):
+    cd = cd_connect.connect()
+    sort = cd.execute('SELECT name, SDC, IIF(name=?, SDC=?, \'Login successful\', \'login failed\') FROM '
+                      'InovClientsBusinessData;', name, cryp)
+    print(sort)
+
+
+def delete_Business_accnt(name=str, email=str):
+    cd = cd_connect.connect()
+    cd.execute("DELETE from InovClientsBusinessData WHERE name=?, email=?", name, email)
+    cd.close()
+    print("account deleted")
 
 
 def get_BusinessAccnt_Country():
-    sort = cd.execute("select name, Country from InovClientsData ")
+    cd = cd_connect.connect()
+    sort = cd.execute("select name, Country from InovClientsBusinessData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
     print("Clients Country of Residence")
     print(result)
 
 
 def get_BusinessAccnt_PIN():
-    # conn = db_connect.connect()
-    sort = cd.execute("select name, SDC from InovClientsData ")
+    cd = cd_connect.connect()
+    sort = cd.execute("select name, SDC from InovClientsBusinessData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
     print("Pins of clients:")
     print(result)
 
 
 def get_BusinessAccnt_DCL():
-    # conn = db_connect.connect()
-    sort = cd.execute("select name, DCL from InovClientsData ")
+    cd = cd_connect.connect()
+    sort = cd.execute("select name, DCL from InovClientsBusinessData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
     print("Digital credit of clients:")
     print(result)
 
 
 def get_BusinessAccnt_Currency():
-    # conn = db_connect.connect()
-    sort = cd.execute("select name, Currency from InovClientsData ")
+    cd = cd_connect.connect()
+    sort = cd.execute("select name, Currency from InovClientsBusinessData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
     print("Domestic currencies of clients:")
     print(result)
 
 
 def get_BusinessAccnt_Address():
-    # conn = db_connect.connect()
-    sort = cd.execute("select name, Currency from InovClientsData ")
+    cd = cd_connect.connect()
+    sort = cd.execute("select name, Currency from InovClientsBusinessData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
     print("Domestic currencies of clients:")
     print(result)
 
 
 def get_BusinessAccnt_CurrentBalance():
-    # conn = db_connect.connect()
-    sort = cd.execute("select name, Current from InovClientsData ")
+    cd = cd_connect.connect()
+    sort = cd.execute("select name, Current from InovClientsBusinessData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
     print("Current Balance of clients:")
     print(result)
 
 
 def get_BusinessAccnt_SavingBalance():
-    # conn = db_connect.connect()
-    sort = cd.execute("select name, Saving from InovClientsData ")
+    cd = cd_connect.connect()
+    sort = cd.execute("select name, Saving from InovClientsBusinessData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
     print("Savings Balance of clients:")
     print(result)
 
 
 # Transactions Database
-db = sqlite3.connect('transactions.db')
-dub = db.cursor()
+db = create_engine('sqlite:///transactions.db')
+
 
 
 def get_all_Transactions():
-    sort = db.execute("select name, Value, Region, Currency from BankTransactions ")
+    dub = db.connect()
+    sort = dub.execute("select name, Value, Region, Currency from BankTransactions ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
     print("All Transaction Information:")
     print(result)
 
+
+# Personal Credit & Debit Account Database
+pcd_connect = create_engine('sqlite:///JointAccountdata.db')
+
+
+
+def delete_Personaljoint_accnt(name=str, email=str):
+    pcd = pcd_connect.connect()
+    pcd.execute("DELETE from InovClientsJointAccountData WHERE name=?, WHERE email=?", name, email)
+    pcd.close()
+    print("account deleted")
+
+
+def get_PersonaljointAccnt_access(name=str, cryp=str):
+    cd = cd_connect.connect()
+    sort = cd.execute('SELECT name, SDC, IIF(name=?, SDC=?, \'Login successful\', \'login failed\') FROM '
+                      'InovClientsJointAccountData;', name, cryp)
+    print(sort)
+
+
+def get_PersonaljointAccnt_Country():
+    pcd = pcd_connect.connect()
+    sort = pcd.execute("select name, Country from InovClientsJointAccountData ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Clients Country of Residence")
+    print(result)
+
+
+def get_PersonaljointAccnt_PIN():
+    pcd = pcd_connect.connect()
+    sort = pcd.execute("select name, SDC from InovClientsJointAccountData ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Pins of clients:")
+    print(result)
+
+
+def get_PersonaljointAccnt_DCL():
+    pcd = pcd_connect.connect()
+    sort = pcd.execute("select name, DCL from InovClientsJointAccountData ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Digital credit of clients:")
+    print(result)
+
+
+def get_PersonaljointAccnt_Currency():
+    conn = db_connect.connect()
+    sort = conn.execute("select name, Currency from InovClientsJointAccountData ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Domestic currencies of clients:")
+    print(result)
+
+
+def get_PersonaljointAccnt_Address():
+    conn = db_connect.connect()
+    sort = conn.execute("select name, Currency from InovClientsJointAccountData ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Domestic currencies of clients:")
+    print(result)
+
+
+def get_PersonaljointAccnt_CurrentBalance():
+    conn = db_connect.connect()
+    sort = conn.execute("select name, Current from InovClientsJointAccountData ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Current Balance of clients:")
+    print(result)
+
+
+def get_PersonaljointAccnt_SavingBalance():
+    conn = db_connect.connect()
+    sort = conn.execute("select name, Saving from InovClientsJointAccountData ")
+    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    print("Savings Balance of clients:")
+    print(result)
 
 def Intro():
     print("Please choose")
