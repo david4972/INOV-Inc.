@@ -8,14 +8,14 @@ def send_mail_for_personal_loan(mw=str, pl=int, c=str):
 
     message = "You have just Received a Personal Loan from OIB that has deposited $ " + [
         {pl}] + "into your " + c + " account."
-
+    # Gmail Accounts
     if "gmail" in mw:
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(sender_email, password)
         print("login success")
         server.sendmail(sender_email, rec_email, message)
-
+    # Yahoo Accounts
     if "yahoo" in mw:
         fromMy = "openbank143@yahoo.com"
         to = mw
@@ -37,14 +37,14 @@ def send_mail_for_business_loan(bl2=int, mt=str, c=str):
     password = "Forsure34"
     message = "You have received a Business loan from OIB that has been deposited  $" + [
         {bl2}] + "into your " + c + " account"
-
+    # Gmail Accounts
     if "gmail" in mt:
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(sender_email, password)
         print("login success")
         server.sendmail(sender_email, rec_email, message)
-
+    # Yahoo Accounts
     if "yahoo" in mt:
         fromMy = "openbank143@yahoo.com"
         to = mt
@@ -68,14 +68,14 @@ def send_mail_for_new_pin(p=int, mz=str):
     rec_email = mz
     password = "Forsure34"
     message = new
-
+    # Gmail Accounts
     if "gmail" in mz:
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(sender_email, password)
         print("login success")
         server.sendmail(sender_email, rec_email, message)
-
+    # Yahoo Accounts
     if "yahoo" in mz:
         fromMy = "openbank143@yahoo.com"
         to = mz
@@ -100,14 +100,14 @@ def send_mail_for_new_Crypt(Cryp=int, mz=str):
     rec_email = mz
     password = "Forsure34"
     message = new
-
+    # Gmail Accounts
     if "gmail" in mz:
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(sender_email, password)
         print("login success")
         server.sendmail(sender_email, rec_email, message)
-
+    # Yahoo Accounts
     if "yahoo" in mz:
         fromMy = "openbank143@yahoo.com"
         to = mz
@@ -133,13 +133,13 @@ def send_mail_for_Transactions(n=str, m=str):
     rec_email = email
     password = "Forsure34"
     message = "You have received $" + trans + " from " + name
-
+    # Gmail Accounts
     if "gmail" in email:
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(sender_email, password)
         server.sendmail(sender_email, rec_email, message)
-
+    # Yahoo Accounts
     if "yahoo" in email:
         fromMy = 'dokoronkwo167@yahoo.com'
         to = email
@@ -163,14 +163,14 @@ def send_mail_for_new_account(m2=str):
               "INOV is a fintech platform " \
               "that gives users full control over their traditional banking and personal finance." \
               "To see more things you can do on the go with INOV feel free to check the application."
-
+    # Gmail Accounts
     if "gmail" in m2:
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(sender_email, password)
         print("login success")
         server.sendmail(sender_email, rec_email, message)
-
+    # Yahoo Accounts
     if "yahoo" in m2:
         fromMy = "openbank143@yahoo.com"
         to = m2
@@ -192,14 +192,14 @@ def send_mail_for_deposits_checking(depo=int, m3=str):
     rec_email = m3
     password = "Forsure34"
     message = "You just made a deposit into your Current account of $ " + [{depo}]
-
+    # Gmail Accounts
     if "gmail" in m3:
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(sender_email, password)
         print("login success")
         server.sendmail(sender_email, rec_email, message)
-
+    # Yahoo Accounts
     if "yahoo" in m3:
         fromMy = "openbank143@yahoo.com"
         to = m3
@@ -220,14 +220,14 @@ def send_mail_for_deposits_saving(depo2=int, m4=str):
     rec_email = m4
     password = "Forsure34"
     message = "You just made a deposit into your savings account of $ " + [{depo2}]
-
+    # Gmail Accounts
     if "gmail" in m4:
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(sender_email, password)
         print("login success")
         server.sendmail(sender_email, rec_email, message)
-
+    # Yahoo Accounts
     if "yahoo" in m4:
         fromMy = "openbank143@yahoo.com"
         to = m4
@@ -241,3 +241,4 @@ def send_mail_for_deposits_saving(depo2=int, m4=str):
         server.starttls()
         server.login(username, password2)
         server.sendmail(fromMy, to, msg)
+
