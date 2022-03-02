@@ -1,3 +1,5 @@
+# Crypto is vastly changing the financial space. With that we decided to make a prototype similar to the original.
+
 from sqlalchemy import create_engine
 from forex_python.bitcoin import BtcConverter
 from cryptography.fernet import Fernet
