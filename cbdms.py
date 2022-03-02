@@ -1,10 +1,10 @@
 from sqlalchemy import create_engine
-import BTCTransactions
 
 db_connect = create_engine('sqlite:///BTCdata.db')
 conn_connect = create_engine('sqlite:///data.db')
 
 
+# account bank statements
 def get_bank_statement(pin=int):
     conn = db_connect.connect()
     # BTC Holdings
@@ -34,37 +34,7 @@ def get_bank_statement(pin=int):
     print(result5)
 
 
-def get_access_INOVBANKACCNT(cryp=str):
-    conn = conn_connect()
-    sort = conn.execute("select name, email, Country from InovClientsData WHERE SDC=?", cryp)
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print(result)
-
-
-def Login_access(pin=int):
-    conn = db_connect.connect()
-    sort = conn.execute("select name, BTC, Country from InovClientsCrypto WHERE SDC=?", pin)
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print(result)
-
-
-def get_new_access(pin=int):
-    conn = db_connect.connect()
-    sort = conn.execute("select name, BTC, Country from InovClientsCrypto WHERE SDC=?", pin)
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print(result)
-
-
-
-
-def get_new_pin(dcl=int, n=str):
-    conn = db_connect.connect()
-    sort = conn.execute("select name, BTC, Country from InovClientsCrypto WHERE DCL!=?", dcl)
-    result = {'Wrong Code': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print(result)
-    BTCTransactions.get_new_Login(n)
-
-
+# account country of origin
 def getCountry():
     conn = db_connect.connect()
     sort = conn.execute("select name, Country from InovClientsCrypto ")
@@ -73,6 +43,7 @@ def getCountry():
     print(result)
 
 
+# account pin
 def getPIN():
     conn = db_connect.connect()
     sort = conn.execute("select name, SDC from InovClientsCrypto ")
@@ -81,6 +52,7 @@ def getPIN():
     print(result)
 
 
+# account Digital credit line
 def getDCL():
     conn = db_connect.connect()
     sort = conn.execute("select name, DCL from InovClientsCrypto ")
@@ -89,6 +61,7 @@ def getDCL():
     print(result)
 
 
+# account balance in Bitcoin
 def getBTC():
     conn = db_connect.connect()
     sort = conn.execute("select name, BTC from InovClientsData ")
@@ -97,6 +70,7 @@ def getBTC():
     print(result)
 
 
+# account balance in United States Dollar
 def getUSD():
     conn = db_connect.connect()
     sort = conn.execute("select name, USD from InovClientsData ")
@@ -105,6 +79,7 @@ def getUSD():
     print(result)
 
 
+# account balance in Euros
 def getEUR():
     conn = db_connect.connect()
     sort = conn.execute("select name, EU from InovClientsData ")
@@ -113,6 +88,7 @@ def getEUR():
     print(result)
 
 
+# account balance in British Pound
 def getGBP():
     conn = db_connect.connect()
     sort = conn.execute("select name, GBP from InovClientsData ")
@@ -121,9 +97,11 @@ def getGBP():
     print(result)
 
 
+# account balance in Chinese Yuan
 def getCNY():
     conn = db_connect.connect()
     sort = conn.execute("select name, CNY from InovClientsData ")
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
     print("Chinese Yuan Balance of clients:")
     print(result)
+
