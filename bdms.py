@@ -31,24 +31,6 @@ def delete_accnt(name=str, email=str):
     print("account deleted")
 
 
-# login to account
-def login_to_account(name=str, cryp=str):
-    # Personal Credit/Debit Account
-    conn = db_connect.connect()
-    sort = conn.execute('SELECT name, SDC, IIF(name=?, SDC=?, \'Login successful\', \'login failed\') FROM '
-                        'InovClientsData;', name, cryp)
-    print(sort)
-    # Business Credit Account
-    cd = cd_connect.connect()
-    sort = cd.execute('SELECT name, SDC, IIF(name=?, SDC=?, \'Login successful\', \'login failed\') FROM '
-                      'InovClientsBusiness;', name, cryp)
-    print(sort)
-    # Personal Credit & Debit Account
-    cd = cd_connect.connect()
-    sort = cd.execute('SELECT name, SDC, IIF(name=?, SDC=?, \'Login successful\', \'login failed\') FROM '
-                      'InovClientsJointAccountData;', name, cryp)
-    print(sort)
-
 
 def get_account_info_Country():
     # Personal Credit/Debit Account
@@ -229,3 +211,4 @@ def get_all_Bank_info():
     result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
     print("Personal Credit & Debit Account Data:")
     print(result)
+
