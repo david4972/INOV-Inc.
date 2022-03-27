@@ -386,7 +386,7 @@ def send_money(t=int, n1=str, n2=str):
     pcd.close()
     cd.close()
 
-
+'''
 def business_loan_checking(bl1=int, n3=str):
     cd.execute('UPDATE InovClientsBusiness SET Checking=Checking+? WHERE name=?', [bl1, n3])
     cd.close()
@@ -409,7 +409,7 @@ def personal_loan_savings(bl4=int, n6=str):
     pcd.execute('UPDATE InovClientsJointAccountData SET DebitSaving=DebitSaving+? WHERE name=?', [bl4, n6])
     data_d.close()
     pcd.close()
-
+'''
 
 def bank_statement(n=str, cr=str):
     # Personal Credit/Debit Account
@@ -1371,7 +1371,7 @@ def global_transactions_USD(region=int, val=int, curname=str, curname2=str, cur=
             dub.execute(data_link, data_src)
             db.commit()
 
-
+'''
 def loan_option(n=str, em=str, ans=str):
     if ans == "1":
         Business_loan_system(n, em)
@@ -1453,9 +1453,10 @@ def Business_loan_system(name=str, email=str):
         business_loan_savings(personal_loan, name)
 
     send_mail_for_business_loan(email, personal_loan, choice)
-
+    '''
 
 # email notifications
+'''
 def send_mail_for_personal_loan(mw=str, pl=int, c=str):
     sender_email = "openinternationalbanking@gmail.com"
     rec_email = mw
@@ -1513,7 +1514,7 @@ def send_mail_for_business_loan(bl2=int, mt=str, c=str):
         server.starttls()
         server.login(username, password2)
         server.sendmail(fromMy, to, msg)
-
+        '''
 
 def send_mail_for_new_pin(p=int, mz=str):
     msg = "{} this is your Temporary password. Please use it to login and get a new DCL"
