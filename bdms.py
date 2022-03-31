@@ -1,214 +1,261 @@
-from sqlalchemy import create_engine
-
-# import sqlite3
-
-# Personal Credit/Debit Account Database
-db_connect = create_engine('sqlite:///data.db')
-# Transactions Database
-db = create_engine('sqlite:///transactions.db')
-# Business Credit Account Database
-cd_connect = create_engine('sqlite:///BusinessAccntdata.db')
-# Personal Credit & Debit Account Database
-pcd_connect = create_engine('sqlite:///JointAccountdata.db')
+from data import get_database  # BDMS (BANK DATA MANAGEMENT SYSTEM)
 
 
-# delete account
-def delete_accnt(name=str, email=str):
-    # Personal Credit/Debit Account
-    conn = db_connect.connect()
-    conn.execute("DELETE from InovClientsData WHERE name=?, email=?", name, email)
-    conn.close()
-    print("account deleted")
+# debit accounts
+def delete_debit_account(name=str, email=str):
+    db = get_database()
+    curr = db.cursor()
+    delete = "DELETE from DebitAccounts WHERE name=?, email=?"
+    curr.execute(delete, [name, email])
+    curr.commit()
+    return "account deleted"
+
+
+# country of residence for Debit account holders
+def debit_account_info_Country():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, Country from DebitAccounts ")
+    result = {'Debit Accounts Country of Residence data': [dict(zip(tuple(sort.keys()), i)) for i in
+                                                           sort.cursor]}
+    return result
+
+
+# Debit card Code (shortened code used to encrypt debit card number)
+def debit_account_CardCode():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, SDC from DebitAccounts ")
+    result = {'Debit Account DCC data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
+
+
+# encrypted code for securing Debit accounts
+def debit_account_SecurityCode():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, DCL from DebitAccounts ")
+    result = {
+        'Debit Account Digital credit data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
+
+
+# currency of Debit account holders
+def debit_account_Currency():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, Country, Currency from DebitAccounts ")
+    result = {'Debit Account Currencies data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
+
+
+# address of Debit account holders
+def debit_account_Address():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, Address from DebitAccounts ")
+    result = {'Debit Account address data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
+
+
+# checkings balance of Debit account holders
+def debit_account_checkings_balance():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, Current from DebitAccounts ")
+    result = {
+        'Debit Account checkings Balance data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
+
+
+# savings balance of Debit account holders
+def debit_account_savings_balance():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, Saving from DebitAccounts ")
+    result = {
+        'Personal Credit/Debit Account Savings Balance data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
+
+
+# all info of Debit account holders
+def all_debit_account_info():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select * from DebitAccounts ")
+    result = {'Debit Account data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
+
+
+# Credit Accounts
+def delete_credit_account(name=str, email=str):
+    db = get_database()
+    curr = db.cursor()
+    delete = "DELETE from CreditAccounts WHERE name=?, email=?"
+    curr.execute(delete, [name, email])
+    curr.commit()
+    return "account deleted"
+
+
+# country of residence for Credit account holders
+def credit_account_info_Country():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, Country from CreditAccounts ")
+    result = {'Credit Accounts Country of Residence data': [dict(zip(tuple(sort.keys()), i)) for i in
+                                                            sort.cursor]}
+    return result
+
+
+# Credit card Code (shortened code used to encrypt credit card number)
+def credit_account_CardCode():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, SDC from CreditAccounts ")
+    result = {'Credit Account DCC data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
+
+
+# encrypted code for securing Credit accounts
+def credit_account_SecurityCode():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, DCL from CreditAccounts ")
+    result = {
+        'Credit Account Digital credit data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
+
+
+# currency of Credit account holders
+def credit_account_Currency():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, Country, Currency from CreditAccounts ")
+    result = {'Credit Account Currencies data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
+
+
+# address of Credit account holders
+def credit_account_Address():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, Address from CreditAccounts ")
+    result = {'Credit Account address data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
+
+
+# checkings balance of Credit account holders
+def credit_account_checkings_balance():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, Current from CreditAccounts ")
+    result = {
+        'Credit Account checkings Balance data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
+
+
+# savings balance of Credit account holders
+def credit_account_savings_balance():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, Saving from CreditAccounts ")
+    result = {
+        'Credit Account Savings Balance data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
+
+
+# all info of Credit account holders
+def all_credit_account_info():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select * from CreditAccounts ")
+    result = {'Credit Account data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
+
+
+# Business Credit Account
+def delete_business_credit_accnt(name=str, email=str):
+    db = get_database()
+    curr = db.cursor()
+    delete = "DELETE from B-CreditAccounts WHERE name=?, email=?"
+    curr.execute(delete, [name, email])
+    curr.commit()
+    return "account deleted"
+
+
+# country of residence of Business Credit account holders
+def business_credit_account_info_Country():
+    db = get_database()
+    curr = db.cursor()
     # Business Credit Account
-    cd = cd_connect.connect()
-    cd.execute("DELETE from InovClientsBusiness WHERE name=?, email=?", name, email)
-    cd.close()
-    print("account deleted")
-    # Personal Credit & Debit Account
-    pcd = pcd_connect.connect()
-    pcd.execute("DELETE from InovClientsJointAccountData WHERE name=?, WHERE email=?", name, email)
-    pcd.close()
-    print("account deleted")
+    sort = curr.execute("select name, Country from B-CreditAccounts ")
+    result = {
+        'Business Credit Accounts Country of Residence data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
 
 
-
-def get_account_info_Country():
-    # Personal Credit/Debit Account
-    conn = db_connect.connect()
-    sort = conn.execute("select name, Country from InovClientsData ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Personal Credit/Debit Accounts Country of Residence:")
-    print(result)
-    # Business Credit Account
-    cd = cd_connect.connect()
-    sort = cd.execute("select name, Country from InovClientsBusiness ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Business Credit Accounts Country of Residence:")
-    print(result)
-    # Personal Credit & Debit Account
-    pcd = pcd_connect.connect()
-    sort = pcd.execute("select name, Country from InovClientsJointAccountData ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Personal Credit & Debit Accounts Country of Residence")
-    print(result)
+# Business Credit card Code (shortened code used to encrypt business credit card number)
+def business_credit_account_CardCode():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, SDC from B-CreditAccounts ")
+    result = {'Business Credit Account DCC data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
 
 
-# Digital Credit Code (shortened code that will be credit card number)
-def get_account_DCC():
-    # Personal Credit/Debit Account
-    conn = db_connect.connect()
-    sort = conn.execute("select name, SDC from InovClientsData ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Personal Credit/Debit Account DCC :")
-    print(result)
-    # Business Credit Account
-    cd = cd_connect.connect()
-    sort = cd.execute("select name, SDC from InovClientsBusiness ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Business Credit Account DCC:")
-    print(result)
-    # Personal Credit & Debit Account
-    pcd = pcd_connect.connect()
-    sort = pcd.execute("select name, SDC from InovClientsJointAccountData ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Pins of clients:")
-    print(result)
+# encrypted code for securing Business Credit accounts
+def business_credit_account_SecurityCode():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, DCL from B-CreditAccounts ")
+    result = {
+        'Business Credit Account Digital credit data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
 
 
-# encrypted code for securing accounts
-def get_account_DCL():
-    # Personal Credit/Debit Account
-    conn = db_connect.connect()
-    sort = conn.execute("select name, DCL from InovClientsData ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Personal Credit/Debit Account DCL:")
-    print(result)
-    # Business Credit Account
-    cd = cd_connect.connect()
-    sort = cd.execute("select name, DCL from InovClientsBusiness ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Digital credit of clients:")
-    print(result)
-    # Personal Credit & Debit Account
-    pcd = pcd_connect.connect()
-    sort = pcd.execute("select name, DCL from InovClientsJointAccountData ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Digital credit of clients:")
-    print(result)
+# currency of Business Credit account holders
+def business_credit_account_Currency():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, Country, Currency from B-CreditAccounts ")
+    result = {'Business Credit Account Currencies data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
 
 
-# currency of account holder
-def get_account_Currency():
-    # Personal Credit/Debit Account
-    conn = db_connect.connect()
-    sort = conn.execute("select name, Currency from InovClientsData ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Personal Credit/Debit Account Currencies:")
-    print(result)
-    # Business Credit Account
-    cd = cd_connect.connect()
-    sort = cd.execute("select name, Currency from InovClientsBusiness ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Business Credit Account currencies:")
-    print(result)
-    # Personal Credit & Debit Account
-    pcd = pcd_connect.connect()
-    sort = pcd.execute("select name, Currency from InovClientsJointAccountData ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Personal Credit & Debit Account currencies:")
-    print(result)
+# address of Business Credit account holders
+def business_credit_account_Address():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, Address from B-CreditAccounts ")
+    result = {'Business Credit Account address data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
 
 
-# address of account holder
-def get_account_Address():
-    # Personal Credit/Debit Account
-    conn = db_connect.connect()
-    sort = conn.execute("select name, Address from InovClientsData ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Personal Credit/Debit Account address:")
-    print(result)
-    # Business Credit Account
-    cd = cd_connect.connect()
-    sort = cd.execute("select name, Address from InovClientsBusiness ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Business Credit Account address:")
-    print(result)
-    # Personal Credit & Debit Account
-    pcd = pcd_connect.connect()
-    sort = pcd.execute("select name, Address from InovClientsJointAccountData ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Personal Credit & Debit Account address:")
-    print(result)
+# checkings balance of Business Credit account holders
+def business_credit_account_checkings_balance():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, Current from B-CreditAccounts ")
+    result = {
+        'Business Credit Account checkings Balance data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
 
 
-def get_account_checkings_balance():
-    # Personal Credit/Debit Account
-    conn = db_connect.connect()
-    sort = conn.execute("select name, Current from InovClientsData ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Personal Credit/Debit Account checkings Balance :")
-    print(result)
-    # Business Credit Account
-    cd = cd_connect.connect()
-    sort = cd.execute("select name, Current from InovClientsBusiness ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Current Balance of clients:")
-    print(result)
-    # Personal Credit & Debit Account
-    pcd = pcd_connect.connect()
-    sort = pcd.execute("select name, CreditChecking, DebitChecking from InovClientsJointAccountData ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Current Balance of clients:")
-    print(result)
+# savings balance of Business Credit account holders
+def business_credit_account_savings_balance():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select name, Saving from B-CreditAccounts ")
+    result = {
+        'Business Credit Account Savings Balance data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
 
 
-def get_account_savings_balance():
-    # Personal Credit/Debit Account
-    conn = db_connect.connect()
-    sort = conn.execute("select name, Saving from InovClientsData ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Savings Balance of clients:")
-    print(result)
-    # Business Credit Account
-    cd = cd_connect.connect()
-    sort = cd.execute("select name, Saving from InovClientsBusinessData ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Business Credit Account Savings Balance:")
-    print(result)
-    # Personal Credit & Debit Account
-    pcd = pcd_connect.connect()
-    sort = pcd.execute("select name, CreditSaving, DebitSaving  from InovClientsJointAccountData ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Current Balance of clients:")
-    print(result)
-
-
-# Transactions Database
-def get_all_Transactions():
-    dub = db.connect()
-    sort = dub.execute("select name, Value, Region, Currency from BankTransactions ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("All Transaction Information:")
-    print(result)
-
-
-def get_all_Bank_info():
-    # Personal Credit/Debit Account
-    conn = db_connect.connect()
-    sort = conn.execute("select * from InovClientsData ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Personal Credit/Debit Account Data:")
-    print(result)
-    # Business Credit Account
-    cd = cd_connect.connect()
-    sort = cd.execute("select * from InovClientsBusiness ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Business Credit Account Data:")
-    print(result)
-    # Personal Credit & Debit Account
-    pcd = pcd_connect.connect()
-    sort = pcd.execute("select * from InovClientsJointAccountData ")
-    result = {'data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
-    print("Personal Credit & Debit Account Data:")
-    print(result)
+# all info of Business Credit account holders
+def all_business_credit_account_info():
+    db = get_database()
+    curr = db.cursor()
+    sort = curr.execute("select * from B-CreditAccounts ")
+    result = {'Business Credit Account data': [dict(zip(tuple(sort.keys()), i)) for i in sort.cursor]}
+    return result
 
