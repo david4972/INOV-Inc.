@@ -1701,3 +1701,32 @@ def send_mail_for_deposits_saving(depo2=int, m4=str):
         server.starttls()
         server.login(username, password2)
         server.sendmail(fromMy, to, msg)
+        
+        
+
+def send_mail_for_processed_payment(m4=str, email=str):
+    sender_email = "openinternationalbanking@gmail.com"
+    rec_email = email
+    password = "Forsure34"
+    message = m4
+    # Gmail Accounts
+    if "gmail" in email:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(sender_email, password)
+        print("login success")
+        server.sendmail(sender_email, rec_email, message)
+    # Yahoo Accounts
+    if "yahoo" in email:
+        fromMy = "openbank143@yahoo.com"
+        to = email
+        subj = 'PAYMENT ORDER'
+
+        msg = "From: %s\nTo: %s\nSubject: %s\n\n%s" % (fromMy, to, subj, message)
+
+        username = "openbank143@yahoo.com"
+        password2 = "holiday20!"
+        server = smtplib.SMTP("smtp.mail.yahoo.com", 587)
+        server.starttls()
+        server.login(username, password2)
+        server.sendmail(fromMy, to, msg)
