@@ -77,7 +77,7 @@ def process_payment(cardcode=str, price=int, email=str):
                           "Vendor = -> {}" \
                           "address = -> {}"
                 msg = message.format(name, price, Vendor, address)
-                send_mail_for_processed_payment(msg, email)
+                inov.send_mail_for_processed_payment(msg, email)
 
     else:
         curr.execute(read_data2, [cardcode, email])
@@ -92,4 +92,4 @@ def process_payment(cardcode=str, price=int, email=str):
                               "Vendor = -> {}" \
                               "address = -> {}"
                     msg = message.format(name, price, Vendor, address)
-                    send_mail_for_processed_payment(msg, email)
+                    inov.send_mail_for_processed_payment(msg, email)
