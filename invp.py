@@ -1,5 +1,5 @@
 from data import get_database
-import smtplib
+import inov
 
 
 def get_card_info(CardCode=str, name=str):
