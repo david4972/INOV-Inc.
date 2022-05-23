@@ -2,6 +2,7 @@ from data import get_database
 from forex_python.converter import CurrencyRates
 from cryptography.fernet import Fernet
 import smtplib
+import invp
 import ccard
 
 
@@ -481,6 +482,9 @@ def personal_loan_savings(bl4=int, n6=str):
    pcd.close()
 '''
 
+def process_payment(CardCode=str, name=str):
+    invp.get_card_info(CardCode, name)
+    return "processing payment"
 
 def bank_statement(name=str, CardCode=str):
     db = get_database()
