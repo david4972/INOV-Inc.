@@ -29,14 +29,15 @@ def create_business_account(account_name=str, email=str, address=str):
     f = Fernet(Crypt)
     CardCode = f.encrypt(CardNo)
     business_type = input("what Industry does your business operate in:")
-    Credit_Checking_amt = int(input('How much do you want to deposit into your Business Credit Checkings account p.s. '
+    Credit_Checking_amt = float(input('How much do you want to deposit into your Business Credit Checkings account '
+                                      'p.s. '
                                     'min deposit is. 50,000 '
                                     'required max '
                                     'deposit is '
                                     '100,000: '))
     if Credit_Checking_amt > 100000 or Credit_Checking_amt < 50000:
         print("deposit does not meet requirement, try again")
-    Credit_Savings_amt = int(
+    Credit_Savings_amt = float(
         input('How much do you want to deposit into your Business Credit Savings account p.s. min deposit is 150,000'
               'required max '
               'deposit is '
@@ -83,14 +84,14 @@ def create_Credit_account(account_name=str, email=str, address=str):
     Crypt = Security[:5]
     f = Fernet(Crypt)
     CardCode = f.encrypt(CardNo)
-    Credit_Checking_amt = int(input('How much do you want to deposit into your Credit Checkings account p.s. no '
+    Credit_Checking_amt = float(input('How much do you want to deposit into your Credit Checkings account p.s. no '
                                     'min deposit '
                                     'required max '
                                     'deposit is '
                                     '5,000: '))
     if Credit_Checking_amt > 5000 or Credit_Checking_amt < 0:
         print("deposit does not meet requirement, try again")
-    Credit_Savings_amt = int(
+    Credit_Savings_amt = float(
         input('How much do you want to deposit into your Credit Savings account p.s. no min deposit '
               'required max '
               'deposit is '
@@ -135,12 +136,12 @@ def create_Debit_account(account_name=str, email=str, address=str):
     Crypt = Security[:5]
     f = Fernet(Crypt)
     CardCode = f.encrypt(CardNo)
-    Debit_Checking = int(input('How much do you want to deposit into this account p.s. no min deposit required max '
+    Debit_Checking = float(input('How much do you want to deposit into this account p.s. no min deposit required max '
                                'deposit is '
                                '5,000: '))
     if Debit_Checking > 5000 or Debit_Checking < 0:
         print("deposit does not meet requirement, try again")
-    Debit_Saving = int(input('How much do you want to deposit into this account p.s. no min deposit required max '
+    Debit_Saving = float(input('How much do you want to deposit into this account p.s. no min deposit required max '
                              'deposit is '
                              '15,000: '))
     if Debit_Saving > 15000 or Debit_Saving < 0:
@@ -170,7 +171,7 @@ def create_Debit_account(account_name=str, email=str, address=str):
 
 
 # Deposits STATUS: Complete
-def deposit_option(name=str, deposit=int, ans=str, CardCode=str):
+def deposit_option(name=str, deposit=float, ans=str, CardCode=str):
     if ans == "1":
         deposit_Checking(name, deposit, CardCode)
         return "processing deposit"
@@ -180,7 +181,7 @@ def deposit_option(name=str, deposit=int, ans=str, CardCode=str):
         return "processing deposit"
 
 
-def deposit_Checking(name=str, deposit=int, CardCode=str):
+def deposit_Checking(name=str, deposit=float, CardCode=str):
     db = get_database()
     curr = db.cursor()
     read_data1 = "SELECT * from DebitAccounts where CardCode=? where name=?"
@@ -210,8 +211,7 @@ def deposit_Checking(name=str, deposit=int, CardCode=str):
     return "deposit complete"
 
 
-def deposit_Savings(name=str, deposit=int, CardCode=str):
-    # send_mail_for_deposits_saving(dep, email)
+def deposit_Savings(name=str, deposit=float, CardCode=str):
     db = get_database()
     curr = db.cursor()
     read_data1 = "SELECT * from DebitAccounts where CardCode=?"
@@ -241,7 +241,7 @@ def deposit_Savings(name=str, deposit=int, CardCode=str):
     return "deposit complete"
 
 
-def atm_option(CardCode=str, var=str, withdraw=int):
+def atm_option(CardCode=str, var=str, withdraw=float):
     if var == "Checkings":
         atm_Checking(CardCode, withdraw)
 
@@ -251,7 +251,7 @@ def atm_option(CardCode=str, var=str, withdraw=int):
     return "ATM processing, You will be charged 1.3% upon withdrawal."
 
 
-def atm_Checking(CardCode=str, withdraw=int):
+def atm_Checking(CardCode=str, withdraw=float):
     db = get_database()
     curr = db.cursor()
     bank = "INOV"
@@ -260,7 +260,6 @@ def atm_Checking(CardCode=str, withdraw=int):
     read_data2 = "SELECT * from CreditAccounts where CardCode=?"
     curr.execute(read_data1, CardCode)
     for row in curr.fetchall(CardCode):
-        email = row[1]
         checking = row[5]
         if CardCode == row[3]:
             service = checking * rate_r
@@ -272,11 +271,10 @@ def atm_Checking(CardCode=str, withdraw=int):
             curr.commit()
             serv = "UPDATE B-CreditAccounts SET Checking=Checking+?, WHERE name=?"
             curr.execute(serv, [service, bank])
-            # send notif
+            curr.commit()
         else:
             curr.execute(read_data2, CardCode)
             for row2 in curr.fetchall(CardCode):
-                email = row2[1]
                 checking = row[5]
                 if CardCode == row2[3]:
                     service = checking * rate_r
@@ -288,11 +286,11 @@ def atm_Checking(CardCode=str, withdraw=int):
                     curr.commit()
                     serv = "UPDATE B-CreditAccounts SET Checking=Checking+?, WHERE name=?"
                     curr.execute(serv, [service, bank])
-                    # send notif
+                    curr.commit()
     return "Withdrawal Complete"
 
 
-def atm_Savings(CardCode=str, withdraw=int):
+def atm_Savings(CardCode=str, withdraw=float):
     db = get_database()
     curr = db.cursor()
     bank = "INOV"
@@ -301,7 +299,6 @@ def atm_Savings(CardCode=str, withdraw=int):
     read_data2 = "SELECT * from CreditAccounts where CardCode=?"
     curr.execute(read_data1, CardCode)
     for row in curr.fetchall(CardCode):
-        email = row[1]
         saving = row[6]
         if CardCode == row[3]:
             service = saving * rate_r
@@ -313,11 +310,10 @@ def atm_Savings(CardCode=str, withdraw=int):
             curr.commit()
             serv = "UPDATE B-CreditAccounts SET Saving=Saving+?, WHERE name=?"
             curr.execute(serv, [service, bank])
-            # send notif
+            curr.commit()
         else:
             curr.execute(read_data2, CardCode)
             for row2 in curr.fetchall(CardCode):
-                email = row2[1]
                 saving = row[6]
                 if CardCode == row2[3]:
                     service = saving * rate_r
@@ -329,7 +325,7 @@ def atm_Savings(CardCode=str, withdraw=int):
                     curr.commit()
                     serv = "UPDATE B-CreditAccounts SET Saving=Saving+?, WHERE name=?"
                     curr.execute(serv, [service, bank])
-                    # send notif
+                    curr.commit()
     return "Withdrawal Complete"
 
 
@@ -379,7 +375,7 @@ def reactivate_account(name=str, Security=str):
     """""
 
 
-def send_money(amount=int, CardCode=str, recipient=str):
+def send_money(amount=float, CardCode=str, recipient=str):
     db = get_database()
     curr = db.cursor()
     rate_r = 0.013
@@ -389,7 +385,6 @@ def send_money(amount=int, CardCode=str, recipient=str):
     curr.execute(read_data1, CardCode)
     for row1 in curr.fetchall(CardCode):
         name = row1[0]
-        # email = row1[1]
         checking = row1[5]
         if CardCode == row1[3]:
             fee = checking * rate_r
@@ -412,7 +407,6 @@ def send_money(amount=int, CardCode=str, recipient=str):
             curr.execute(read_data2, CardCode)
             for row3 in curr.fetchall(CardCode):
                 name = row3[0]
-                # email = row3[1]
                 checking = row3[5]
                 if CardCode == row3[3]:
                     fee = checking * rate_r
@@ -435,7 +429,6 @@ def send_money(amount=int, CardCode=str, recipient=str):
         curr.execute(read_data3, CardCode)
         for row5 in curr.fetchall(CardCode):
             name = row5[0]
-            # email = row5[1]
             checking = row5[5]
             if CardCode == row5[3]:
                 fee = checking * rate_r
@@ -482,9 +475,11 @@ def personal_loan_savings(bl4=int, n6=str):
    pcd.close()
 '''
 
+
 def process_payment(CardCode=str, name=str):
     invp.get_card_info(CardCode, name)
-    return "processing payment"
+    # return "processing payment"
+
 
 def bank_statement(name=str, CardCode=str):
     db = get_database()
@@ -952,7 +947,7 @@ def CurrencyExchange_JPY(name=str, CardCode=str):
 # 1. North America,  2. Europe, 3. South America, 4. Africa, 5. Asia, 6. Caribbean, 7. Central America
 # USD base currency
 # 1. North America
-def global_transactions_NA(region=int, val=int, curname=str, CardCode=str, name2=str):
+def global_transactions_NA(region=int, val=float, curname=str, CardCode=str, name2=str):
     c = CurrencyRates()
     # North America
     if region == "1":
@@ -971,7 +966,7 @@ def global_transactions_NA(region=int, val=int, curname=str, CardCode=str, name2
 
 
 # 2. Europe
-def global_transactions_EU(region=int, val=int, curname=str, CardCode=str, name2=str):
+def global_transactions_EU(region=int, val=float, curname=str, CardCode=str, name2=str):
     c = CurrencyRates()
     if region == "2":
         # reg = "Europe"
@@ -1029,7 +1024,7 @@ def global_transactions_EU(region=int, val=int, curname=str, CardCode=str, name2
 
 
 # South America
-def global_transactions_SA(region=int, val=int, curname=str, CardCode=str, name2=str):
+def global_transactions_SA(region=int, val=float, curname=str, CardCode=str, name2=str):
     c = CurrencyRates()
     if region == "3":
         # reg = "South America"
@@ -1082,7 +1077,7 @@ def global_transactions_SA(region=int, val=int, curname=str, CardCode=str, name2
 
 
 # Africa
-def global_transactions_Africa(region=int, val=int, curname=str, CardCode=str, name2=str):
+def global_transactions_Africa(region=int, val=float, curname=str, CardCode=str, name2=str):
     c = CurrencyRates()
     if region == "4":
         # reg = "Africa"
@@ -1151,7 +1146,7 @@ def global_transactions_Africa(region=int, val=int, curname=str, CardCode=str, n
 
 
 # Asia
-def global_transactions_Asia_Middle_east(region=int, val=int, curname=str, CardCode=str, name2=str):
+def global_transactions_Asia_Middle_east(region=int, val=float, curname=str, CardCode=str, name2=str):
     c = CurrencyRates()
     if region == "5":
         # reg = "Asia/Middle East"
@@ -1239,7 +1234,7 @@ def global_transactions_Asia_Middle_east(region=int, val=int, curname=str, CardC
 
 
 # Caribbean
-def global_transactions_Caribbean(region=int, val=int, curname=str, CardCode=str, name2=str):
+def global_transactions_Caribbean(region=int, val=float, curname=str, CardCode=str, name2=str):
     c = CurrencyRates()
     if region == "6":
         # reg = "Caribbean"
@@ -1312,7 +1307,7 @@ def global_transactions_Caribbean(region=int, val=int, curname=str, CardCode=str
 
 
 # Central America
-def global_transactions_CA(region=int, val=int, curname=str, CardCode=str, name2=str):
+def global_transactions_CA(region=int, val=float, curname=str, CardCode=str, name2=str):
     c = CurrencyRates()
     if region == "7":
         # reg = "Central America"
