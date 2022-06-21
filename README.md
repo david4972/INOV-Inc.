@@ -4,8 +4,7 @@ INOV is a financial services and SaaS Company that offers digitized banking proc
 We provide Software for:
 - Virtual Credit/Debit card processing
 - Domestic & International transactions
-- Formal Crypto Banking
-- Lending 
+- Formal Crypto Banking 
 - Checking and Savings Account Management 
 
 My name is David Okoronkwo. I am a Finance Major and Economics Minor at Quinnipiac University in Hamden, Connecticut. Over the past year, Three of my friends and I began working on INOV.
