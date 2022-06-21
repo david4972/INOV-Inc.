@@ -1,7 +1,7 @@
 # INOV-Inc.
 INOV is a financial services and SaaS Company that offers digitized banking processing software to Banks and Other Financial Institutions.
 
-We provide Software for:
+We build Software for:
 - Virtual Credit/Debit card processing
 - Domestic & International transactions
 - Formal Crypto Banking 
