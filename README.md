@@ -69,7 +69,7 @@ We Currently have an Executive Team that consist of:
 - David Okoronkwo - President, CTO 
 - Patrick Crispino - CEO 
 - Zachary Merrill - Investor Relations 
-- Juyon Kim - COO
+- Ebuka Momah - COO
 
 Our Mission - To Advance the global credit, retail and institutional Banking system, pushing to more efficient financial services.
 
