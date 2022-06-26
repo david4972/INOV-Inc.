@@ -128,13 +128,13 @@ def send_money_BTC(amount=float, CardNo=int, recipient=str, name=str):
         BTC_GBP = float(b.convert_btc_to_cur(amount, 'GBP'))
         BTC_CNY = float(b.convert_btc_to_cur(amount, 'CNY'))
         fee = BTC_USD * rate_r
-        total_val_credit = amount + fee
+        total_val = BTC_USD + fee
         curr.execute('''UPDATE CryptoDebitAccounts SET BTC=BTC-?, USD=USD-?, EU=EU-?, GBP=GBP-?, SET CNY=CNY-? WHERE 
-        CardNo=?''', [BTC_USD, BTC_USD, BTC_EU, BTC_GBP, BTC_CNY, CardNo]) 
+        CardNo=?''', [total_val, BTC_USD, BTC_EU, BTC_GBP, BTC_CNY, CardNo])
         curr.execute('''UPDATE BusinessInov SET Saving=Saving+? WHERE name=?''', [fee, Bank_fee])
         # processing transaction
         curr.execute('''UPDATE CryptoDebitAccounts SET BTC=BTC+?, USD=USD+?, EU=EU+?, GBP=GBP+?, SET CNY=CNY+? WHERE 
-        name=?''', [BTC_USD, BTC_USD, BTC_EU, BTC_GBP, BTC_CNY, recipient]) 
+        name=?''', [BTC_USD, BTC_USD, BTC_EU, BTC_GBP, BTC_CNY, recipient])
         conn.commit()
         print("transaction complete")
         conn.close()
