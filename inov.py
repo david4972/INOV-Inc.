@@ -234,94 +234,83 @@ def deposit_Savings(deposit=float, CardNo=int):
                 send_mail_for_deposits_saving(dep, mail)
 
 
-def atm_option(CardCode=str, var=str, withdraw=int):
-    if var == "Checkings":
-        atm_Checking(CardCode, withdraw)
-
-    if var == "Savings":
-        atm_Savings(CardCode, withdraw)
-
-    return "ATM processing, You will be charged 1.3% upon withdrawal."
-
-
-def atm_Checking(CardCode=str, withdraw=int):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
-    # Creating a cursor object using the cursor() method
-    curr = conn.cursor()
-    bank = "INOV"
-    rate_r = 0.013
-    read_data1 = '''SELECT * from DebitAccounts WHERE CardCode=?'''
-    read_data2 = '''SELECT * from CreditAccounts WHERE CardCode=?'''
-    curr.execute(read_data1, CardCode)
-    for row in curr.fetchall(CardCode):
-        checking = row[5]
-        if CardCode == row[3]:
-            service = checking * rate_r
-            transaction = "UPDATE DebitAccounts SET Checking=Checking-?, WHERE CardCode=?"
-            curr.execute(transaction, [withdraw, CardCode])
-            fee = "UPDATE DebitAccounts SET Checking=Checking-?, WHERE CardCode=?"
-            curr.execute(fee, [service, CardCode])
-            serv = "UPDATE B-CreditAccounts SET Checking=Checking+?, WHERE name=?"
-            curr.execute(serv, [service, bank])
-            conn.commit()
-            print("Withdrawal Complete")
-            conn.close()
-        else:
-            curr.execute(read_data2, CardCode)
-            for row2 in curr.fetchall(CardCode):
-                checking = row[5]
-                if CardCode == row2[3]:
-                    service = checking * rate_r
-                    transaction = "UPDATE CreditAccounts SET Checking=Checking-?, WHERE CardCode=?"
-                    curr.execute(transaction, [withdraw, CardCode])
-                    fee = "UPDATE CreditAccounts SET Checking=Checking-?, WHERE CardCode=?"
-                    curr.execute(fee, [service, CardCode])
-                    serv = "UPDATE B-CreditAccounts SET Checking=Checking+?, WHERE name=?"
-                    curr.execute(serv, [service, bank])
-                    conn.commit()
-                    print("Withdrawal Complete")
-                    conn.close()
-
-
-def atm_Savings(CardCode=str, withdraw=int):
+# Atm Checking account
+def atm_Checking_Debit(CardNo=int, withdraw=float):
     # Connecting to sqlite
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     bank = "INOVBank"
     rate_r = 0.013
-    read_data1 = '''SELECT * from DebitAccounts WHERE CardCode=?'''
-    read_data2 = '''SELECT * from CreditAccounts WHERE CardCode=?'''
-    curr.execute(read_data1, CardCode)
+    curr.execute('''SELECT * from DebitInov WHERE CardNo=?''', [CardNo])
     for row in curr.fetchall():
-        saving = row[6]
-        if CardCode == row[3]:
-            service = saving * rate_r
-            transaction = "UPDATE DebitAccounts SET Saving=Saving-?, WHERE CardCode=?"
-            curr.execute(transaction, [withdraw, CardCode])
-            fee = "UPDATE DebitAccounts SET Saving=Saving-?, WHERE CardCode=?"
-            curr.execute(fee, [service, CardCode])
-            serv = "UPDATE B-CreditAccounts SET Saving=Saving+?, WHERE name=?"
-            curr.execute(serv, [service, bank])
-            conn.commit()
-            print("Withdrawal Complete")
-            conn.close()
-        else:
-            curr.execute(read_data2, CardCode)
-            for row2 in curr.fetchall():
-                saving = row[6]
-                if CardCode == row2[3]:
-                    service = saving * rate_r
-                    transaction = "UPDATE CreditAccounts SET Saving=Saving-?, WHERE CardCode=?"
-                    curr.execute(transaction, [withdraw, CardCode])
-                    fee = "UPDATE CreditAccounts SET Saving=Saving-?, WHERE CardCode=?"
-                    curr.execute(fee, [service, CardCode])
-                    serv = "UPDATE B-CreditAccounts SET Saving=Saving+?, WHERE name=?"
-                    curr.execute(serv, [service, bank])
-                    conn.commit()
-                    print("Withdrawal Complete")
-                    conn.close()
+        checking = row[5]
+        service = checking * rate_r
+        total_val = withdraw + service
+        curr.execute('''UPDATE DebitInov SET Checking=Checking-?, WHERE CardNo=?''', [total_val, CardNo])
+        curr.execute('''UPDATE BusinessInov SET Checking=Checking+?, WHERE name=?''', [service, bank])
+        conn.commit()
+        print("Withdrawal Complete")
+        conn.close()
+
+
+def atm_Checking_Credit(CardNo=int, withdraw=float):
+    # Connecting to sqlite
+    conn = sqlite3.connect('inov.db')
+    # Creating a cursor object using the cursor() method
+    curr = conn.cursor()
+    bank = "INOVBank"
+    rate_r = 0.013
+    curr.execute('''SELECT * from CreditInov WHERE CardNo=?''', [CardNo])
+    for row in curr.fetchall():
+        checking = row[5]
+        service = checking * rate_r
+        total_val = withdraw + service
+        curr.execute('''UPDATE CreditInov SET Checking=Checking-?, WHERE CardNo=?''', [total_val, CardNo])
+        curr.execute('''UPDATE BusinessInov SET Checking=Checking+?, WHERE name=?''', [service, bank])
+        conn.commit()
+        print("Withdrawal Complete")
+        conn.close()
+
+
+# Atm Savings account
+def atm_Savings_Debit(CardNo=int, withdraw=float):
+    # Connecting to sqlite
+    conn = sqlite3.connect('inov.db')
+    # Creating a cursor object using the cursor() method
+    curr = conn.cursor()
+    bank = "INOVBank"
+    rate_r = 0.013
+    curr.execute('''SELECT * from DebitInov WHERE CardNo=?''', [CardNo])
+    for row in curr.fetchall():
+        checking = row[5]
+        service = checking * rate_r
+        total_val = withdraw + service
+        curr.execute('''UPDATE DebitInov SET Saving=Saving-?, WHERE CardNo=?''', [total_val, CardNo])
+        curr.execute('''UPDATE BusinessInov SET Checking=Checking+?, WHERE name=?''', [service, bank])
+        conn.commit()
+        print("Withdrawal Complete")
+        conn.close()
+
+
+def atm_Savings_Credit(CardNo=int, withdraw=float):
+    # Connecting to sqlite
+    conn = sqlite3.connect('inov.db')
+    # Creating a cursor object using the cursor() method
+    curr = conn.cursor()
+    bank = "INOVBank"
+    rate_r = 0.013
+    curr.execute('''SELECT * from CreditInov WHERE CardNo=?''', [CardNo])
+    for row in curr.fetchall():
+        checking = row[5]
+        service = checking * rate_r
+        total_val = withdraw + service
+        curr.execute('''UPDATE CreditInov SET Saving=Saving-?, WHERE CardNo=?''', [total_val, CardNo])
+        curr.execute('''UPDATE BusinessInov SET Checking=Checking+?, WHERE name=?''', [service, bank])
+        conn.commit()
+        print("Withdrawal Complete")
+        conn.close()
+
 
 
 def send_money_Debit(amount=float, CardNo=int, recipient=str, name=str):  # send money between Debit Accounts
