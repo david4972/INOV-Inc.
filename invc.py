@@ -11,9 +11,9 @@ import invp
 
 
 # create new bitcoin account
-def create_accnt_BTC(account_name=str, email=str, amt=int):
+def create_accnt_BTC_Debit(account_name=str, email=str, amt=int):
     # Connecting to sqlite
-    conn = sqlite3.connect('InovCrypto.db')
+    conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     country = "USA"
@@ -46,78 +46,63 @@ def create_accnt_BTC(account_name=str, email=str, amt=int):
 
 
 # link bank account to create crypto account (available to those who have accounts with regular bank)
-def link_accnt_BTC(cardNo=int, amt=int):
+def link_accnt_BTC_Debit(cardNo=int, amt=int):
     # Connecting to sqlite
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
-    read_data1 = "SELECT * from DebitAccounts WHERE CardNo=? "
-    # read_data2 = "SELECT * from CreditAccounts where CardNo=? "
-    curr.execute(read_data1, [cardNo])
+    curr.execute('''SELECT * from DebitInov WHERE CardNo=?''', [cardNo])
     for row in curr.fetchall():
-        name = row[0]
         email = row[1]
-        CardNo = row[2]
-        Cardcode = row[3]
-        sec_code = row[4]
-        country = row[8]
-        if cardNo == row[2]:
-            # Connecting to sqlite
-            conn = sqlite3.connect('InovCrypto.db')
-            # Creating a cursor object using the cursor() method
-            curr2 = conn.cursor()
-            link = "INSERT INTO CryptoDebitAccounts(name, email, CardNo, CardCode, SecurityCode, Country) SELECT name, " \
-                   "email, CardNo, CardCode, SecurityCode, Country FROM " \
-                   "DebitAccounts WHERE CardNo=? "
-            curr2.execute(link, [name, email, CardNo, Cardcode, sec_code, country])
-            conn.commit()
-            b = BtcConverter()
-            BTC_USD = b.convert_btc_to_cur(amt, 'USD')
-            BTC_EU = b.convert_btc_to_cur(amt, 'EUR')
-            BTC_GBP = b.convert_btc_to_cur(amt, 'GBP')
-            BTC_CNY = b.convert_btc_to_cur(amt, 'CNY')
-            connect = "UPDATE CryptoDebitAccounts SET CardNo=?, BTC=?, USD=?, EU=?, GBP=?, CNY=? WHERE name=?"
-            curr2.execute(connect, [BTC_USD, BTC_USD, BTC_EU, BTC_GBP, BTC_CNY])
-            conn.commit()
-
-            dclNo = 'PLEASE READ: Congrats on your new Crypto Debit account!!! This -> {}  is your secured card ' \
-                    'number, this number ' \
-                    'will ' \
-                    'handle ' \
-                    'all ' \
-                    'payments you make.' \
-                    'This is to ensure safer payment and build a more secure wall around your credit. Please memorize ' \
-                    'these five digits. '
-            msg = dclNo.format(cardNo)
-            print("Account Linked, Crypto Debit Account created")
-            conn.close()
-            inov.send_mail_for_new_account(email, msg)
+        Debit_mail_email_crypto = str(email)
+        curr.execute('''INSERT INTO CryptoDebitAccounts(name, email, CardNo, CardCode, SecurityCode, Country) SELECT name," \
+               "email, CardNo, CardCode, SecurityCode, Country FROM " \
+               "DebitInov WHERE CardNo=?''', [cardNo])
+        b = BtcConverter()
+        BTC_USD = b.convert_btc_to_cur(amt, 'USD')
+        BTC_EU = b.convert_btc_to_cur(amt, 'EUR')
+        BTC_GBP = b.convert_btc_to_cur(amt, 'GBP')
+        BTC_CNY = b.convert_btc_to_cur(amt, 'CNY')
+        curr.execute('''UPDATE CryptoDebitAccounts SET BTC=?, USD=?, EU=?, GBP=?, CNY=? WHERE CardNo=?''',
+                     [BTC_USD, BTC_USD, BTC_EU, BTC_GBP, BTC_CNY, cardNo])
+        dclNo = 'PLEASE READ: Congrats on your new Crypto Debit account!!! This -> {}  is your secured card ' \
+                'number, this number ' \
+                'will ' \
+                'handle ' \
+                'all ' \
+                'payments you make.' \
+                'This is to ensure safer payment and build a more secure wall around your credit. Please memorize ' \
+                'these five digits. '
+        msg = dclNo.format(cardNo)
+        conn.commit()
+        print("Account Linked, Crypto Debit Account created")
+        conn.close()
+        inov.send_mail_for_new_account(Debit_mail_email_crypto, msg)
 
 
-def deposit_Checking_BTC(cardNo=int, amt=int):
+def deposit_BTC_Debit(cardNo=int, amt=int):
     # Connecting to sqlite
-    conn = sqlite3.connect('InovCrypto.db')
+    conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     read_data1 = "SELECT * from CryptoDebitAccounts WHERE CardNo=? "
     curr.execute(read_data1, [cardNo])
     for row in curr.fetchall():
         email = row[1]
-        if cardNo == row[2]:
-            b = BtcConverter()
-            BTC_USD = b.convert_btc_to_cur(amt, 'USD')
-            BTC_EU = b.convert_btc_to_cur(amt, 'EUR')
-            BTC_GBP = b.convert_btc_to_cur(amt, 'GBP')
-            BTC_CNY = b.convert_btc_to_cur(amt, 'CNY')
-            deposit = "UPDATE CryptoDebitAccounts SET BTC=BTC+?, USD=USD+?, EU=EU+?, GBP=GBP+?, SET CNY=CNY+? WHERE " \
-                      "CardNo=?=?",
-            curr.execute(deposit, [BTC_USD, BTC_USD, BTC_EU, BTC_GBP, BTC_CNY, cardNo])
-            conn.commit()
-            print("Deposit processed")
-            conn.close()
-            inov.send_mail_for_deposits_checking(amt, email)
-        else:
-            print("Account not found, feel free to try again")
+        mail = str(email)
+        b = BtcConverter()
+        BTC_USD = b.convert_btc_to_cur(amt, 'USD')
+        BTC_EU = b.convert_btc_to_cur(amt, 'EUR')
+        BTC_GBP = b.convert_btc_to_cur(amt, 'GBP')
+        BTC_CNY = b.convert_btc_to_cur(amt, 'CNY')
+        curr.execute('''UPDATE CryptoDebitAccounts SET BTC=BTC+?, USD=USD+?, EU=EU+?, GBP=GBP+?, SET CNY=CNY+? WHERE 
+        CardNo=?''', [BTC_USD, BTC_USD, BTC_EU, BTC_GBP, BTC_CNY, cardNo]) 
+        conn.commit()
+        print("Deposit processed")
+        conn.close()
+        inov.send_mail_for_deposits_checking(amt, mail)
+    else:
+        print("Account not found, feel free to try again")
 
 
 # Process crypto payment
@@ -125,35 +110,32 @@ def crypto_payment(CardCode=str):
     invp.get_card_info_Crypto(CardCode)
 
 
-def send_money(amount=float, name=str, recipient=str):
+def send_money_BTC(amount=float, CardNo=int, recipient=str, name=str):
+    Bank_fee = "INOVBank"
     # Connecting to sqlite
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     rate_r = 0.013
-    read_data1 = '''SELECT * from CryptoDebitAccounts WHERE name=?'''
-    # read_data2 = '''SELECT * from CreditAccounts WHERE name=?'''
-    # read_data3 = "SELECT * from B-CreditAccounts where CardCode=?"
-    curr.execute(read_data1, name)
-    for row1 in curr.fetchall():
-        # checking = row1[5]
-        if name == row1[0]:
-            # fee = checking * rate_r
-            # curr.execute('UPDATE BusinessCreditAccounts SET Saving=Saving+? WHERE name=INOVBank', [fee])
-            # processing transaction
-            retrieve = "UPDATE CryptoDebitAccounts SET BTC=BTC-? name=?"
-            curr.execute(retrieve, [amount, name])
-            conn.commit()
-            print("transaction complete")
-            conn.close()
-            process = "SELECT * from CryptoDebitAccounts WHERE name=?"
-            curr.execute(process, recipient)
-            for row2 in curr.fetchall():
-                email = row2[0]
-                if recipient == row2[0]:
-                    send = "UPDATE CryptoDebitAccounts SET BTC=BTC+? WHERE name=?"
-                    curr.execute(send, [amount, recipient])  # completing transaction
-                    conn.commit()
-                    print("transaction complete")
-                    conn.close()
-                    inov.send_mail_for_Transactions(name, email, amount)
+    curr.execute('''SELECT * from CryptoDebitAccounts WHERE name=?''', [recipient])
+    for credit_row in curr.fetchall():
+        email = credit_row[1]
+        mail = str(email)
+        b = BtcConverter()
+        BTC_USD = float(b.convert_btc_to_cur(amount, 'USD'))
+        mail_amount = str(BTC_USD)
+        BTC_EU = float(b.convert_btc_to_cur(amount, 'EUR'))
+        BTC_GBP = float(b.convert_btc_to_cur(amount, 'GBP'))
+        BTC_CNY = float(b.convert_btc_to_cur(amount, 'CNY'))
+        fee = BTC_USD * rate_r
+        total_val_credit = amount + fee
+        curr.execute('''UPDATE CryptoDebitAccounts SET BTC=BTC-?, USD=USD-?, EU=EU-?, GBP=GBP-?, SET CNY=CNY-? WHERE 
+        CardNo=?''', [BTC_USD, BTC_USD, BTC_EU, BTC_GBP, BTC_CNY, CardNo]) 
+        curr.execute('''UPDATE BusinessInov SET Saving=Saving+? WHERE name=?''', [fee, Bank_fee])
+        # processing transaction
+        curr.execute('''UPDATE CryptoDebitAccounts SET BTC=BTC+?, USD=USD+?, EU=EU+?, GBP=GBP+?, SET CNY=CNY+? WHERE 
+        name=?''', [BTC_USD, BTC_USD, BTC_EU, BTC_GBP, BTC_CNY, recipient]) 
+        conn.commit()
+        print("transaction complete")
+        conn.close()
+        inov.send_mail_for_Transactions(name, mail, mail_amount)
