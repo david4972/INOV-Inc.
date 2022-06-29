@@ -463,6 +463,35 @@ def international_send_CentralAmerica(region=str, val=float, curname=str, Sender
                                  account=str, CardNo=int):
     InternationalTransactions.global_transactions_CA(region, val, curname, Sender_accnt_name, Receive_accnt_name,
                                                             account, CardNo)
+    
+def currency_exchange_debit_USD(debit_name=str, debit_CardNo=int, base=str):
+    CurrencyExchange.CurrencyExchange_USD_Debit(debit_name, debit_CardNo, base)
+
+
+def currency_exchange_debit(debit_name=str, debit_CardNo=int, choice=str):
+    if choice == "1":
+        CurrencyExchange.CurrencyExchange_EUR_Debit(debit_name, debit_CardNo)
+    if choice == "2":
+        CurrencyExchange.CurrencyExchange_GBP_Debit(debit_name, debit_CardNo)
+    if choice == "3":
+        CurrencyExchange.CurrencyExchange_AUS_Debit(debit_name, debit_CardNo)
+    if choice == "4":
+        CurrencyExchange.CurrencyExchange_CNY_Debit(debit_name, debit_CardNo)
+
+
+def currency_exchange_credit_USD(credit_name=str, credit_CardNo=int, base=str):
+    CurrencyExchange.CurrencyExchange_USD_Credit(credit_name, credit_CardNo, base)
+
+
+def currency_exchange_credit(credit_name=str, credit_CardNo=int, choice=str):
+    if choice == "1":
+        CurrencyExchange.CurrencyExchange_EUR_Debit(credit_name, credit_CardNo)
+    if choice == "2":
+        CurrencyExchange.CurrencyExchange_GBP_Debit(credit_name, credit_CardNo)
+    if choice == "3":
+        CurrencyExchange.CurrencyExchange_AUS_Debit(credit_name, credit_CardNo)
+    if choice == "4":
+        CurrencyExchange.CurrencyExchange_CNY_Debit(credit_name, credit_CardNo)
 
 
 def process_payment_debit_accnt(CardCode=str):
