@@ -3,6 +3,8 @@ from cryptography.fernet import Fernet
 import smtplib
 import invp
 import random
+import InternationalTransactions
+import CurrencyExchange
 
 
 def intro():
@@ -417,6 +419,50 @@ def send_to_debit(amount=float, CardNo=str, recipient=str, name=str):  # Send mo
         print("transaction complete")
         conn.close()
         send_mail_for_Transactions(name, mail, mail_amount)
+        
+
+def international_send_NorthAmerica(region=str, val=float, curname=str, Sender_accnt_name=str, Receive_accnt_name=str,
+                                    account=str, CardNo=int):
+    InternationalTransactions.global_transactions_NA(region, val, curname, Sender_accnt_name, Receive_accnt_name,
+                                                     account, CardNo)
+
+
+def international_send_Europe(region=str, val=float, curname=str, Sender_accnt_name=str, Receive_accnt_name=str,
+                              account=str, CardNo=int):
+    InternationalTransactions.global_transactions_EU(region, val, curname, Sender_accnt_name, Receive_accnt_name,
+                                                     account, CardNo)
+
+
+def international_send_SouthAmerica(region=str, val=float, curname=str, Sender_accnt_name=str, Receive_accnt_name=str,
+                                    account=str, CardNo=int):
+    InternationalTransactions.global_transactions_SA(region, val, curname, Sender_accnt_name, Receive_accnt_name,
+                                                     account, CardNo)
+
+
+def international_send_Africa(region=str, val=float, curname=str, Sender_accnt_name=str, Receive_accnt_name=str,
+                              account=str, CardNo=int):
+    InternationalTransactions.global_transactions_Africa(region, val, curname, Sender_accnt_name, Receive_accnt_name,
+                                                         account, CardNo)
+
+
+def international_send_Asia_Middle_East(region=str, val=float, curname=str, Sender_accnt_name=str,
+                                        Receive_accnt_name=str,
+                                        account=str, CardNo=int):
+    InternationalTransactions.global_transactions_Asia_Middle_east(region, val, curname, Sender_accnt_name,
+                                                                   Receive_accnt_name,
+                                                                   account, CardNo)
+
+
+def international_send_Carribean(region=str, val=float, curname=str, Sender_accnt_name=str, Receive_accnt_name=str,
+                                 account=str, CardNo=int):
+    InternationalTransactions.global_transactions_Caribbean(region, val, curname, Sender_accnt_name, Receive_accnt_name,
+                                                            account, CardNo)
+
+
+def international_send_CentralAmerica(region=str, val=float, curname=str, Sender_accnt_name=str, Receive_accnt_name=str,
+                                 account=str, CardNo=int):
+    InternationalTransactions.global_transactions_CA(region, val, curname, Sender_accnt_name, Receive_accnt_name,
+                                                            account, CardNo)
 
 
 def process_payment_debit_accnt(CardCode=str):
