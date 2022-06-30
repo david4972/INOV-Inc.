@@ -168,6 +168,48 @@ def create_Debit_account(account_name=str, email=str, address=str):
     conn.close()
     send_mail_for_new_account(email, msg)
 
+    
+def create_international_debit_accnt(account_name=str, email=str, address=str, country=str):
+    # Connecting to sqlite
+    conn = sqlite3.connect('inov.db')
+    # Creating a cursor object using the cursor() method
+    curr = conn.cursor()
+    Curr = country
+    CardNo = random.randint(11111, 99999)
+    Security = str(Fernet.generate_key())
+    Sec_code = str(Security[:10])
+    Crypt = str(Security[:5])
+    CardCode = Crypt
+    Debit_Checking = float(input('How much do you want to deposit into this account p.s. no min deposit required max '
+                                 'deposit is '
+                                 '5,000: '))
+    if Debit_Checking > 5000 or Debit_Checking < 0:
+        print("deposit does not meet requirement, try again")
+    Debit_Saving = float(input('How much do you want to deposit into this account p.s. no min deposit required max '
+                               'deposit is '
+                               '15,000: '))
+    if Debit_Saving > 15000 or Debit_Saving < 0:
+        print("deposit does not meet requirement, try again")
+    read_data = "INSERT INTO InterDebitInov (name, email, CardNo, CardCode, SecurityCode, Checking, Saving, " \
+                "Address, Country, " \
+                "Currency) " \
+                "VALUES ( " \
+                "?, " \
+                "?, ?, ?, ?, ?, ?, ?, ?, ?) "
+    val = (account_name, email, CardNo, CardCode, Sec_code, Debit_Checking, Debit_Saving,
+           address,
+           country, Curr)
+    curr.execute(read_data, val)
+    conn.commit()
+    dclNo = "Congrats on your new International Debit Bank account!!! This -> {} is your card number. This -> {} is " \
+            "your secured " \
+            "card " \
+            "code that will be used to secure your account. "
+    msg = dclNo.format(CardNo, CardCode)
+    print("Account created")
+    conn.close()
+    send_mail_for_new_account(email, msg)
+    
 
 # Deposits STATUS: Complete
 def deposit_Checking(deposit=float, CardNo=int):
@@ -234,6 +276,47 @@ def deposit_Savings(deposit=float, CardNo=int):
                 conn.close()
                 print("deposit complete")  # completing transaction
                 send_mail_for_deposits_saving(dep, mail)
+ 
+
+
+def International_deposit_Checking(deposit=float, CardNo=int):
+    dep = str(deposit)
+    # Connecting to sqlite
+    conn = sqlite3.connect('inov.db')
+    # Creating a cursor object using the cursor() method
+    curr = conn.cursor()
+    curr.execute('''SELECT * from InterDebitInov where CardNo=?''', [CardNo])
+    for row in curr.fetchall():
+        email = row[1]
+        mail = str(email)
+        if CardNo == row[2]:
+            # processing transaction
+            curr.execute('''UPDATE InterDebitInov SET Checking=Checking+? WHERE CardNo=?''', [deposit, CardNo])
+            conn.commit()
+            # dep = str(deposit)
+            conn.close()
+            print("deposit complete")  # completing transaction
+            # send_mail_for_deposits_checking(dep, mail)
+
+
+def International_deposit_Savings(deposit=float, CardNo=int):
+    dep = str(deposit)
+    # Connecting to sqlite
+    conn = sqlite3.connect('inov.db')
+    # Creating a cursor object using the cursor() method
+    curr = conn.cursor()
+    curr.execute('''SELECT * from InterDebitInov WHERE CardNo=?''', [CardNo])
+    for row in curr.fetchall():
+        email = row[1]
+        mail = str(email)
+        if CardNo == row[2]:
+            # processing transaction
+            curr.execute('''UPDATE InterDebitInov SET Saving=Saving+? WHERE CardNo=?''', [deposit, CardNo])
+            conn.commit()
+            # dep = str(deposit)
+            conn.close()
+            print("deposit complete")  # completing transaction
+            send_mail_for_deposits_saving(dep, mail)
 
 
 # Atm Checking account
