@@ -23,10 +23,10 @@ def create_accnt_BTC_Debit(account_name=str, email=str, amt=int):
     Crypt = str(Security[:5])
     CardCode = Crypt
     b = BtcConverter()
-    BTC_USD = b.convert_btc_to_cur(amt, 'USD')
-    BTC_EU = b.convert_btc_to_cur(amt, 'EUR')
-    BTC_GBP = b.convert_btc_to_cur(amt, 'GBP')
-    BTC_CNY = b.convert_btc_to_cur(amt, 'CNY')
+    BTC_USD = float(b.convert_btc_to_cur(amt, 'USD'))
+    BTC_EU = float(b.convert_btc_to_cur(amt, 'EUR'))
+    BTC_GBP = float(b.convert_btc_to_cur(amt, 'GBP'))
+    BTC_CNY = float(b.convert_btc_to_cur(amt, 'CNY'))
     read_data = "INSERT INTO CryptoDebitAccounts (name, email, number, CardNo, CardCode, SecurityCode, BTC, USD, EU, " \
                 "GBP, CNY, Country) " \
                 "VALUES ( " \
@@ -59,10 +59,10 @@ def link_accnt_BTC_Debit(cardNo=int, amt=int):
                "email, CardNo, CardCode, SecurityCode, Country FROM " \
                "DebitInov WHERE CardNo=?''', [cardNo])
         b = BtcConverter()
-        BTC_USD = b.convert_btc_to_cur(amt, 'USD')
-        BTC_EU = b.convert_btc_to_cur(amt, 'EUR')
-        BTC_GBP = b.convert_btc_to_cur(amt, 'GBP')
-        BTC_CNY = b.convert_btc_to_cur(amt, 'CNY')
+        BTC_USD = float(b.convert_btc_to_cur(amt, 'USD'))
+        BTC_EU = float(b.convert_btc_to_cur(amt, 'EUR'))
+        BTC_GBP = float(b.convert_btc_to_cur(amt, 'GBP'))
+        BTC_CNY = float(b.convert_btc_to_cur(amt, 'CNY'))
         curr.execute('''UPDATE CryptoDebitAccounts SET BTC=?, USD=?, EU=?, GBP=?, CNY=? WHERE CardNo=?''',
                      [BTC_USD, BTC_USD, BTC_EU, BTC_GBP, BTC_CNY, cardNo])
         dclNo = 'PLEASE READ: Congrats on your new Crypto Debit account!!! This -> {}  is your secured card ' \
@@ -91,12 +91,12 @@ def deposit_BTC_Debit(cardNo=int, amt=int):
         email = row[1]
         mail = str(email)
         b = BtcConverter()
-        BTC_USD = b.convert_btc_to_cur(amt, 'USD')
-        BTC_EU = b.convert_btc_to_cur(amt, 'EUR')
-        BTC_GBP = b.convert_btc_to_cur(amt, 'GBP')
-        BTC_CNY = b.convert_btc_to_cur(amt, 'CNY')
+        BTC_USD = float(b.convert_btc_to_cur(amt, 'USD'))
+        BTC_EU = float(b.convert_btc_to_cur(amt, 'EUR'))
+        BTC_GBP = float(b.convert_btc_to_cur(amt, 'GBP'))
+        BTC_CNY = float(b.convert_btc_to_cur(amt, 'CNY'))
         curr.execute('''UPDATE CryptoDebitAccounts SET BTC=BTC+?, USD=USD+?, EU=EU+?, GBP=GBP+?, SET CNY=CNY+? WHERE 
-        CardNo=?''', [BTC_USD, BTC_USD, BTC_EU, BTC_GBP, BTC_CNY, cardNo]) 
+        CardNo=?''', [BTC_USD, BTC_USD, BTC_EU, BTC_GBP, BTC_CNY, cardNo])
         conn.commit()
         print("Deposit processed")
         conn.close()
@@ -139,3 +139,4 @@ def send_money_BTC(amount=float, CardNo=int, recipient=str, name=str):
         print("transaction complete")
         conn.close()
         inov.send_mail_for_Transactions(name, mail, mail_amount)
+
