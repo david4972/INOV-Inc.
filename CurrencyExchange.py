@@ -6,16 +6,18 @@ from forex_python.converter import CurrencyRates
 # Currency change (allows account users to convert currency cash account into the main global currencies (USD, EUR,
 # GBP, CNY)
 # USD
-def CurrencyExchange_USD_Debit(debit_name=str, debit_CardNo=int, debit_gbc=str):
+def CurrencyExchange_USD_Debit(debit_CardNo=int, debit_gbc=str):
     # Connecting to sqlite
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
     CurrencyExchange_USD_debit_curr = conn.cursor()
     c = CurrencyRates()
-    USD_debit_var = "USD"
+    USD_debit_var = 'USD'
     USD_Currency_debit_convert = debit_gbc
     USD_debit_convert_check = c.get_rate(USD_Currency_debit_convert, USD_debit_var)
+    checking_price = float(USD_debit_convert_check)
     USD_debit_convert_sav = c.get_rate(USD_Currency_debit_convert, USD_debit_var)
+    saving_price = float(USD_debit_convert_sav)
     rate_r = 0.013
     CurrencyExchange_USD_debit_curr.execute('''SELECT * FROM DebitInov WHERE CardNo=?''', [debit_CardNo])
     for row1 in CurrencyExchange_USD_debit_curr.fetchall():
@@ -28,14 +30,14 @@ def CurrencyExchange_USD_Debit(debit_name=str, debit_CardNo=int, debit_gbc=str):
         CurrencyExchange_USD_debit_curr.execute('''UPDATE BusinessInov SET Checking=Checking+? WHERE name=INOVBank''',
                                                 [db_checking_fee])
         CurrencyExchange_USD_debit_curr.execute('''UPDATE DebitInov SET Current=Current/?, Saving=Saving/? Currency=? 
-        WHERE name=?''', [USD_debit_convert_check, USD_debit_convert_sav, USD_debit_var, debit_name])
+        WHERE CardNo=?''', [checking_price, saving_price, USD_debit_var, debit_CardNo])
         conn.commit()
         print("exchange complete")
         conn.close()
         inov.send_mail_for_currency_exchange(USD_debit_var, mail_currency_exchange_debit)
 
 
-def CurrencyExchange_USD_Credit(credit_name=str, credit_CardNo=int, credit_gbc=str):
+def CurrencyExchange_USD_Credit(credit_CardNo=int, credit_gbc=str):
     # Connecting to sqlite
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
@@ -44,7 +46,9 @@ def CurrencyExchange_USD_Credit(credit_name=str, credit_CardNo=int, credit_gbc=s
     USD_credit_var = "USD"
     USD_Currency_credit_convert = credit_gbc
     USD_credit_convert_check = c.get_rate(USD_Currency_credit_convert, USD_credit_var)
+    checking_price = float(USD_credit_convert_check)
     USD_credit_convert_sav = c.get_rate(USD_Currency_credit_convert, USD_credit_var)
+    saving_price = float(USD_credit_convert_sav)
     rate_r = 0.013
     CurrencyExchange_USD_credit_curr.execute('''SELECT * FROM CreditInov WHERE CardNo=?''', [credit_CardNo])
     for row1 in CurrencyExchange_USD_credit_curr.fetchall():
@@ -57,7 +61,7 @@ def CurrencyExchange_USD_Credit(credit_name=str, credit_CardNo=int, credit_gbc=s
         CurrencyExchange_USD_credit_curr.execute('''UPDATE BusinessInov SET Checking=Checking+? WHERE name=INOVBank''',
                                                  [db_checking_fee])
         CurrencyExchange_USD_credit_curr.execute('''UPDATE CreditInov SET Current=Current/?, Saving=Saving/? Currency=? 
-        WHERE name=?''', [USD_credit_convert_check, USD_credit_convert_sav, USD_credit_var, credit_name])
+        WHERE CardNo=?''', [checking_price, saving_price, USD_credit_var, credit_CardNo])
         conn.commit()
         print("exchange complete")
         conn.close()
@@ -65,7 +69,7 @@ def CurrencyExchange_USD_Credit(credit_name=str, credit_CardNo=int, credit_gbc=s
 
 
 # EUR
-def CurrencyExchange_EUR_Debit(debit_name=str, debit_CardNo=int):
+def CurrencyExchange_EUR_Debit(debit_CardNo=int):
     # Connecting to sqlite
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
@@ -74,7 +78,9 @@ def CurrencyExchange_EUR_Debit(debit_name=str, debit_CardNo=int):
     var1 = "USD"
     var2 = "EUR"
     cex1 = c.get_rate(var1, var2)
+    checking_price = float(cex1)
     cex2 = c.get_rate(var1, var2)
+    saving_price = float(cex2)
     rate_r = 0.013
     CurrencyExchange_EUR_debit_curr.execute('''SELECT * FROM DebitInov WHERE CardNo=?''', [debit_CardNo])
     for row1 in CurrencyExchange_EUR_debit_curr.fetchall():
@@ -87,14 +93,14 @@ def CurrencyExchange_EUR_Debit(debit_name=str, debit_CardNo=int):
         CurrencyExchange_EUR_debit_curr.execute('''UPDATE BusinessInov SET Checking=Checking+? WHERE name=INOVBank''',
                                                 [db_checking_fee])
         CurrencyExchange_EUR_debit_curr.execute('''UPDATE DebitInov SET Current=Current/?, Saving=Saving/? Currency=? 
-            WHERE name=?''', [cex1, cex2, var2, debit_name])
+            WHERE CardNo=?''', [checking_price, saving_price, var2, debit_CardNo])
         conn.commit()
         print("exchange complete")
         conn.close()
         inov.send_mail_for_currency_exchange(var2, mail_currency_exchange_debit)
 
 
-def CurrencyExchange_EUR_Credit(credit_name=str, credit_CardNo=int):
+def CurrencyExchange_EUR_Credit(credit_CardNo=int):
     # Connecting to sqlite
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
@@ -103,7 +109,9 @@ def CurrencyExchange_EUR_Credit(credit_name=str, credit_CardNo=int):
     var1 = "USD"
     var2 = "EUR"
     cex1 = c.get_rate(var1, var2)
+    checking_price = float(cex1)
     cex2 = c.get_rate(var1, var2)
+    saving_price = float(cex2)
     rate_r = 0.013
     CurrencyExchange_EUR_credit_curr.execute('''SELECT * FROM CreditInov WHERE CardNo=?''', [credit_CardNo])
     for row1 in CurrencyExchange_EUR_credit_curr.fetchall():
@@ -116,7 +124,7 @@ def CurrencyExchange_EUR_Credit(credit_name=str, credit_CardNo=int):
         CurrencyExchange_EUR_credit_curr.execute('''UPDATE BusinessInov SET Checking=Checking+? WHERE name=INOVBank''',
                                                  [db_checking_fee])
         CurrencyExchange_EUR_credit_curr.execute('''UPDATE CreditInov SET Current=Current/?, Saving=Saving/? Currency=? 
-        WHERE name=?''', [cex1, cex2, var2, credit_name])
+        WHERE CardNo=?''', [checking_price, saving_price, var2, credit_CardNo])
         conn.commit()
         print("exchange complete")
         conn.close()
@@ -124,7 +132,7 @@ def CurrencyExchange_EUR_Credit(credit_name=str, credit_CardNo=int):
 
 
 # GBP
-def CurrencyExchange_GBP_Debit(debit_name=str, debit_CardNo=int):
+def CurrencyExchange_GBP_Debit(debit_CardNo=int):
     # Connecting to sqlite
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
@@ -133,7 +141,9 @@ def CurrencyExchange_GBP_Debit(debit_name=str, debit_CardNo=int):
     var1 = "USD"
     var2 = "GBP"
     cex1 = c.get_rate(var1, var2)
+    checking_price = float(cex1)
     cex2 = c.get_rate(var1, var2)
+    saving_price = float(cex2)
     rate_r = 0.013
     CurrencyExchange_GBP_debit_curr.execute('''SELECT * FROM DebitInov WHERE CardNo=?''', [debit_CardNo])
     for row1 in CurrencyExchange_GBP_debit_curr.fetchall():
@@ -146,14 +156,14 @@ def CurrencyExchange_GBP_Debit(debit_name=str, debit_CardNo=int):
         CurrencyExchange_GBP_debit_curr.execute('''UPDATE BusinessInov SET Checking=Checking+? WHERE name=INOVBank''',
                                                 [db_checking_fee])
         CurrencyExchange_GBP_debit_curr.execute('''UPDATE DebitInov SET Current=Current/?, Saving=Saving/? Currency=? 
-                WHERE name=?''', [cex1, cex2, var2, debit_name])
+                WHERE CardNo=?''', [checking_price, saving_price, var2, debit_CardNo])
         conn.commit()
         print("exchange complete")
         conn.close()
         inov.send_mail_for_currency_exchange(var2, mail_currency_exchange_debit)
 
 
-def CurrencyExchange_GBP_Credit(credit_name=str, credit_CardNo=int):
+def CurrencyExchange_GBP_Credit(credit_CardNo=int):
     # Connecting to sqlite
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
@@ -162,7 +172,9 @@ def CurrencyExchange_GBP_Credit(credit_name=str, credit_CardNo=int):
     var1 = "USD"
     var2 = "GBP"
     cex1 = c.get_rate(var1, var2)
+    checking_price = float(cex1)
     cex2 = c.get_rate(var1, var2)
+    saving_price = float(cex2)
     rate_r = 0.013
     CurrencyExchange_GBP_Credit_curr.execute('''SELECT * FROM CreditInov WHERE CardNo=?''', [credit_CardNo])
     for row1 in CurrencyExchange_GBP_Credit_curr.fetchall():
@@ -175,14 +187,14 @@ def CurrencyExchange_GBP_Credit(credit_name=str, credit_CardNo=int):
         CurrencyExchange_GBP_Credit_curr.execute('''UPDATE BusinessInov SET Checking=Checking+? WHERE name=INOVBank''',
                                                  [db_checking_fee])
         CurrencyExchange_GBP_Credit_curr.execute('''UPDATE CreditInov SET Current=Current/?, Saving=Saving/? Currency=? 
-        WHERE name=?''', [cex1, cex2, var2, credit_name])
+        WHERE CardNo=?''', [checking_price, saving_price, var2, credit_CardNo])
         conn.commit()
         print("exchange complete")
         conn.close()
         inov.send_mail_for_currency_exchange(var2, mail_currency_exchange_credit)
 
 
-def CurrencyExchange_AUS_Debit(debit_name=str, debit_CardNo=int):
+def CurrencyExchange_AUS_Debit(debit_CardNo=int):
     # Connecting to sqlite
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
@@ -191,7 +203,9 @@ def CurrencyExchange_AUS_Debit(debit_name=str, debit_CardNo=int):
     AUS_debit_var = "AUS"
     AUS_debit_USD = "USD"
     AUS_debit_convert_check = c.get_rate(AUS_debit_USD, AUS_debit_var)
+    checking_price = float(AUS_debit_convert_check)
     AUS_debit_convert_sav = c.get_rate(AUS_debit_USD, AUS_debit_var)
+    saving_price = float(AUS_debit_convert_sav)
     rate_r = 0.013
     CurrencyExchange_AUS_debit_curr.execute('''SELECT * FROM DebitInov WHERE CardNo=?''', [debit_CardNo])
     for row1 in CurrencyExchange_AUS_debit_curr.fetchall():
@@ -204,14 +218,14 @@ def CurrencyExchange_AUS_Debit(debit_name=str, debit_CardNo=int):
         CurrencyExchange_AUS_debit_curr.execute('''UPDATE BusinessInov SET Checking=Checking+? WHERE name=INOVBank''',
                                                 [db_checking_fee])
         CurrencyExchange_AUS_debit_curr.execute('''UPDATE DebitInov SET Current=Current/?, Saving=Saving/? Currency=? 
-                    WHERE name=?''', [AUS_debit_convert_check, AUS_debit_convert_sav, AUS_debit_var, debit_name])
+                    WHERE CardNo=?''', [checking_price, saving_price, AUS_debit_var, debit_CardNo])
         conn.commit()
         print("exchange complete")
         conn.close()
         inov.send_mail_for_currency_exchange(AUS_debit_var, mail_currency_exchange_debit)
 
 
-def CurrencyExchange_AUS_Credit(credit_name=str, credit_CardNo=int):
+def CurrencyExchange_AUS_Credit(credit_CardNo=int):
     # Connecting to sqlite
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
@@ -220,7 +234,9 @@ def CurrencyExchange_AUS_Credit(credit_name=str, credit_CardNo=int):
     var1 = "USD"
     var2 = "AUS"
     cex1 = c.get_rate(var1, var2)
+    checking_price = float(cex1)
     cex2 = c.get_rate(var1, var2)
+    saving_price = float(cex2)
     rate_r = 0.013
     CurrencyExchange_AUS_Credit_curr.execute('''SELECT * FROM CreditInov WHERE CardNo=?''', [credit_CardNo])
     for row1 in CurrencyExchange_AUS_Credit_curr.fetchall():
@@ -233,14 +249,14 @@ def CurrencyExchange_AUS_Credit(credit_name=str, credit_CardNo=int):
         CurrencyExchange_AUS_Credit_curr.execute('''UPDATE BusinessInov SET Checking=Checking+? WHERE name=INOVBank''',
                                                  [db_checking_fee])
         CurrencyExchange_AUS_Credit_curr.execute('''UPDATE CreditInov SET Current=Current/?, Saving=Saving/? Currency=? 
-        WHERE name=?''', [cex1, cex2, var2, credit_name])
+        WHERE name=?''', [checking_price, saving_price, var2, credit_CardNo])
         conn.commit()
         print("exchange complete")
         conn.close()
         inov.send_mail_for_currency_exchange(var2, mail_currency_exchange_credit)
 
 
-def CurrencyExchange_CNY_Debit(debit_name=str, debit_CardNo=int):
+def CurrencyExchange_CNY_Debit(debit_CardNo=int):
     # Connecting to sqlite
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
@@ -249,7 +265,9 @@ def CurrencyExchange_CNY_Debit(debit_name=str, debit_CardNo=int):
     var5 = "CNY"
     gbc = "USD"
     hex5 = c.get_rate(gbc, var5)
+    checking_price = float(hex5)
     hex6 = c.get_rate(gbc, var5)
+    saving_price = float(hex6)
     rate_r = 0.013
     CurrencyExchange_CNY_Debit_curr.execute('''SELECT * FROM DebitInov WHERE CardNo=?''', [debit_CardNo])
     for row1 in CurrencyExchange_CNY_Debit_curr.fetchall():
@@ -262,14 +280,14 @@ def CurrencyExchange_CNY_Debit(debit_name=str, debit_CardNo=int):
         CurrencyExchange_CNY_Debit_curr.execute('''UPDATE BusinessInov SET Checking=Checking+? WHERE name=INOVBank''',
                                                 [db_checking_fee])
         CurrencyExchange_CNY_Debit_curr.execute('''UPDATE DebitInov SET Current=Current/?, Saving=Saving/? Currency=? 
-                        WHERE name=?''', [hex5, hex6, var5, debit_name])
+                        WHERE CardNo=?''', [checking_price, saving_price, var5, debit_CardNo])
         conn.commit()
         print("exchange complete")
         conn.close()
         inov.send_mail_for_currency_exchange(var5, mail_currency_exchange_debit)
 
 
-def CurrencyExchange_CNY_Credit(credit_name=str, credit_CardNo=int):
+def CurrencyExchange_CNY_Credit(credit_CardNo=int):
     # Connecting to sqlite
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
@@ -278,7 +296,9 @@ def CurrencyExchange_CNY_Credit(credit_name=str, credit_CardNo=int):
     var1 = "USD"
     var2 = "CNY"
     cex1 = c.get_rate(var1, var2)
+    checking_price = float(cex1)
     cex2 = c.get_rate(var1, var2)
+    saving_price = float(cex2)
     rate_r = 0.013
     CurrencyExchange_CNY_Credit_curr.execute('''SELECT * FROM CreditInov WHERE CardNo=?''', [credit_CardNo])
     for row1 in CurrencyExchange_CNY_Credit_curr.fetchall():
@@ -291,14 +311,14 @@ def CurrencyExchange_CNY_Credit(credit_name=str, credit_CardNo=int):
         CurrencyExchange_CNY_Credit_curr.execute('''UPDATE BusinessInov SET Checking=Checking+? WHERE name=INOVBank''',
                                                  [db_checking_fee])
         CurrencyExchange_CNY_Credit_curr.execute('''UPDATE CreditInov SET Current=Current/?, Saving=Saving/? Currency=? 
-        WHERE name=?''', [cex1, cex2, var2, credit_name])
+        WHERE CardNo=?''', [checking_price, saving_price, var2, credit_CardNo])
         conn.commit()
         print("exchange complete")
         conn.close()
         inov.send_mail_for_currency_exchange(var2, mail_currency_exchange_credit)
 
 
-def CurrencyExchange_JPY_Debit(debit_name=str, debit_CardNo=int):
+def CurrencyExchange_JPY_Debit(debit_CardNo=int):
     # Connecting to sqlite
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
@@ -307,7 +327,9 @@ def CurrencyExchange_JPY_Debit(debit_name=str, debit_CardNo=int):
     var6 = "JPY"
     gbc = "USD"
     hex6 = c.get_rate(gbc, var6)
+    checking_price = float(hex6)
     hex7 = c.get_rate(gbc, var6)
+    saving_price = float(hex7)
     rate_r = 0.013
     CurrencyExchange_JPY_Debit_curr.execute('''SELECT * FROM DebitInov WHERE CardNo=?''', [debit_CardNo])
     for row1 in CurrencyExchange_JPY_Debit_curr.fetchall():
@@ -320,14 +342,14 @@ def CurrencyExchange_JPY_Debit(debit_name=str, debit_CardNo=int):
         CurrencyExchange_JPY_Debit_curr.execute('''UPDATE BusinessInov SET Checking=Checking+? WHERE name=INOVBank''',
                                                 [db_checking_fee])
         CurrencyExchange_JPY_Debit_curr.execute('''UPDATE DebitInov SET Current=Current/?, Saving=Saving/? Currency=? 
-                            WHERE name=?''', [hex6, hex7, var6, debit_name])
+                            WHERE CardNo=?''', [checking_price, saving_price, var6, debit_CardNo])
         conn.commit()
         print("exchange complete")
         conn.close()
         inov.send_mail_for_currency_exchange(var6, mail_currency_exchange_debit)
 
 
-def CurrencyExchange_JPY_Credit(credit_name=str, credit_CardNo=int):
+def CurrencyExchange_JPY_Credit(credit_CardNo=int):
     # Connecting to sqlite
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
@@ -336,7 +358,9 @@ def CurrencyExchange_JPY_Credit(credit_name=str, credit_CardNo=int):
     var1 = "USD"
     var2 = "JPY"
     cex1 = c.get_rate(var1, var2)
+    checking_price = float(cex1)
     cex2 = c.get_rate(var1, var2)
+    saving_price = float(cex2)
     rate_r = 0.013
     CurrencyExchange_JPY_Credit_curr.execute('''SELECT * FROM CreditInov WHERE CardNo=?''', [credit_CardNo])
     for row1 in CurrencyExchange_JPY_Credit_curr.fetchall():
@@ -349,7 +373,7 @@ def CurrencyExchange_JPY_Credit(credit_name=str, credit_CardNo=int):
         CurrencyExchange_JPY_Credit_curr.execute('''UPDATE BusinessInov SET Checking=Checking+? WHERE name=INOVBank''',
                                                  [db_checking_fee])
         CurrencyExchange_JPY_Credit_curr.execute('''UPDATE CreditInov SET Current=Current/?, Saving=Saving/? Currency=? 
-        WHERE name=?''', [cex1, cex2, var2, credit_name])
+        WHERE CardNo=?''', [checking_price, saving_price, var2, credit_CardNo])
         conn.commit()
         print("exchange complete")
         conn.close()
