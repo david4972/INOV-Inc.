@@ -109,21 +109,23 @@ def currency_Exchange():
         currency_Exchange_USD()
     if c == "2":
         print("Will you be exchanging to USD today?")
-        print("1. Euros")
-        print("2. British Pound")
-        print("3. Australian Dollar")
-        print("4. Chinese Yen")
-        ans = input()
+
         name = str(input("please enter account name = "))
         card_num = int(input("please enter your card number = "))
         print("please select account?")
         print("1. Debit")
         print("2. Credit")
         accnt = input()
+        print("Please select")
+        print("1. Euros")
+        print("2. British Pound")
+        print("3. Australian Dollar")
+        print("4. Chinese Yen")
+        ans = input()
         if accnt == "1":
-            inov.currency_exchange_debit(name, card_num, ans)
+            inov.currency_exchange_debit(card_num, ans)
         if accnt == "2":
-            inov.currency_exchange_credit(name, card_num, ans)
+            inov.currency_exchange_credit(card_num, ans)
 
 
 def currency_Exchange_USD():
@@ -175,3 +177,4 @@ def deposit_money_International():
 
 if __name__ == '__main__':
     Intro()
+
