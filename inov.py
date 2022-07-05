@@ -780,7 +780,7 @@ def send_mail_for_International_Transactions(n=str, mail=str, amt=str, country=s
     sender_email = "monetarytransatlantic@gmail.com"
     rec_email = email
     password = "ladfpscfaupnptmn"
-    message = "You have received $ " + trans + " from " + name + " in " + country
+    message = "You have received " + trans + " from " + name + " in " + country
     # Gmail Accounts
     if "gmail" in email:
         server = smtplib.SMTP('smtp.gmail.com', 587)
