@@ -433,18 +433,18 @@ def send_to_Credit(amount=float, CardNo=int, recipient=str, name=str):  # Send m
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
-    curr.execute('''SELECT * from DebitInov WHERE name=?''', [recipient])
+    curr.execute('''SELECT * from CreditInov WHERE name=?''', [recipient])
     for credit_row in curr.fetchall():
         email = credit_row[1]
         mail = e_mail(email)
         rate_r = 0.013
-        curr.execute('''SELECT * from CreditInov WHERE CardNo=?''', [CardNo])
+        curr.execute('''SELECT * from DebitInov WHERE CardNo=?''', [CardNo])
         fee = amount * rate_r
         total_val_credit = amount + fee
-        curr.execute('''UPDATE CreditInov SET Checking=Checking-? WHERE CardNo=?''', [total_val_credit, CardNo])
+        curr.execute('''UPDATE DebitInov SET Checking=Checking-? WHERE CardNo=?''', [total_val_credit, CardNo])
         curr.execute('''UPDATE BusinessInov SET Saving=Saving+? WHERE name=?''', [fee, Bank_fee])
         # processing transaction
-        curr.execute('''UPDATE DebitInov SET Checking=Checking+? WHERE name=?''', [amount, recipient])
+        curr.execute('''UPDATE CreditInov SET Checking=Checking+? WHERE name=?''', [amount, recipient])
         conn.commit()
         print("transaction complete")
         conn.close()
