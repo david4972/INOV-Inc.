@@ -5,12 +5,12 @@ import invp
 import random
 import InternationalTransactions
 import CurrencyExchange
+import json
 
 
 def intro():
-    text = "WELCOME TO INOV!!!!!! We are a Saas startup that build creative, innovative and simpler " \
-           "apis for more transparent financial services. " \
-           "We only operate in the US as of right now but we look to expand."
+    text = 'WELCOME TO INOV!!!!!! We are a Saas startup that build creative, innovative and simpler apis for more ' \
+           'transparent financial services. We only operate in the US as of right now but we look to expand. '
     return text
 
 
@@ -77,7 +77,8 @@ def create_business_account(account_name=str, email=str, address=str):
 
 
 # create Credit Account
-def create_Credit_account(account_name=str, email=str, address=str):
+def create_Credit_account(account_name=str, email=str, address=str, Credit_Checking_amt=float,
+                          Credit_Savings_amt=float):
     # Connecting to sqlite
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
@@ -89,22 +90,6 @@ def create_Credit_account(account_name=str, email=str, address=str):
     Sec_code = str(Security[:10])
     Crypt = str(Security[:5])
     CardCode = Crypt
-    Credit_Checking_amt = float(input('How much do you want to deposit into your Credit Checkings account p.s. no '
-                                      'min deposit '
-                                      'required max '
-                                      'deposit is '
-                                      '5,000: '))
-    if Credit_Checking_amt > 5000 or Credit_Checking_amt < 0:
-        print("deposit does not meet requirement, try again")
-        intro()
-    Credit_Savings_amt = float(
-        input('How much do you want to deposit into your Credit Savings account p.s. no min deposit '
-              'required max '
-              'deposit is '
-              '15,000: '))
-    if Credit_Savings_amt > 15000 or Credit_Savings_amt < 0:
-        print("deposit does not meet requirement, try again")
-        intro()
     read_data = "INSERT INTO CreditInov (name, email, CardNo, CardCode, SecurityCode, Checking, " \
                 "Saving, " \
                 " Address, Country, " \
@@ -123,11 +108,11 @@ def create_Credit_account(account_name=str, email=str, address=str):
     msg = dclNo.format(CardNo, CardCode)
     send_mail_for_new_account(email, msg)
     conn.close()
-    return "Account created"
+    return "Credit Account created"
 
 
 # create Debit Account
-def create_Debit_account(account_name=str, email=str, address=str):
+def create_Debit_account(account_name=str, email=str, address=str, Debit_Checking=float, Debit_Saving=float):
     # Connecting to sqlite
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
@@ -139,16 +124,6 @@ def create_Debit_account(account_name=str, email=str, address=str):
     Sec_code = str(Security[:10])
     Crypt = str(Security[:5])
     CardCode = Crypt
-    Debit_Checking = float(input('How much do you want to deposit into this account p.s. no min deposit required max '
-                                 'deposit is '
-                                 '5,000: '))
-    if Debit_Checking > 5000 or Debit_Checking < 0:
-        print("deposit does not meet requirement, try again")
-    Debit_Saving = float(input('How much do you want to deposit into this account p.s. no min deposit required max '
-                               'deposit is '
-                               '15,000: '))
-    if Debit_Saving > 15000 or Debit_Saving < 0:
-        print("deposit does not meet requirement, try again")
     read_data = "INSERT INTO DebitInov (name, email, CardNo, CardCode, SecurityCode, Checking, Saving, " \
                 "Address, Country, " \
                 "Currency) " \
@@ -164,12 +139,13 @@ def create_Debit_account(account_name=str, email=str, address=str):
             "card " \
             "code that will be used to secure your account. "
     msg = dclNo.format(CardNo, CardCode)
-    print("Account created")
     conn.close()
     send_mail_for_new_account(email, msg)
+    return "Debit Account created"
 
-    
-def create_international_debit_accnt(account_name=str, email=str, address=str, country=str):
+
+def create_international_debit_accnt(account_name=str, email=str, address=str, country=str, Inter_Debit_Checking=float,
+                                     Inter_Debit_Saving=float):
     # Connecting to sqlite
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
@@ -180,23 +156,13 @@ def create_international_debit_accnt(account_name=str, email=str, address=str, c
     Sec_code = str(Security[:10])
     Crypt = str(Security[:5])
     CardCode = Crypt
-    Debit_Checking = float(input('How much do you want to deposit into this account p.s. no min deposit required max '
-                                 'deposit is '
-                                 '5,000: '))
-    if Debit_Checking > 5000 or Debit_Checking < 0:
-        print("deposit does not meet requirement, try again")
-    Debit_Saving = float(input('How much do you want to deposit into this account p.s. no min deposit required max '
-                               'deposit is '
-                               '15,000: '))
-    if Debit_Saving > 15000 or Debit_Saving < 0:
-        print("deposit does not meet requirement, try again")
     read_data = "INSERT INTO InterDebitInov (name, email, CardNo, CardCode, SecurityCode, Checking, Saving, " \
                 "Address, Country, " \
                 "Currency) " \
                 "VALUES ( " \
                 "?, " \
                 "?, ?, ?, ?, ?, ?, ?, ?, ?) "
-    val = (account_name, email, CardNo, CardCode, Sec_code, Debit_Checking, Debit_Saving,
+    val = (account_name, email, CardNo, CardCode, Sec_code, Inter_Debit_Checking, Inter_Debit_Saving,
            address,
            country, Curr)
     curr.execute(read_data, val)
@@ -206,10 +172,10 @@ def create_international_debit_accnt(account_name=str, email=str, address=str, c
             "card " \
             "code that will be used to secure your account. "
     msg = dclNo.format(CardNo, CardCode)
-    print("Account created")
     conn.close()
     send_mail_for_new_account(email, msg)
-    
+    return "International Debit Account created"
+
 
 # Deposits STATUS: Complete
 def deposit_Checking(deposit=float, CardNo=int):
@@ -228,8 +194,8 @@ def deposit_Checking(deposit=float, CardNo=int):
             conn.commit()
             # dep = str(deposit)
             conn.close()
-            print("deposit complete")  # completing transaction
             send_mail_for_deposits_checking(dep, mail)
+            return "deposit complete"  # completing transaction
     else:
         curr.execute('''SELECT * from CreditInov WHERE CardNo=?''', [CardNo])
         for row in curr.fetchall():
@@ -241,8 +207,8 @@ def deposit_Checking(deposit=float, CardNo=int):
                 conn.commit()
                 # dep = str(deposit)
                 conn.close()
-                print("deposit complete")  # completing transaction
                 send_mail_for_deposits_checking(dep, mail)
+                return "deposit complete"  # completing transaction
 
 
 def deposit_Savings(deposit=float, CardNo=int):
@@ -276,7 +242,6 @@ def deposit_Savings(deposit=float, CardNo=int):
                 conn.close()
                 print("deposit complete")  # completing transaction
                 send_mail_for_deposits_saving(dep, mail)
- 
 
 
 def International_deposit_Checking(deposit=float, CardNo=int):
@@ -295,7 +260,7 @@ def International_deposit_Checking(deposit=float, CardNo=int):
             conn.commit()
             # dep = str(deposit)
             conn.close()
-            print("deposit complete")  # completing transaction
+            return "deposit complete"  # completing transaction
             # send_mail_for_deposits_checking(dep, mail)
 
 
@@ -397,8 +362,7 @@ def atm_Savings_Credit(CardNo=int, withdraw=float):
         conn.close()
 
 
-
-def send_money_Debit(amount=float, CardNo=int, recipient=str, name=str):  # send money between Debit Accounts
+def send_money_Debit(amount=float, CardNo=int, recipient=str):  # send money between Debit Accounts
     Bank_fee = "INOVBank"
     e_mail = str
     mail_amount = str(amount)
@@ -406,23 +370,27 @@ def send_money_Debit(amount=float, CardNo=int, recipient=str, name=str):  # send
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
-    curr.execute('''SELECT * from DebitInov WHERE name=?''', [recipient])
-    for credit_row in curr.fetchall():
-        email = credit_row[1]
-        mail = e_mail(email)
-        rate_r = 0.013
-        fee = amount * rate_r
-        total_val_credit = amount + fee
-        curr.execute('''UPDATE DebitInov SET Checking=Checking-? WHERE CardNo=?''', [total_val_credit, CardNo])
-        curr.execute('''UPDATE BusinessInov SET Saving=Saving+? WHERE name=?''', [fee, Bank_fee])
-        # processing transaction
-        curr.execute('''UPDATE DebitInov SET Checking=Checking+? WHERE name=?''', [amount, recipient])
-        conn.commit()
-        print("transaction complete")
-        conn.close()
-        send_mail_for_Transactions(name, mail, mail_amount)
-    else:
-        send_to_Credit(amount, CardNo, recipient, name)
+    curr.execute('''SELECT * from DebitInov WHERE CardNo=?''', [CardNo])
+    for get_cred_name in curr.fetchall():
+        name = get_cred_name[0]
+        mail_nm = str(name)
+        curr.execute('''SELECT * from DebitInov WHERE name=?''', [recipient])
+        for credit_row in curr.fetchall():
+            email = credit_row[1]
+            mail = e_mail(email)
+            rate_r = 0.013
+            fee = amount * rate_r
+            total_val_credit = amount + fee
+            curr.execute('''UPDATE DebitInov SET Checking=Checking-? WHERE CardNo=?''', [total_val_credit, CardNo])
+            curr.execute('''UPDATE BusinessInov SET Saving=Saving+? WHERE name=?''', [fee, Bank_fee])
+            # processing transaction
+            curr.execute('''UPDATE DebitInov SET Checking=Checking+? WHERE name=?''', [amount, recipient])
+            conn.commit()
+            conn.close()
+            send_mail_for_Transactions(mail_nm, mail, mail_amount)
+            return "transaction complete"
+        else:
+            send_to_Credit(amount, CardNo, recipient, mail_nm)
 
 
 def send_to_Credit(amount=float, CardNo=int, recipient=str, name=str):  # Send money from Debit to Credit
@@ -451,7 +419,7 @@ def send_to_Credit(amount=float, CardNo=int, recipient=str, name=str):  # Send m
         send_mail_for_Transactions(name, mail, mail_amount)
 
 
-def send_money_Credit(amount=float, CardNo=int, recipient=str, name=str):  # send money between Credit Accounts
+def send_money_Credit(amount=float, CardNo=int, recipient=str):  # send money between Credit Accounts
     Bank_fee = "INOVBank"
     e_mail = str
     mail_amount = str(amount)
@@ -459,23 +427,27 @@ def send_money_Credit(amount=float, CardNo=int, recipient=str, name=str):  # sen
     conn = sqlite3.connect('inov.db')
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
-    curr.execute('''SELECT * from CreditInov WHERE name=?''', [recipient])
-    for credit_row in curr.fetchall():
-        email = credit_row[1]
-        mail = e_mail(email)
-        rate_r = 0.013
-        fee = amount * rate_r
-        total_val_credit = amount + fee
-        curr.execute('''UPDATE CreditInov SET Checking=Checking-? WHERE CardNo=?''', [total_val_credit, CardNo])
-        curr.execute('''UPDATE BusinessInov SET Saving=Saving+? WHERE name=?''', [fee, Bank_fee])
-        # processing transaction
-        curr.execute('''UPDATE CreditInov SET Checking=Checking+? WHERE name=?''', [amount, recipient])
-        conn.commit()
-        print("transaction complete")
-        conn.close()
-        send_mail_for_Transactions(name, mail, mail_amount)
-    else:
-        send_to_debit(amount, CardNo, recipient, name)
+    curr.execute('''SELECT * from CreditInov WHERE CardNo=?''', [CardNo])
+    for get_cred_name in curr.fetchall():
+        name = get_cred_name[0]
+        mail_nm = str(name)
+        curr.execute('''SELECT * from CreditInov WHERE name=?''', [recipient])
+        for credit_row in curr.fetchall():
+            email = credit_row[1]
+            mail = e_mail(email)
+            rate_r = 0.013
+            fee = amount * rate_r
+            total_val_credit = amount + fee
+            curr.execute('''UPDATE CreditInov SET Checking=Checking-? WHERE CardNo=?''', [total_val_credit, CardNo])
+            curr.execute('''UPDATE BusinessInov SET Saving=Saving+? WHERE name=?''', [fee, Bank_fee])
+            # processing transaction
+            curr.execute('''UPDATE CreditInov SET Checking=Checking+? WHERE name=?''', [amount, recipient])
+            conn.commit()
+            print("transaction complete")
+            conn.close()
+            send_mail_for_Transactions(mail_nm, mail, mail_amount)
+        else:
+            send_to_debit(amount, CardNo, recipient, mail_nm)
 
 
 def send_to_debit(amount=float, CardNo=str, recipient=str, name=str):  # Send money from Credit to Debit
@@ -502,51 +474,15 @@ def send_to_debit(amount=float, CardNo=str, recipient=str, name=str):  # Send mo
         print("transaction complete")
         conn.close()
         send_mail_for_Transactions(name, mail, mail_amount)
-        
-
-def international_send_NorthAmerica(region=str, val=float, curname=str, Sender_accnt_name=str, Receive_accnt_name=str,
-                                    account=str, CardNo=int):
-    InternationalTransactions.global_transactions_NA(region, val, curname, Sender_accnt_name, Receive_accnt_name,
-                                                     account, CardNo)
 
 
-def international_send_Europe(region=str, val=float, curname=str, Sender_accnt_name=str, Receive_accnt_name=str,
-                              account=str, CardNo=int):
-    InternationalTransactions.global_transactions_EU(region, val, curname, Sender_accnt_name, Receive_accnt_name,
-                                                     account, CardNo)
+def international_send(val=float, Receive_accnt_name=str, CardNo=int, curname=str):
+    InternationalTransactions.global_transactions(val, Receive_accnt_name, CardNo, curname)
 
 
-def international_send_SouthAmerica(region=str, val=float, curname=str, Sender_accnt_name=str, Receive_accnt_name=str,
-                                    account=str, CardNo=int):
-    InternationalTransactions.global_transactions_SA(region, val, curname, Sender_accnt_name, Receive_accnt_name,
-                                                     account, CardNo)
 
 
-def international_send_Africa(region=str, val=float, curname=str, Sender_accnt_name=str, Receive_accnt_name=str,
-                              account=str, CardNo=int):
-    InternationalTransactions.global_transactions_Africa(region, val, curname, Sender_accnt_name, Receive_accnt_name,
-                                                         account, CardNo)
 
-
-def international_send_Asia_Middle_East(region=str, val=float, curname=str, Sender_accnt_name=str,
-                                        Receive_accnt_name=str,
-                                        account=str, CardNo=int):
-    InternationalTransactions.global_transactions_Asia_Middle_east(region, val, curname, Sender_accnt_name,
-                                                                   Receive_accnt_name,
-                                                                   account, CardNo)
-
-
-def international_send_Carribean(region=str, val=float, curname=str, Sender_accnt_name=str, Receive_accnt_name=str,
-                                 account=str, CardNo=int):
-    InternationalTransactions.global_transactions_Caribbean(region, val, curname, Sender_accnt_name, Receive_accnt_name,
-                                                            account, CardNo)
-
-
-def international_send_CentralAmerica(region=str, val=float, curname=str, Sender_accnt_name=str, Receive_accnt_name=str,
-                                 account=str, CardNo=int):
-    InternationalTransactions.global_transactions_CA(region, val, curname, Sender_accnt_name, Receive_accnt_name,
-                                                            account, CardNo)
-    
 def currency_exchange_debit_USD(debit_CardNo=int, base=str):
     CurrencyExchange.CurrencyExchange_USD_Debit(debit_CardNo, base)
 
@@ -639,9 +575,9 @@ def bank_statement_credit(CardNo=int):
 
 
 # email notifications
-def send_mail_for_new_pin(p=int, mz=str):
-    msg = "{} this is your Temporary password. Please use it to login and get a new DCL"
-    new = (msg.format(p))
+def send_mail_for_account_recovery(cardNo=int, cardcode=str, mz=str):
+    msg = "{} this is your new virtual card number. {} is your new card code, please keep secured and not protected}"
+    new = (msg.format(cardNo, cardcode))
 
     sender_email = "monetarytransatlantic@gmail.com"
     rec_email = mz
@@ -950,3 +886,4 @@ def send_mail_for_processed_payment(m4=str, email=str):
         server.login(username, password2)
         server.sendmail(fromMy, to, msg)
         server.close()
+
