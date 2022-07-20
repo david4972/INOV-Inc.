@@ -5,13 +5,7 @@ import invp
 import random
 import InternationalTransactions
 import CurrencyExchange
-import json
-
-
-def intro():
-    text = 'WELCOME TO INOV!!!!!! We are a Saas startup that build creative, innovative and simpler apis for more ' \
-           'transparent financial services. We only operate in the US as of right now but we look to expand. '
-    return text
+import InternationalDebitSend
 
 
 # CODE STATUS: Complete
@@ -476,11 +470,16 @@ def send_to_debit(amount=float, CardNo=str, recipient=str, name=str):  # Send mo
         send_mail_for_Transactions(name, mail, mail_amount)
 
 
-def international_send(val=float, Receive_accnt_name=str, CardNo=int, curname=str):
-    InternationalTransactions.global_transactions(val, Receive_accnt_name, CardNo, curname)
+def international_send_debit(val=float, Receive_accnt_name=str, CardNo=int, curname=str):
+    InternationalTransactions.global_transactions_Debit(val, Receive_accnt_name, CardNo, curname)
 
 
+def international_send_credit(val=float, Receive_accnt_name=str, CardNo=int, curname=str):
+    InternationalTransactions.global_transactions_Credit(val, Receive_accnt_name, CardNo, curname)
 
+
+def international_debit_send(val=float, Receive_accnt_name=str, CardNo=int, curname=str, code=str):
+    InternationalDebitSend.global_transactions_International_Debit(val, Receive_accnt_name, CardNo, curname, code)
 
 
 def currency_exchange_debit_USD(debit_CardNo=int, base=str):
