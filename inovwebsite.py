@@ -98,13 +98,35 @@ def deposit_International():
 # send money
 @app.route('/send_money_option', methods={'POST', 'GET'})
 def send_option():
-    if request.args.values() == 'Debit account':
-        return make_response(url_for('send_money_debit'))
-    if request.args.values() == 'Credit account':
+    if request.args.values() == 'Yes':
+        return make_response(url_for('send_money_InternationalDebit'))
+    if request.args.values() == 'No':
         return make_response(url_for('send_money_credit'))
     if request.args.values() == 'International Debit account':
         return make_response(url_for('send_money_InternationalDebit'))
-    return render_template('send.html')
+    return render_template('sendOption.html')
+
+
+@app.route('/send_money_option2', methods={'POST', 'GET'})
+def send_option2():
+    if request.args.values() == 'Yes':
+        return make_response(url_for('send_option3'))
+    if request.args.values() == 'No':
+        return make_response(url_for('send_money_credit'))
+    if request.args.values() == 'International Debit account':
+        return make_response(url_for('send_money_InternationalDebit'))
+    return render_template('sendOption2.html')
+
+
+@app.route('/send_money_option3', methods={'POST', 'GET'})
+def send_option3():
+    if request.args.values() == 'Debit account':
+        return make_response(url_for('send_money_debit_International'))
+    if request.args.values() == 'Credit account':
+        return make_response(url_for('send_money_credit'))
+    if request.args.values() == 'International Debit account':
+        return make_response(url_for('send_money_credit_International'))
+    return render_template('sendOption3.html')
 
 
 @app.route('/send money', methods={'POST', 'GET'})
@@ -113,12 +135,10 @@ def send_money():
         return make_response(url_for('send_money_debit'))
     if request.args.values() == 'Credit account':
         return make_response(url_for('send_money_credit'))
-    if request.args.values() == 'International Debit account':
-        return make_response(url_for('send_money_InternationalDebit'))
     return render_template('send.html')
 
 
-@app.route('/send money', methods={'POST', 'GET'})
+@app.route('/send_money_debit', methods={'POST', 'GET'})
 def send_money_debit():
     if request.method == 'POST':
         debit_card_num = request.form['virtual_debit_card_num']
@@ -128,7 +148,18 @@ def send_money_debit():
     return render_template('debit_send.html')
 
 
-@app.route('/send money', methods={'POST', 'GET'})
+@app.route('/send_money_debit_International', methods={'POST', 'GET'})
+def send_money_debit_International():
+    if request.method == 'POST':
+        debit_card_num = request.form['virtual_debit_card_num']
+        debit_receiver_name = request.form['debit_rec_name']
+        debit_amount = request.form['debit_amount']
+        debit_country = request.form['Inter_debit_Country']
+        return inov.international_send_debit(debit_amount, debit_card_num, debit_receiver_name, debit_country)
+    return render_template('sendDebitInter.html')
+
+
+@app.route('/send_money_credit', methods={'POST', 'GET'})
 def send_money_credit():
     if request.method == 'POST':
         credit_card_num = request.form['virtual_credit_name']
@@ -138,16 +169,30 @@ def send_money_credit():
     return render_template('credit_send.html')
 
 
+@app.route('/send_money_credit_International', methods={'POST', 'GET'})
+def send_money_credit_International():
+    if request.method == 'POST':
+        credit_card_num = request.form['virtual_credit_name']
+        credit_receiver_name = request.form['credit_rec_name']
+        credit_amount = request.form['credit_amount']
+        credit_country = request.form['Inter_debit_Country']
+        return inov.international_send_credit(credit_amount, credit_card_num, credit_receiver_name, credit_country)
+    return render_template('sendCreditInter.html')
+
+
 @app.route('/send money', methods={'POST', 'GET'})
 def send_money_InternationalDebit():
     if request.method == 'POST':
         inter_debit_card_num = request.form['Inter_virtual_debit_card_num']
         inter_debit_receiver_name = request.form['Inter_debit_rec_name']
         inter_debit_amount = request.form['Inter_debit_amount']
+        inter_debit_country = request.form['Inter_debit_Country']
         inter_debit_code = request.form['Inter_debit_Country_code']
-        return inov.international_send(inter_debit_amount, inter_debit_receiver_name, inter_debit_card_num, inter_debit_code)
+        return inov.international_debit_send(inter_debit_amount, inter_debit_receiver_name, inter_debit_card_num,
+                                             inter_debit_code, inter_debit_country)
     return render_template('inter_send.html')
 
 
 if __name__ == '__main__':
     app.run(debug=True)
+
