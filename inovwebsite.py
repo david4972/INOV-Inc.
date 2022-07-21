@@ -10,9 +10,9 @@ def welcome():
     if request.args.values() == 'Create Account':
         return make_response(url_for('create_acc_choice'))
     if request.args.values() == 'Send Money':
-        return make_response(url_for('send_money'))
+        return make_response(url_for('send_option'))
     if request.args.values() == 'Deposit':
-        return make_response(url_for('deposit'))
+        return make_response(url_for('deposit_option'))
     return render_template('intro.html')
 
 
@@ -195,4 +195,5 @@ def send_money_InternationalDebit():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 
