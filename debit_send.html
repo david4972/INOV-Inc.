@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Create Credit Account</title></head>
+<style>
+    body {
+        background-image: url('invback3.0.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+
+    }
+</style>
+    <body>
+    <h1>Create Credit Account</h1>
+    <form action = "http://localhost:5000/create_credit_user" method = "POST">
+        <label for="credit_nm">Name:</label><br>
+        <p><input type = text id="credit_nm" /></p>
+        <label for="credit_email">Email:</label><br>
+        <p><input type = email id="credit_email" /></p>
+        <label for="credit_address">Address:</label><br>
+        <p><input type = text id="credit_address"/></p>
+        <label for="credit_checkings">Checkings Deposit p.s. no min deposit, max deposit 15000:</label><br>
+        <p><input type = number id="credit_checkings"/></p>
+        <label for="credit_savings">Savings Deposit p.s. no min deposit, max deposit 15000:</label><br>
+        <p><input type = number id="credit_savings"/></p>
+        <p><input type = submit value="create credit account"/></p>
+    </form>
+    </body>
+</html>
