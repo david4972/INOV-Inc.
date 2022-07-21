@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>send money internationally</title></head>
+<style>
+    body {
+        background-image: url('invback3.0.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+
+    }
+</style>
+    <h1>Send Money Internationally</h1>
+    <body>
+    <form action = "http://localhost:5000/create_International_transactions" method = "POST">
+        <label for="Inter_virtual_debit_card_num">Virtual debit card number:</label><br>
+        <p><input type = text id="Inter_virtual_debit_card_num" /></p>
+        <p>please enter name of person receiving money: </p>
+        <label for="Inter_debit_rec_name">Receiver Name:</label><br>
+        <p><input type = email id="Inter_debit_rec_name" /></p>
+        <p>please enter the name of the country where person is receiving money: ex. (United States)</p>
+        <label for="Inter_debit_Country">Country :</label><br>
+        <p><input type = text id="Inter_debit_Country"/></p>
+        <p>please enter the country code your country: ex. (USD - United States)</p>
+        <label for="Inter_debit_Country_code">Country code:</label><br>
+        <p><input type = text id="Inter_debit_Country_code"/></p>
+        <label for="Inter_debit_amount">amount:</label><br>
+        <p><input type = number id="Inter_debit_amount"/></p>
+        <p><input type = "submit" value="send"/></p>
+    </form>
+    </body>
+</html>
