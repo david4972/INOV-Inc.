@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Deposit</title></head>
+<style>
+    body {
+        background-image: url('invback3.0.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+
+    }
+</style>
+    <h1>Deposit</h1>
+    <body>
+    <form action = "http://localhost:5000/send_debit_user" method = "POST">
+        <label for="Inter_virtual_credit_card_num">Virtual card number:</label><br>
+        <p><input type = number id="Inter_virtual_credit_card_num" /></p>
+        <p>please enter the amount of money you want to deposit: </p>
+        <label for="Inter_credit_amount">amount:</label><br>
+        <p><input type = number id="Inter_credit_amount"/></p>
+        <p>please select: </p>
+        <p><input type = "submit" value="deposit"/></p>
+    </form>
+    </body>
+</html>
