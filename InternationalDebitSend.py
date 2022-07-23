@@ -1,4 +1,4 @@
-import sqlite3
+import psycopg2
 import inov
 from forex_python import converter
 
@@ -366,8 +366,10 @@ def send_money_International_Debit(amount=float, CardNo=int, recipient=str,
     Bank_fee = "INOVBank"
     e_mail = str
     mail_amount = str(amount)
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     curr.execute('''SELECT * from InterDebitInov WHERE CardNo=?''', [CardNo])
@@ -398,8 +400,10 @@ def send_to_debit_International(amount=float, CardNo=int, recipient=str,
     Bank_fee = "INOVBank"
     e_mail = str
     mail_amount = str(amount)
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     curr.execute('''SELECT * from InterDebitInov WHERE CardNo=?''', [CardNo])
@@ -430,8 +434,10 @@ def send_to_credit_International(amount=float, CardNo=str, recipient=str,
     Bank_fee = "INOVBank"
     e_mail = str
     mail_amount = str(amount)
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     curr.execute('''SELECT * from InterDebitInov WHERE CardNo=?''', [CardNo])
@@ -453,4 +459,5 @@ def send_to_credit_International(amount=float, CardNo=str, recipient=str,
             conn.close()
             inov.send_mail_for_International_Transactions(s_name, mail, mail_amount, curname)
             return "transaction complete"
+
 
