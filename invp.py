@@ -1,13 +1,15 @@
-import sqlite3
 import inov
 from forex_python.bitcoin import BtcConverter
+import psycopg2
 
 
 # virtual debit processing
 def get_card_info_Debit(CardCode=str):
     price = float(input())
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     Debit_curr1 = conn.cursor()
     # Debit
@@ -23,8 +25,10 @@ def get_card_info_Debit(CardCode=str):
 
 
 def charge_card_Debit(ccode=str, name_debit=str, price=float, email_debit=str):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     charge_debit_curr = conn.cursor()
     # Debit
@@ -55,8 +59,10 @@ def process_payment_Debit(price=float, name_process_debit=str, email_process_deb
 # virtual credit processing
 def get_card_info_Credit(CardCode=str):
     price = float(input())
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     Credit_curr1 = conn.cursor()
     # Credit
@@ -72,8 +78,10 @@ def get_card_info_Credit(CardCode=str):
 
 
 def charge_card_Credit(ccode=str, name_Credit=str, price=float, email_Credit=str):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     charge_credit_curr = conn.cursor()
     # Credit
@@ -106,8 +114,10 @@ def get_card_info_Crypto(CardCode=str):
     price = float(input())
     b = BtcConverter()
     BTC_USD = float(b.convert_btc_to_cur(price, 'USD'))
-    # Connecting to sqlite
-    conn = sqlite3.connect('InovCrypto.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     Crypto_debit_curr = conn.cursor()
     # Crypto
@@ -123,8 +133,10 @@ def get_card_info_Crypto(CardCode=str):
 
 
 def charge_card_Crypto(ccode=str, name_crypt=str, price=float, email_crypt=str):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     charge_crypto_curr = conn.cursor()
     # Credit
@@ -133,7 +145,7 @@ def charge_card_Crypto(ccode=str, name_crypt=str, price=float, email_crypt=str):
         crypto_address = charge_crypto_row[7]
         crypto_mail_address = str(crypto_address)
         # charge card
-        charge_crypto_row.execute('''UPDATE CryptoDebitAccounts SET BTC=BTC-? WHERE CardCode=?''', [price, ccode])
+        charge_crypto_row.execute('''UPDATE CryptoDebitAccounts SET Bitcoin=Bitcoin-? WHERE CardCode=?''', [price, ccode])
         conn.commit()
         conn.close()  # completing charge
         process_payment_Debit(price, name_crypt, email_crypt, crypto_mail_address)
