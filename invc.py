@@ -1,7 +1,7 @@
 from forex_python.bitcoin import BtcConverter
 from cryptography.fernet import Fernet
 import psycopg2
-from Inov import inov
+import inov
 import random
 import invp
 
