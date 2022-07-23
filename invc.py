@@ -1,7 +1,7 @@
 from forex_python.bitcoin import BtcConverter
 from cryptography.fernet import Fernet
-import sqlite3
-import inov
+import psycopg2
+from Inov import inov
 import random
 import invp
 
@@ -12,8 +12,10 @@ import invp
 
 # create new bitcoin account
 def create_accnt_BTC_Debit(account_name=str, email=str, amt=int):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     country = "USA"
@@ -27,7 +29,8 @@ def create_accnt_BTC_Debit(account_name=str, email=str, amt=int):
     BTC_EU = float(b.convert_btc_to_cur(amt, 'EUR'))
     BTC_GBP = float(b.convert_btc_to_cur(amt, 'GBP'))
     BTC_CNY = float(b.convert_btc_to_cur(amt, 'CNY'))
-    read_data = "INSERT INTO CryptoDebitAccounts (name, email, number, CardNo, CardCode, SecurityCode, BTC, USD, EU, " \
+    read_data = "INSERT INTO CryptoDebitAccounts (name, email, number, CardNo, CardCode, SecurityCode, Bitcoin, USD, " \
+                "EU, " \
                 "GBP, CNY, Country) " \
                 "VALUES ( " \
                 "?, " \
@@ -47,8 +50,10 @@ def create_accnt_BTC_Debit(account_name=str, email=str, amt=int):
 
 # link bank account to create crypto account (available to those who have accounts with regular bank)
 def link_accnt_BTC_Debit(cardNo=int, amt=int):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     curr.execute('''SELECT * from DebitInov WHERE CardNo=?''', [cardNo])
@@ -63,7 +68,7 @@ def link_accnt_BTC_Debit(cardNo=int, amt=int):
         BTC_EU = float(b.convert_btc_to_cur(amt, 'EUR'))
         BTC_GBP = float(b.convert_btc_to_cur(amt, 'GBP'))
         BTC_CNY = float(b.convert_btc_to_cur(amt, 'CNY'))
-        curr.execute('''UPDATE CryptoDebitAccounts SET BTC=?, USD=?, EU=?, GBP=?, CNY=? WHERE CardNo=?''',
+        curr.execute('''UPDATE CryptoDebitAccounts SET Bitcoin=?, USD=?, EU=?, GBP=?, CNY=? WHERE CardNo=?''',
                      [BTC_USD, BTC_USD, BTC_EU, BTC_GBP, BTC_CNY, cardNo])
         dclNo = 'PLEASE READ: Congrats on your new Crypto Debit account!!! This -> {}  is your secured card ' \
                 'number, this number ' \
@@ -81,8 +86,10 @@ def link_accnt_BTC_Debit(cardNo=int, amt=int):
 
 
 def deposit_BTC_Debit(cardNo=int, amt=int):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     read_data1 = "SELECT * from CryptoDebitAccounts WHERE CardNo=? "
@@ -95,7 +102,7 @@ def deposit_BTC_Debit(cardNo=int, amt=int):
         BTC_EU = float(b.convert_btc_to_cur(amt, 'EUR'))
         BTC_GBP = float(b.convert_btc_to_cur(amt, 'GBP'))
         BTC_CNY = float(b.convert_btc_to_cur(amt, 'CNY'))
-        curr.execute('''UPDATE CryptoDebitAccounts SET BTC=BTC+?, USD=USD+?, EU=EU+?, GBP=GBP+?, SET CNY=CNY+? WHERE 
+        curr.execute('''UPDATE CryptoDebitAccounts SET Bitcoin=Bitcoin+?, USD=USD+?, EU=EU+?, GBP=GBP+?, SET CNY=CNY+? WHERE 
         CardNo=?''', [BTC_USD, BTC_USD, BTC_EU, BTC_GBP, BTC_CNY, cardNo])
         conn.commit()
         print("Deposit processed")
@@ -112,8 +119,10 @@ def crypto_payment(CardCode=str):
 
 def send_money_BTC(amount=float, CardNo=int, recipient=str, name=str):
     Bank_fee = "INOVBank"
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     rate_r = 0.013
@@ -129,14 +138,13 @@ def send_money_BTC(amount=float, CardNo=int, recipient=str, name=str):
         BTC_CNY = float(b.convert_btc_to_cur(amount, 'CNY'))
         fee = BTC_USD * rate_r
         total_val = BTC_USD + fee
-        curr.execute('''UPDATE CryptoDebitAccounts SET BTC=BTC-?, USD=USD-?, EU=EU-?, GBP=GBP-?, SET CNY=CNY-? WHERE 
+        curr.execute('''UPDATE CryptoDebitAccounts SET Bitcoin=Bitcoin-?, USD=USD-?, EU=EU-?, GBP=GBP-?, SET CNY=CNY-? WHERE 
         CardNo=?''', [total_val, BTC_USD, BTC_EU, BTC_GBP, BTC_CNY, CardNo])
         curr.execute('''UPDATE BusinessInov SET Saving=Saving+? WHERE name=?''', [fee, Bank_fee])
         # processing transaction
-        curr.execute('''UPDATE CryptoDebitAccounts SET BTC=BTC+?, USD=USD+?, EU=EU+?, GBP=GBP+?, SET CNY=CNY+? WHERE 
+        curr.execute('''UPDATE CryptoDebitAccounts SET Bitcoin=Bitcoin+?, USD=USD+?, EU=EU+?, GBP=GBP+?, SET CNY=CNY+? WHERE 
         name=?''', [BTC_USD, BTC_USD, BTC_EU, BTC_GBP, BTC_CNY, recipient])
         conn.commit()
         print("transaction complete")
         conn.close()
         inov.send_mail_for_Transactions(name, mail, mail_amount)
-
