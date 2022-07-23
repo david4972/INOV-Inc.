@@ -1,6 +1,4 @@
-# Handling account securitization: Logins, reactivating accounts, retrieving accounts
-
-import sqlite3
+import psycopg2
 from cryptography.fernet import Fernet
 import random
 import inov
@@ -8,8 +6,10 @@ import inov
 
 # Virtual Credit and Debit accounts (USD only)
 def Login_accnt():
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     print("temporary crypt password generating...")
@@ -40,8 +40,10 @@ def get_back_accnt():
 
 
 def reactivate_accnt_debit():
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     print("please enter card code: ")
@@ -56,8 +58,10 @@ def reactivate_accnt_debit():
 
 
 def reactivate_accnt_credit():
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     print("please enter card code: ")
@@ -72,8 +76,10 @@ def reactivate_accnt_credit():
 
 
 def retrieve_account():
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     CardNo = random.randint(11111, 99999)
@@ -109,8 +115,10 @@ def retrieve_account():
 
 # Virtual International Debit Accounts
 def Login_accnt_International():
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     print("temporary crypt password generating...")
@@ -135,8 +143,10 @@ def get_back_accnt_Inter():
 
 
 def reactivate_accnt_debit_Inter():
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     print("please enter card code: ")
@@ -151,8 +161,10 @@ def reactivate_accnt_debit_Inter():
 
 
 def retrieve_account_Inter():
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     CardNo = random.randint(11111, 99999)
@@ -170,3 +182,7 @@ def retrieve_account_Inter():
                          [CardNo, CardCode, Sec_code, accnt_name])
         inov.send_mail_for_account_recovery(CardNo, CardCode, mail_e)
         print("account recovered")
+
+
+if __name__ == '__main__':
+    Login_accnt()
