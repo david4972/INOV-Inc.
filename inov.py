@@ -1,4 +1,3 @@
-import sqlite3
 from cryptography.fernet import Fernet
 import smtplib
 import invp
@@ -6,14 +5,17 @@ import random
 import InternationalTransactions
 import CurrencyExchange
 import InternationalDebitSend
+import psycopg2
 
 
 # CODE STATUS: Complete
 # Create Accounts STATUS: Complete
 # create Business Credit Account
 def create_business_account(account_name=str, email=str, address=str):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     country = "USA"
@@ -73,8 +75,10 @@ def create_business_account(account_name=str, email=str, address=str):
 # create Credit Account
 def create_Credit_account(account_name=str, email=str, address=str, Credit_Checking_amt=float,
                           Credit_Savings_amt=float):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     country = "USA"
@@ -107,8 +111,10 @@ def create_Credit_account(account_name=str, email=str, address=str, Credit_Check
 
 # create Debit Account
 def create_Debit_account(account_name=str, email=str, address=str, Debit_Checking=float, Debit_Saving=float):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     country = "USA"
@@ -140,8 +146,10 @@ def create_Debit_account(account_name=str, email=str, address=str, Debit_Checkin
 
 def create_international_debit_accnt(account_name=str, email=str, address=str, country=str, Inter_Debit_Checking=float,
                                      Inter_Debit_Saving=float):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     Curr = country
@@ -174,8 +182,10 @@ def create_international_debit_accnt(account_name=str, email=str, address=str, c
 # Deposits STATUS: Complete
 def deposit_Checking(deposit=float, CardNo=int):
     dep = str(deposit)
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     curr.execute('''SELECT * from DebitInov where CardNo=?''', [CardNo])
@@ -207,8 +217,10 @@ def deposit_Checking(deposit=float, CardNo=int):
 
 def deposit_Savings(deposit=float, CardNo=int):
     dep = str(deposit)
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     curr.execute('''SELECT * from DebitInov WHERE CardNo=?''', [CardNo])
@@ -240,8 +252,10 @@ def deposit_Savings(deposit=float, CardNo=int):
 
 def International_deposit_Checking(deposit=float, CardNo=int):
     dep = str(deposit)
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     curr.execute('''SELECT * from InterDebitInov where CardNo=?''', [CardNo])
@@ -260,8 +274,10 @@ def International_deposit_Checking(deposit=float, CardNo=int):
 
 def International_deposit_Savings(deposit=float, CardNo=int):
     dep = str(deposit)
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     curr.execute('''SELECT * from InterDebitInov WHERE CardNo=?''', [CardNo])
@@ -280,8 +296,10 @@ def International_deposit_Savings(deposit=float, CardNo=int):
 
 # Atm Checking account
 def atm_Checking_Debit(CardNo=int, withdraw=float):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     bank = "INOVBank"
@@ -299,8 +317,10 @@ def atm_Checking_Debit(CardNo=int, withdraw=float):
 
 
 def atm_Checking_Credit(CardNo=int, withdraw=float):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     bank = "INOVBank"
@@ -319,8 +339,10 @@ def atm_Checking_Credit(CardNo=int, withdraw=float):
 
 # Atm Savings account
 def atm_Savings_Debit(CardNo=int, withdraw=float):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     bank = "INOVBank"
@@ -338,8 +360,10 @@ def atm_Savings_Debit(CardNo=int, withdraw=float):
 
 
 def atm_Savings_Credit(CardNo=int, withdraw=float):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     bank = "INOVBank"
@@ -360,8 +384,10 @@ def send_money_Debit(amount=float, CardNo=int, recipient=str):  # send money bet
     Bank_fee = "INOVBank"
     e_mail = str
     mail_amount = str(amount)
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     curr.execute('''SELECT * from DebitInov WHERE CardNo=?''', [CardNo])
@@ -391,8 +417,10 @@ def send_to_Credit(amount=float, CardNo=int, recipient=str, name=str):  # Send m
     Bank_fee = "INOVBank"
     e_mail = str
     mail_amount = str(amount)
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     curr.execute('''SELECT * from CreditInov WHERE name=?''', [recipient])
@@ -417,8 +445,10 @@ def send_money_Credit(amount=float, CardNo=int, recipient=str):  # send money be
     Bank_fee = "INOVBank"
     e_mail = str
     mail_amount = str(amount)
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     curr.execute('''SELECT * from CreditInov WHERE CardNo=?''', [CardNo])
@@ -448,8 +478,10 @@ def send_to_debit(amount=float, CardNo=str, recipient=str, name=str):  # Send mo
     Bank_fee = "INOVBank"
     e_mail = str
     mail_amount = str(amount)
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
     curr.execute('''SELECT * from DebitInov WHERE name=?''', [recipient])
@@ -521,8 +553,10 @@ def process_payment_credit_accnt(CardCode=str):
 
 
 def bank_statement_debit(CardNo=int):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     Debit_accnt_stmt_curr = conn.cursor()
     Debit_accnt_stmt_curr.execute('''SELECT * from DebitInov WHERE CardNo=?''', [CardNo])
@@ -547,8 +581,10 @@ def bank_statement_debit(CardNo=int):
 
 
 def bank_statement_credit(CardNo=int):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     credit_accnt_stmt_curr = conn.cursor()
     credit_accnt_stmt_curr.execute('''SELECT * from CreditInov WHERE CardNo=?''', [CardNo])
