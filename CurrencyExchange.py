@@ -1,4 +1,4 @@
-import sqlite3
+import psycopg2
 import inov
 from forex_python.converter import CurrencyRates
 
@@ -7,8 +7,10 @@ from forex_python.converter import CurrencyRates
 # GBP, CNY)
 # USD
 def CurrencyExchange_USD_Debit(debit_CardNo=int, debit_gbc=str):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     CurrencyExchange_USD_debit_curr = conn.cursor()
     c = CurrencyRates()
@@ -38,8 +40,10 @@ def CurrencyExchange_USD_Debit(debit_CardNo=int, debit_gbc=str):
 
 
 def CurrencyExchange_USD_Credit(credit_CardNo=int, credit_gbc=str):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     CurrencyExchange_USD_credit_curr = conn.cursor()
     c = CurrencyRates()
@@ -70,8 +74,10 @@ def CurrencyExchange_USD_Credit(credit_CardNo=int, credit_gbc=str):
 
 # EUR
 def CurrencyExchange_EUR_Debit(debit_CardNo=int):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     CurrencyExchange_EUR_debit_curr = conn.cursor()
     c = CurrencyRates()
@@ -101,8 +107,10 @@ def CurrencyExchange_EUR_Debit(debit_CardNo=int):
 
 
 def CurrencyExchange_EUR_Credit(credit_CardNo=int):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     CurrencyExchange_EUR_credit_curr = conn.cursor()
     c = CurrencyRates()
@@ -133,8 +141,10 @@ def CurrencyExchange_EUR_Credit(credit_CardNo=int):
 
 # GBP
 def CurrencyExchange_GBP_Debit(debit_CardNo=int):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     CurrencyExchange_GBP_debit_curr = conn.cursor()
     c = CurrencyRates()
@@ -164,8 +174,10 @@ def CurrencyExchange_GBP_Debit(debit_CardNo=int):
 
 
 def CurrencyExchange_GBP_Credit(credit_CardNo=int):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     CurrencyExchange_GBP_Credit_curr = conn.cursor()
     c = CurrencyRates()
@@ -195,8 +207,10 @@ def CurrencyExchange_GBP_Credit(credit_CardNo=int):
 
 
 def CurrencyExchange_AUS_Debit(debit_CardNo=int):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     CurrencyExchange_AUS_debit_curr = conn.cursor()
     c = CurrencyRates()
@@ -226,8 +240,10 @@ def CurrencyExchange_AUS_Debit(debit_CardNo=int):
 
 
 def CurrencyExchange_AUS_Credit(credit_CardNo=int):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     CurrencyExchange_AUS_Credit_curr = conn.cursor()
     c = CurrencyRates()
@@ -257,8 +273,10 @@ def CurrencyExchange_AUS_Credit(credit_CardNo=int):
 
 
 def CurrencyExchange_CNY_Debit(debit_CardNo=int):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     CurrencyExchange_CNY_Debit_curr = conn.cursor()
     c = CurrencyRates()
@@ -288,8 +306,10 @@ def CurrencyExchange_CNY_Debit(debit_CardNo=int):
 
 
 def CurrencyExchange_CNY_Credit(credit_CardNo=int):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     CurrencyExchange_CNY_Credit_curr = conn.cursor()
     c = CurrencyRates()
@@ -319,8 +339,10 @@ def CurrencyExchange_CNY_Credit(credit_CardNo=int):
 
 
 def CurrencyExchange_JPY_Debit(debit_CardNo=int):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     CurrencyExchange_JPY_Debit_curr = conn.cursor()
     c = CurrencyRates()
@@ -350,8 +372,10 @@ def CurrencyExchange_JPY_Debit(debit_CardNo=int):
 
 
 def CurrencyExchange_JPY_Credit(credit_CardNo=int):
-    # Connecting to sqlite
-    conn = sqlite3.connect('inov.db')
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
     # Creating a cursor object using the cursor() method
     CurrencyExchange_JPY_Credit_curr = conn.cursor()
     c = CurrencyRates()
@@ -378,5 +402,7 @@ def CurrencyExchange_JPY_Credit(credit_CardNo=int):
         print("exchange complete")
         conn.close()
         inov.send_mail_for_currency_exchange(var2, mail_currency_exchange_credit)
+
+
 
 
