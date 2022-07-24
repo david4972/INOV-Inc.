@@ -18,13 +18,13 @@ def Login_accnt():
     while Security.isascii():
         print("please enter card number: ")
         cardNo = int(input())
-        curr.execute("SELECT * FROM DebitInov WHERE CardNo=?", [cardNo])
+        curr.execute("SELECT * FROM DebitInov WHERE CardNo=%s", [cardNo])
         for row in curr.fetchall():
             debit_card_num = row[2]
             if cardNo == debit_card_num:
                 print("login successful")
             else:
-                curr.execute("SELECT * FROM CreditInov WHERE CardNo=?", [cardNo])
+                curr.execute("SELECT * FROM CreditInov WHERE CardNo=%s", [cardNo])
                 for row2 in curr.fetchall():
                     credit_card_num = row2[2]
                     if cardNo == credit_card_num:
@@ -48,7 +48,7 @@ def reactivate_accnt_debit():
     curr = conn.cursor()
     print("please enter card code: ")
     card_code = input()
-    curr.execute("SELECT * FROM DebitInov WHERE SecurityCode=?", [card_code])
+    curr.execute("SELECT * FROM DebitInov WHERE SecurityCode=%s", [card_code])
     for row in curr.fetchall():
         code = row[4]
         if card_code == code:
@@ -66,7 +66,7 @@ def reactivate_accnt_credit():
     curr = conn.cursor()
     print("please enter card code: ")
     card_code = input()
-    curr.execute("SELECT * FROM CreditInov WHERE SecurityCode=?", [card_code])
+    curr.execute("SELECT * FROM CreditInov WHERE SecurityCode=%s", [card_code])
     for row in curr.fetchall():
         code = row[4]
         if card_code == code:
@@ -94,20 +94,20 @@ def retrieve_account():
     print("2. Credit")
     accnt_choice = input()
     if accnt_choice == "1":
-        curr.execute("SELECT * FROM DebitInov WHERE name=?", [accnt_name])
+        curr.execute("SELECT * FROM DebitInov WHERE name=%s", [accnt_name])
         for row in curr.fetchall():
             email = row[1]
             mail_e = str(email)
-            curr.execute("UPDATE DebitInov set CardNo=?, CardCode=?, SecurityCode=?  WHERE name=?",
+            curr.execute("UPDATE DebitInov set CardNo=%s, CardCode=%s, SecurityCode=%s  WHERE name=%s",
                          [CardNo, CardCode, Sec_code, accnt_name])
             inov.send_mail_for_account_recovery(CardNo, CardCode, mail_e)
             print("account recovered")
     if accnt_choice == "2":
-        curr.execute("SELECT * FROM CreditInov WHERE name=?", [accnt_name])
+        curr.execute("SELECT * FROM CreditInov WHERE name=%s", [accnt_name])
         for row in curr.fetchall():
             email = row[1]
             mail_e = str(email)
-            curr.execute("UPDATE CreditInov set CardNo=?, CardCode=?, SecurityCode=?  WHERE name=?",
+            curr.execute("UPDATE CreditInov set CardNo=%s, CardCode=%s, SecurityCode=%s  WHERE name=%s",
                          [CardNo, CardCode, Sec_code, accnt_name])
             inov.send_mail_for_account_recovery(CardNo, CardCode, mail_e)
             print("account recovered")
@@ -127,7 +127,7 @@ def Login_accnt_International():
     while Security.isascii():
         print("please enter card number: ")
         cardNo = int(input())
-        curr.execute("SELECT * FROM InterDebitInov WHERE CardNo=?", [cardNo])
+        curr.execute("SELECT * FROM InterDebitInov WHERE CardNo=%s", [cardNo])
         for row in curr.fetchall():
             debit_card_num = row[2]
             if cardNo == debit_card_num:
@@ -151,7 +151,7 @@ def reactivate_accnt_debit_Inter():
     curr = conn.cursor()
     print("please enter card code: ")
     card_code = input()
-    curr.execute("SELECT * FROM InterDebitInov WHERE SecurityCode=?", [card_code])
+    curr.execute("SELECT * FROM InterDebitInov WHERE SecurityCode=%s", [card_code])
     for row in curr.fetchall():
         code = row[4]
         if card_code == code:
@@ -174,11 +174,11 @@ def retrieve_account_Inter():
     CardCode = Crypt
     print("please enter the name your account is in: ")
     accnt_name = input()
-    curr.execute("SELECT * FROM DebitInov WHERE name=?", [accnt_name])
+    curr.execute("SELECT * FROM DebitInov WHERE name=%s", [accnt_name])
     for row in curr.fetchall():
         email = row[1]
         mail_e = str(email)
-        curr.execute("UPDATE InterDebitInov set CardNo=?, CardCode=?, SecurityCode=?  WHERE name=?",
+        curr.execute("UPDATE InterDebitInov set CardNo=%s, CardCode=%s, SecurityCode=%s  WHERE name=%s",
                          [CardNo, CardCode, Sec_code, accnt_name])
         inov.send_mail_for_account_recovery(CardNo, CardCode, mail_e)
         print("account recovered")
@@ -186,3 +186,4 @@ def retrieve_account_Inter():
 
 if __name__ == '__main__':
     Login_accnt()
+
