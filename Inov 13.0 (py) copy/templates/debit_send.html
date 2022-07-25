@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>send money Debit</title></head>
+<style>
+    body {
+        background-image: url('invback3.0.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+
+    }
+</style>
+    <h1>Send Money Debit</h1>
+    <body>
+    <form action = "http://localhost:5000/send_debit_user" method = "POST">
+        <label for="virtual_debit_card_num">Virtual debit card number:</label><br>
+        <p><input type = number id="virtual_debit_card_num" /></p>
+        <p>please enter name of person receiving money: </p>
+        <label for="debit_rec_name">Receiver Name:</label><br>
+        <p><input type = text id="debit_rec_name" /></p>
+        <p>please enter the amount of money: </p>
+        <label for="debit_amount">amount:</label><br>
+        <p><input type = number id="debit_amount"/></p>
+        <p><input type = "submit" value="send"/></p>
+    </form>
+    </body>
+</html>

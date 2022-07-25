@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>Inov inc</head>
+<style>
+    body {
+        background-image: url('invback3.0.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+</style>
+    <body>
+   	<h1>WELCOME TO INOV!!!!!!</h1>
+    <p>We are a Saas Company that build creative, innovative and simpler  apis for more transparent financial services. We operate in the US as well as 70 other countires across all 7 continents of right now. As we look to expand, we encourage you to check out our new approach to everyday use of credit and debit. </p>
+      <form action = "http://localhost:5000/" method = "POST">
+         <button type="button" onclick="window.location.href='{{ url_for( 'create_acc_choice' ) }}';">Create Account</button>
+         <button type="button" onclick="window.location.href='{{ url_for( 'send_option'  ) }}';">Send Money</button>
+          <button type="button" onclick="window.location.href='{{ url_for( 'deposit_option' ) }}';">Deposit</button>
+      </form>
+    <h2>Contacts</h2>
+    <p>email: monetarytransatlantic@gmail.com</p>
+    <p>location: USA (Hamden, CT , Lawrence, KS , Santa Clara, CA , Boulder, CO)</p>
+    </body>
+</html>

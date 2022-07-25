@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Send</title></head>
+    <h1>Send</h1>
+    <body>
+    <form action = "http://localhost:5000/create_accounts" method = "POST">
+         <p>Please Select which account you'll be sending money from</p>
+         <button type="button" onclick="window.location.href='{{ url_for( 'send_money_debit_International' ) }}';">Debit account</button>
+         <button type="button" onclick="window.location.href='{{ url_for( 'send_money_credit_International'  ) }}';">Credit account</button>
+    </form>
+    </body>
+</html>
