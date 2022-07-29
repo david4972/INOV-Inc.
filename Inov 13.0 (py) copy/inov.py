@@ -371,7 +371,7 @@ def send_to_Credit(amount=float, CardNo=int, recipient=str, name=str):  # Send m
         send_mail_for_Transactions(name, mail, mail_amount)
 
 
-def send_money_Credit(amount=float, CardNo=int, recipient=str):  # send money between Credit Accounts
+def send_money_Credit(amount=float, CardNo=int, recipient=str, name=str):  # send money between Credit Accounts
     Bank_fee = "INOVBank"
     e_mail = str
     mail_amount = str(amount)
@@ -381,27 +381,23 @@ def send_money_Credit(amount=float, CardNo=int, recipient=str):  # send money be
     )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
-    curr.execute('''SELECT * from CreditInov WHERE CardNo=%s''', [CardNo])
-    for get_cred_name in curr.fetchall():
-        name = get_cred_name[0]
-        mail_nm = str(name)
-        curr.execute('''SELECT * from CreditInov WHERE name=%s''', [recipient])
-        for credit_row in curr.fetchall():
-            email = credit_row[1]
-            mail = e_mail(email)
-            rate_r = 0.013
-            fee = amount * rate_r
-            total_val_credit = amount + fee
-            curr.execute('''UPDATE CreditInov SET Checking=Checking-%s WHERE CardNo=%s''', [total_val_credit, CardNo])
-            curr.execute('''UPDATE BusinessInov SET Saving=Saving+%s WHERE name=%s''', [fee, Bank_fee])
-            # processing transaction
-            curr.execute('''UPDATE CreditInov SET Checking=Checking+%s WHERE name=%s''', [amount, recipient])
-            conn.commit()
-            print("transaction complete")
-            conn.close()
-            send_mail_for_Transactions(mail_nm, mail, mail_amount)
-        else:
-            send_to_debit(amount, CardNo, recipient, mail_nm)
+    curr.execute('''SELECT * from CreditInov WHERE name=%s''', [recipient])
+    for credit_row in curr.fetchall():
+        email = credit_row[1]
+        mail = e_mail(email)
+        rate_r = 0.013
+        fee = amount * rate_r
+        total_val_credit = amount + fee
+        curr.execute('''UPDATE CreditInov SET Checking=Checking-%s WHERE CardNo=%s''', [total_val_credit, CardNo])
+        curr.execute('''UPDATE BusinessInov SET Saving=Saving+%s WHERE name=%s''', [fee, Bank_fee])
+        # processing transaction
+        curr.execute('''UPDATE CreditInov SET Checking=Checking+%s WHERE name=%s''', [amount, recipient])
+        conn.commit()
+        print("transaction complete")
+        conn.close()
+        send_mail_for_Transactions(name, mail, mail_amount)
+    else:
+        send_to_debit(amount, CardNo, recipient, name)
 
 
 def send_to_debit(amount=float, CardNo=str, recipient=str, name=str):  # Send money from Credit to Debit
@@ -842,4 +838,5 @@ def send_mail_for_processed_payment(m4=str, email=str):
         server.login(username, password2)
         server.sendmail(fromMy, to, msg)
         server.close()
+
 
