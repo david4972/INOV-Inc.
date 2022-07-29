@@ -168,7 +168,6 @@ def deposit_Savings(deposit=float, CardNo=int):
             curr.execute('''UPDATE DebitInov SET Saving=Saving+%s WHERE CardNo=%s''', [deposit, CardNo])
             conn.commit()
             # dep = str(deposit)
-            conn.close()
             print("deposit complete")  # completing transaction
             send_mail_for_deposits_saving(dep, mail)
     else:
@@ -181,7 +180,6 @@ def deposit_Savings(deposit=float, CardNo=int):
                 curr.execute('''UPDATE CreditInov SET Saving=Saving+%s WHERE CardNo=%s''', [deposit, CardNo])
                 conn.commit()
                 # dep = str(deposit)
-                conn.close()
                 print("deposit complete")  # completing transaction
                 send_mail_for_deposits_saving(dep, mail)
 
@@ -316,8 +314,8 @@ def atm_Savings_Credit(CardNo=int, withdraw=float):
         conn.close()
 
 
-def send_money_Debit(amount=float, CardNo=int, recipient=str):  # send money between Debit Accounts
-    Bank_fee = "INOVBank"
+def send_money_Debit(amount=float, CardNo=int, recipient=str, name=str):  # send money between Debit Accounts
+    # Bank_fee = "INOVBank"
     e_mail = str
     mail_amount = str(amount)
     # Connecting to postgres database server
@@ -326,27 +324,23 @@ def send_money_Debit(amount=float, CardNo=int, recipient=str):  # send money bet
     )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
-    curr.execute('''SELECT * from DebitInov WHERE CardNo=%s''', [CardNo])
-    for get_cred_name in curr.fetchall():
-        name = get_cred_name[0]
-        mail_nm = str(name)
-        curr.execute('''SELECT * from DebitInov WHERE name=%s''', [recipient])
-        for credit_row in curr.fetchall():
-            email = credit_row[1]
-            mail = e_mail(email)
-            rate_r = 0.013
-            fee = amount * rate_r
-            total_val_credit = amount + fee
-            curr.execute('''UPDATE DebitInov SET Checking=Checking-%s WHERE CardNo=%s''', [total_val_credit, CardNo])
-            curr.execute('''UPDATE BusinessInov SET Saving=Saving+%s WHERE name=%s''', [fee, Bank_fee])
-            # processing transaction
-            curr.execute('''UPDATE DebitInov SET Checking=Checking+%s WHERE name=%s''', [amount, recipient])
-            conn.commit()
-            conn.close()
-            send_mail_for_Transactions(mail_nm, mail, mail_amount)
-            return "transaction complete"
-        else:
-            send_to_Credit(amount, CardNo, recipient, mail_nm)
+    curr.execute('''SELECT * from DebitInov WHERE name=%s''', [recipient])
+    for credit_row in curr.fetchall():
+        email = credit_row[1]
+        mail = e_mail(email)
+        rate_r = 0.013
+        fee = amount * rate_r
+        total_val_credit = amount + fee
+        curr.execute('''UPDATE DebitInov SET Checking=Checking-%s WHERE CardNo=%s''', [total_val_credit, CardNo])
+        # curr.execute('''UPDATE BusinessInov SET Saving=Saving+%s WHERE name=%s''', [fee, Bank_fee])
+        # processing transaction
+        curr.execute('''UPDATE DebitInov SET Checking=Checking+%s WHERE name=%s''', [amount, recipient])
+        conn.commit()
+        conn.close()
+        send_mail_for_Transactions(name, mail, mail_amount)
+        return "transaction complete"
+    else:
+        send_to_Credit(amount, CardNo, recipient, name)
 
 
 def send_to_Credit(amount=float, CardNo=int, recipient=str, name=str):  # Send money from Debit to Credit
@@ -451,14 +445,11 @@ def international_debit_send(val=float, Receive_accnt_name=str, CardNo=int, curn
 
 
 def currency_exchange_debit(debit_CardNo=int, base=str):
-    CurrencyExchange.global_transactions_Credit(debit_CardNo, base)
+    CurrencyExchange.global_transactions_Debit(debit_CardNo, base)
 
 
 def currency_exchange_credit(credit_CardNo=int, base=str):
     CurrencyExchange.global_transactions_Credit(credit_CardNo, base)
-
-
-
 
 
 def process_payment_debit_accnt(CardCode=str):
@@ -851,3 +842,4 @@ def send_mail_for_processed_payment(m4=str, email=str):
         server.login(username, password2)
         server.sendmail(fromMy, to, msg)
         server.close()
+
