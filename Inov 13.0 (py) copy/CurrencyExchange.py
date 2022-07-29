@@ -474,11 +474,10 @@ def CurrencyExchange_Credit(credit_CardNo=int, credit_gbc=str):
         # [db_checking_fee, credit_CardNo])
         # CurrencyExchange_USD_credit_curr.execute('''UPDATE BusinessInov SET Checking=Checking+? WHERE name=INOVBank''',
         # [db_checking_fee])
-        CurrencyExchange_USD_credit_curr.execute('''UPDATE CreditInov SET Checking=Checking/%s, Saving=Saving/%s, Currency=%s 
+        CurrencyExchange_USD_credit_curr.execute('''UPDATE CreditInov SET Checking=Checking*%s, Saving=Saving*%s, Currency=%s 
         WHERE CardNo=%s''', [checking_price, saving_price, USD_credit_var, credit_CardNo])
         conn.commit()
         print("exchange complete")
-        conn.close()
         inov.send_mail_for_currency_exchange(USD_credit_var, mail_currency_exchange_credit)
 
 
@@ -508,9 +507,8 @@ def CurrencyExchange_Debit(debit_CardNo=int, debit_gbc=str):
         # [db_checking_fee, debit_CardNo])
         # CurrencyExchange_EUR_debit_curr.execute('''UPDATE BusinessInov SET Checking=Checking+? WHERE name=INOVBank''',
         # [db_checking_fee])
-        CurrencyExchange_EUR_debit_curr.execute('''UPDATE DebitInov SET Checking=Checking/%s, Saving=Saving/%s, Currency=%s 
+        CurrencyExchange_EUR_debit_curr.execute('''UPDATE DebitInov SET Checking=Checking*%s, Saving=Saving*%s, Currency=%s 
             WHERE CardNo=%s''', [checking_price, saving_price, var2, debit_CardNo])
         conn.commit()
         print("exchange complete")
-        conn.close()
         inov.send_mail_for_currency_exchange(var2, mail_currency_exchange_debit)
