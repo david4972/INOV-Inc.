@@ -7,7 +7,7 @@ import CurrencyExchange
 import InternationalDebitSend
 import psycopg2
 import bdms
-
+import datetime
 
 # CODE STATUS: Complete
 # Create Accounts STATUS: Complete
@@ -511,6 +511,28 @@ def bank_statement_credit(CardNo=int):
         Debit_msg = Debit_message.format(credit_mail_name_stmt, credit_mail_name_stmt, credit_mail_checking_stmt,
                                          credit_mail_saving_stmt, credit_mail_debit_currency_stmt)
         send_mail_for_bank_statement(Debit_msg, credit_mail_email_stmt)
+        
+
+# Personal Loans
+# loans variable rates (0.5 - 2.5% SHORT TERM 6months - 1yr) (1.5-3.0% MID TERM 1 - 3yrs) (2-4.5% LONG TERM 3 - 5yrs).
+# CASHBACK MIN. 5% (on whatever is paid back for that duration).
+# loan amount - short term (1000 - 3500) mid term (4000 - 10000) long term (10000 - 45000)
+def loan_Credit(cardNo=int, amount=float, loan_type=str):
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
+    # Creating a cursor object using the cursor() method
+    credit_accnt_stmt_curr = conn.cursor()
+    credit_accnt_stmt_curr.execute('''SELECT * from CreditInov WHERE CardNo=%s''', [cardNo])
+    for credit_accnt_stmt_row in credit_accnt_stmt_curr.fetchall():
+        stmt_credit_name = credit_accnt_stmt_row[0]
+        credit_mail_name_stmt = str(stmt_credit_name)
+        stmt_credit_email = credit_accnt_stmt_row[1]
+        credit_mail_email_stmt = str(stmt_credit_email)
+        stmt_credit__Checking = credit_accnt_stmt_row[5]
+        credit_mail_checking_stmt = str(stmt_credit__Checking)
+    # return cardNo
 
 
 # delete account
