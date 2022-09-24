@@ -21,7 +21,17 @@ DCCS
 
 The DCCS would allow Financial institutions to more accurately calculate credit score, administer more fair and feasible loans to clients to pay off more serious payments such as mortgages, short and long term loan payments/debts. The DCCS takes away more Administrative/Logistical issues Financial institutions take into account when delivering credit scores to clients such as closure of older accounts and maxing out of cards(for more on this please read the securitization text).  
 
+DOMESTIC & INTERNATIONAL TRANSACTIONS
 
+Financial transactions happen every minute and occur on a day to day basis. Building applicable tools that allow more direct access to capital on both domestic and international would prove vital for economic development. 
+
+FORMAL CRYPTO BANKING
+
+Although Crypto has mixed reactions from the public, Many are still bullish on its value and what it can do long term. our software includes funcitonality to handle crypto accounts with a design in mind of what we think it could be. 
+
+CHECKING & SAVING ACCOUNT MANAGEMENT
+
+Our software allows functionalities for autonomous management of depositor accounts. 
 
 Executive Team : 
 - David Okoronkwo - President, CTO 
