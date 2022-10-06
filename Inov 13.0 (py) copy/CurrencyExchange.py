@@ -1,6 +1,7 @@
 import psycopg2
 import inov
-from forex_python.converter import CurrencyRates
+import requests
+import json
 
 
 # Global transactions (USD only) Debit
@@ -8,220 +9,219 @@ def global_transactions_Debit(CardNo=int, curname=str):
     # "North America"
     if curname == "United States":
         United_States = 'USD'
-        CurrencyExchange_Debit(CardNo, United_States)
+        exchange_code_debit(CardNo, United_States)
     if curname == "Canada":
         Canada = 'CAD'
-        CurrencyExchange_Debit(CardNo, Canada)
+        exchange_code_debit(CardNo, Canada)
     if curname == "Mexico":
         Mexico = 'MXN'
-        CurrencyExchange_Debit(CardNo, Mexico)
+        exchange_code_debit(CardNo, Mexico)
         # "Europe"
     if curname == "UK":
         GBP = 'GBP'
-        CurrencyExchange_Debit(CardNo, GBP)
+        exchange_code_debit(CardNo, GBP)
     if curname == "Germany":
         Germany = 'EUR'
-        CurrencyExchange_Debit(CardNo, Germany)
+        exchange_code_debit(CardNo, Germany)
     if curname == "France":
         France = 'EUR'
-        CurrencyExchange_Debit(CardNo, France)
+        exchange_code_debit(CardNo, France)
     if curname == "Italy":
         Italy = 'EUR'
-        CurrencyExchange_Debit(CardNo, Italy)
+        exchange_code_debit(CardNo, Italy)
     if curname == "Spain":
         Spain = 'EUR'
-        CurrencyExchange_Debit(CardNo, Spain)
+        exchange_code_debit(CardNo, Spain)
     if curname == "Netherlands":
         Netherlands = 'EUR'
-        CurrencyExchange_Debit(CardNo, Netherlands)
+        exchange_code_debit(CardNo, Netherlands)
     if curname == "Switzerland":
         Switzerland = 'CHF'
-        CurrencyExchange_Debit(CardNo, Switzerland)
+        exchange_code_debit(CardNo, Switzerland)
     if curname == "Poland":
         Poland = 'EUR'
-        CurrencyExchange_Debit(CardNo, Poland)
+        exchange_code_debit(CardNo, Poland)
     if curname == "Sweden":
         Sweden = 'EUR'
-        CurrencyExchange_Debit(CardNo, Sweden)
+        exchange_code_debit(CardNo, Sweden)
     if curname == "Russia":
         Russia = 'RUB'
-        CurrencyExchange_Debit(CardNo, Russia)
+        exchange_code_debit(CardNo, Russia)
         # reg = "South America
     if curname == "Argentina":
         Argentina = 'ARS'
-        CurrencyExchange_Debit(CardNo, Argentina)
+        exchange_code_debit(CardNo, Argentina)
     if curname == "Bolivia":
         Bolivia = 'BOB'
-        CurrencyExchange_Debit(CardNo, Bolivia)
+        exchange_code_debit(CardNo, Bolivia)
     if curname == "Brazil":
         Brazil = 'BRL'
-        CurrencyExchange_Debit(CardNo, Brazil)
+        exchange_code_debit(CardNo, Brazil)
     if curname == "Chile":
         Chile = 'CLP'
-        CurrencyExchange_Debit(CardNo, Chile)
+        exchange_code_debit(CardNo, Chile)
     if curname == "Colombia":
         Colombia = 'COP'
-        CurrencyExchange_Debit(CardNo, Colombia)
+        exchange_code_debit(CardNo, Colombia)
     if curname == "Peru":
         Peru = 'PEN'
-        CurrencyExchange_Debit(CardNo, Peru)
+        exchange_code_debit(CardNo, Peru)
     if curname == "Ecuador":
         Ecuador = 'PEN'
         # link = c.convert(cur2, cur, val)
-        CurrencyExchange_Debit(CardNo, Ecuador)
+        exchange_code_debit(CardNo, Ecuador)
     if curname == "Venezuela":
         Venezuela = 'VES'
-        CurrencyExchange_Debit(CardNo, Venezuela)
+        exchange_code_debit(CardNo, Venezuela)
     if curname == "Uruguay":
         Uruguay = 'UYU'
-        CurrencyExchange_Debit(CardNo, Uruguay)
+        exchange_code_debit(CardNo, Uruguay)
     # reg = "Africa"
     if curname == "Nigeria":
         Nigeria = 'NGN'
-        CurrencyExchange_Debit(CardNo, Nigeria)
+        exchange_code_debit(CardNo, Nigeria)
     if curname == "South Africa":
         South_Africa = 'ZAR'
-        CurrencyExchange_Debit(CardNo, South_Africa)
+        exchange_code_debit(CardNo, South_Africa)
     if curname == "Egypt":
         Egypt = 'EGP'
-        CurrencyExchange_Debit(CardNo, Egypt)
+        exchange_code_debit(CardNo, Egypt)
     if curname == "Algeria":
         Algeria = 'DZD'
-        CurrencyExchange_Debit(CardNo, Algeria)
+        exchange_code_debit(CardNo, Algeria)
     if curname == "Morocco":
         Morocco = 'MAD'
-        CurrencyExchange_Debit(CardNo, Morocco)
+        exchange_code_debit(CardNo, Morocco)
     if curname == "Kenya":
         Kenya = 'KES'
-        CurrencyExchange_Debit(CardNo, Kenya)
+        exchange_code_debit(CardNo, Kenya)
     if curname == "Ethiopia":
         Ethiopia = 'ETB'
-        CurrencyExchange_Debit(CardNo, Ethiopia)
+        exchange_code_debit(CardNo, Ethiopia)
     if curname == "Ghana":
         Ghana = 'GHS'
-        CurrencyExchange_Debit(CardNo, Ghana)
-        print("Transaction complete")
+        exchange_code_debit(CardNo, Ghana)
     if curname == "Angola":
         Angola = 'AOA'
-        CurrencyExchange_Debit(CardNo, Angola)
+        exchange_code_debit(CardNo, Angola)
     if curname == "Tanzania":
         Tanzania = 'TZS'
-        CurrencyExchange_Debit(CardNo, Tanzania)
+        exchange_code_debit(CardNo, Tanzania)
     if curname == "Ivory Coast":
         Ivory_Coast = 'XAF'
-        CurrencyExchange_Debit(CardNo, Ivory_Coast)
+        exchange_code_debit(CardNo, Ivory_Coast)
     if curname == "Cameroon":
         Cameroon = 'XAF'
-        CurrencyExchange_Debit(CardNo, Cameroon)
+        exchange_code_debit(CardNo, Cameroon)
     # reg = "Asia/Middle East"
     if curname == "China":
         China = 'CNY'
-        CurrencyExchange_Debit(CardNo, China)
+        exchange_code_debit(CardNo, China)
     if curname == "Japan":
         Japan = 'JPY'
-        CurrencyExchange_Debit(CardNo, Japan)
+        exchange_code_debit(CardNo, Japan)
     if curname == "India":
         India = 'INR'
-        CurrencyExchange_Debit(CardNo, India)
+        exchange_code_debit(CardNo, India)
     if curname == "South Korea":
         South_Korea = 'KRW'
-        CurrencyExchange_Debit(CardNo, South_Korea)
+        exchange_code_debit(CardNo, South_Korea)
     if curname == "Indonesia":
         Indonesia = 'IDR'
-        CurrencyExchange_Debit(CardNo, Indonesia)
+        exchange_code_debit(CardNo, Indonesia)
     if curname == "Saudi Arabia":
         Saudi_Arabia = 'SAR'
-        CurrencyExchange_Debit(CardNo, Saudi_Arabia)
+        exchange_code_debit(CardNo, Saudi_Arabia)
     if curname == "Taiwan":
         Taiwan = 'TWD'
-        CurrencyExchange_Debit(CardNo, Taiwan)
+        exchange_code_debit(CardNo, Taiwan)
     if curname == "Thailand":
         Thailand = 'THB'
-        CurrencyExchange_Debit(CardNo, Thailand)
+        exchange_code_debit(CardNo, Thailand)
     if curname == "UAE":
         UAE = 'AED'
-        CurrencyExchange_Debit(CardNo, UAE)
+        exchange_code_debit(CardNo, UAE)
     if curname == "Israel":
         Israel = 'ILS'
-        CurrencyExchange_Debit(CardNo, Israel)
+        exchange_code_debit(CardNo, Israel)
     if curname == "Philippines":
         Philippines = 'PHP'
-        CurrencyExchange_Debit(CardNo, Philippines)
+        exchange_code_debit(CardNo, Philippines)
     if curname == "Hong Kong":
         Hong_Kong = 'HKD'
-        CurrencyExchange_Debit(CardNo, Hong_Kong)
+        exchange_code_debit(CardNo, Hong_Kong)
     if curname == "Singapore":
         Singapore = 'SGD'
-        CurrencyExchange_Debit(CardNo, Singapore)
+        exchange_code_debit(CardNo, Singapore)
     if curname == "Malaysia":
         Malaysia = 'MYR'
-        CurrencyExchange_Debit(CardNo, Malaysia)
+        exchange_code_debit(CardNo, Malaysia)
     if curname == "Bangladesh":
         Bangladesh = 'BDT'
-        CurrencyExchange_Debit(CardNo, Bangladesh)
+        exchange_code_debit(CardNo, Bangladesh)
     if curname == "Vietnam":
         Vietnam = 'VND'
-        CurrencyExchange_Debit(CardNo, Vietnam)
+        exchange_code_debit(CardNo, Vietnam)
     # Carribean
     if curname == "Antigua":
         Antigua = 'XCD'
-        CurrencyExchange_Debit(CardNo, Antigua)
+        exchange_code_debit(CardNo, Antigua)
     if curname == "Bahamas":
         Bahamas = 'BSD'
-        CurrencyExchange_Debit(CardNo, Bahamas)
+        exchange_code_debit(CardNo, Bahamas)
     if curname == "Belize":
         Belize = 'BZD'
-        CurrencyExchange_Debit(CardNo, Belize)
+        exchange_code_debit(CardNo, Belize)
     if curname == "Dominica":
         Dominica = 'DOP'
-        CurrencyExchange_Debit(CardNo, Dominica)
+        exchange_code_debit(CardNo, Dominica)
     if curname == "Grenada":
         Grenada = 'XCD'
-        CurrencyExchange_Debit(CardNo, Grenada)
+        exchange_code_debit(CardNo, Grenada)
     if curname == "Guyana":
         Guyana = 'GYD'
-        CurrencyExchange_Debit(CardNo, Guyana)
+        exchange_code_debit(CardNo, Guyana)
     if curname == "Jamaica":
         Jamaica = 'JMD'
-        CurrencyExchange_Debit(CardNo, Jamaica)
+        exchange_code_debit(CardNo, Jamaica)
     if curname == "Puerto Rico":
         Puerto_Rico = 'GYD'
-        CurrencyExchange_Debit(CardNo, Puerto_Rico)
+        exchange_code_debit(CardNo, Puerto_Rico)
     if curname == "St. Kitts":
         St_Kitts = 'XCD'
-        CurrencyExchange_Debit(CardNo, St_Kitts)
+        exchange_code_debit(CardNo, St_Kitts)
     if curname == "St. Lucia":
         st_lucia = 'XCD'
-        CurrencyExchange_Debit(CardNo, st_lucia)
+        exchange_code_debit(CardNo, st_lucia)
     if curname == "St. Vincent & Grenadines":
         st_vincent = 'XCD'
-        CurrencyExchange_Debit(CardNo, st_vincent)
+        exchange_code_debit(CardNo, st_vincent)
     if curname == "Suriname":
         Suriname = 'SRD'
-        CurrencyExchange_Credit(CardNo, Suriname)
+        exchange_code_debit(CardNo, Suriname)
     if curname == "Trinidad & Tobago":
         Trinidad = 'TTD'
-        CurrencyExchange_Debit(CardNo, Trinidad)
+        exchange_code_debit(CardNo, Trinidad)
     # reg = "Central America"
     if curname == "Guatemala":
         Guatemala = 'GTQ'
-        CurrencyExchange_Debit(CardNo, Guatemala)
+        exchange_code_debit(CardNo, Guatemala)
     if curname == "Panama":
         Panama = 'PAB'
-        CurrencyExchange_Debit(CardNo, Panama)
+        exchange_code_debit(CardNo, Panama)
     if curname == "Costa Rica":
         Costa_Rica = 'CRC'
-        CurrencyExchange_Debit(CardNo, Costa_Rica)
+        exchange_code_debit(CardNo, Costa_Rica)
     if curname == "El Salvador":
         El_Salvador = 'PAB'
         # link = c.convert(cur2, cur, val)
-        CurrencyExchange_Debit(CardNo, El_Salvador)
+        exchange_code_debit(CardNo, El_Salvador)
     if curname == "Honduras":
         Honduras = 'HNL'
-        CurrencyExchange_Debit(CardNo, Honduras)
+        exchange_code_debit(CardNo, Honduras)
     if curname == "Nicaragua":
         Nicaragua = 'NIO'
-        CurrencyExchange_Debit(CardNo, Nicaragua)
+        exchange_code_debit(CardNo, Nicaragua)
 
 
 # Global transactions (USD only) Credit
@@ -229,240 +229,254 @@ def global_transactions_Credit(CardNo=int, curname=str):
     # "North America"
     if curname == "United States":
         United_States = 'USD'
-        CurrencyExchange_Credit(CardNo, United_States)
+        exchange_code_credit(CardNo, United_States)
     if curname == "Canada":
         Canada = 'CAD'
-        CurrencyExchange_Credit(CardNo, Canada)
+        exchange_code_credit(CardNo, Canada)
     if curname == "Mexico":
         Mexico = 'MXN'
-        CurrencyExchange_Credit(CardNo, Mexico)
+        exchange_code_credit(CardNo, Mexico)
         # "Europe"
     if curname == "UK":
         GBP = 'GBP'
-        CurrencyExchange_Credit(CardNo, GBP)
+        exchange_code_credit(CardNo, GBP)
     if curname == "Germany":
         Germany = 'EUR'
-        CurrencyExchange_Credit(CardNo, Germany)
+        exchange_code_credit(CardNo, Germany)
     if curname == "France":
         France = 'EUR'
-        CurrencyExchange_Credit(CardNo, France)
+        exchange_code_credit(CardNo, France)
     if curname == "Italy":
         Italy = 'EUR'
-        CurrencyExchange_Credit(CardNo, Italy)
+        exchange_code_credit(CardNo, Italy)
     if curname == "Spain":
         Spain = 'EUR'
-        CurrencyExchange_Credit(CardNo, Spain)
+        exchange_code_credit(CardNo, Spain)
     if curname == "Netherlands":
         Netherlands = 'EUR'
-        CurrencyExchange_Credit(CardNo, Netherlands)
+        exchange_code_credit(CardNo, Netherlands)
     if curname == "Switzerland":
         Switzerland = 'CHF'
-        CurrencyExchange_Credit(CardNo, Switzerland)
+        exchange_code_credit(CardNo, Switzerland)
     if curname == "Poland":
         Poland = 'EUR'
-        CurrencyExchange_Credit(CardNo, Poland)
+        exchange_code_credit(CardNo, Poland)
     if curname == "Sweden":
         Sweden = 'EUR'
-        CurrencyExchange_Credit(CardNo, Sweden)
+        exchange_code_credit(CardNo, Sweden)
     if curname == "Russia":
         Russia = 'RUB'
-        CurrencyExchange_Credit(CardNo, Russia)
+        exchange_code_credit(CardNo, Russia)
         # reg = "South America
     if curname == "Argentina":
         Argentina = 'ARS'
-        CurrencyExchange_Credit(CardNo, Argentina)
+        exchange_code_credit(CardNo, Argentina)
     if curname == "Bolivia":
         Bolivia = 'BOB'
-        CurrencyExchange_Credit(CardNo, Bolivia)
+        exchange_code_credit(CardNo, Bolivia)
     if curname == "Brazil":
         Brazil = 'BRL'
-        CurrencyExchange_Credit(CardNo, Brazil)
+        exchange_code_credit(CardNo, Brazil)
     if curname == "Chile":
         Chile = 'CLP'
-        CurrencyExchange_Credit(CardNo, Chile)
+        exchange_code_credit(CardNo, Chile)
     if curname == "Colombia":
         Colombia = 'COP'
-        CurrencyExchange_Credit(CardNo, Colombia)
+        exchange_code_credit(CardNo, Colombia)
     if curname == "Peru":
         Peru = 'PEN'
-        CurrencyExchange_Credit(CardNo, Peru)
+        exchange_code_credit(CardNo, Peru)
     if curname == "Ecuador":
         Ecuador = 'PEN'
         # link = c.convert(cur2, cur, val)
-        CurrencyExchange_Credit(CardNo, Ecuador)
+        exchange_code_credit(CardNo, Ecuador)
     if curname == "Venezuela":
         Venezuela = 'VES'
-        CurrencyExchange_Credit(CardNo, Venezuela)
+        exchange_code_credit(CardNo, Venezuela)
     if curname == "Uruguay":
         Uruguay = 'UYU'
-        CurrencyExchange_Credit(CardNo, Uruguay)
+        exchange_code_credit(CardNo, Uruguay)
     # reg = "Africa"
     if curname == "Nigeria":
         Nigeria = 'NGN'
-        CurrencyExchange_Credit(CardNo, Nigeria)
+        exchange_code_credit(CardNo, Nigeria)
     if curname == "South Africa":
         South_Africa = 'ZAR'
-        CurrencyExchange_Credit(CardNo, South_Africa)
+        exchange_code_credit(CardNo, South_Africa)
     if curname == "Egypt":
         Egypt = 'EGP'
-        CurrencyExchange_Credit(CardNo, Egypt)
+        exchange_code_credit(CardNo, Egypt)
     if curname == "Algeria":
         Algeria = 'DZD'
-        CurrencyExchange_Credit(CardNo, Algeria)
+        exchange_code_credit(CardNo, Algeria)
     if curname == "Morocco":
         Morocco = 'MAD'
-        CurrencyExchange_Credit(CardNo, Morocco)
+        exchange_code_credit(CardNo, Morocco)
     if curname == "Kenya":
         Kenya = 'KES'
-        CurrencyExchange_Credit(CardNo, Kenya)
+        exchange_code_credit(CardNo, Kenya)
     if curname == "Ethiopia":
         Ethiopia = 'ETB'
-        CurrencyExchange_Credit(CardNo, Ethiopia)
+        exchange_code_credit(CardNo, Ethiopia)
     if curname == "Ghana":
         Ghana = 'GHS'
-        CurrencyExchange_Credit(CardNo, Ghana)
+        exchange_code_credit(CardNo, Ghana)
         print("Transaction complete")
     if curname == "Angola":
         Angola = 'AOA'
-        CurrencyExchange_Credit(CardNo, Angola)
+        exchange_code_credit(CardNo, Angola)
     if curname == "Tanzania":
         Tanzania = 'TZS'
-        CurrencyExchange_Credit(CardNo, Tanzania)
+        exchange_code_credit(CardNo, Tanzania)
     if curname == "Ivory Coast":
         Ivory_Coast = 'XAF'
-        CurrencyExchange_Credit(CardNo, Ivory_Coast)
+        exchange_code_credit(CardNo, Ivory_Coast)
     if curname == "Cameroon":
         Cameroon = 'XAF'
-        CurrencyExchange_Credit(CardNo, Cameroon)
+        exchange_code_credit(CardNo, Cameroon)
     # reg = "Asia/Middle East"
     if curname == "China":
         China = 'CNY'
-        CurrencyExchange_Credit(CardNo, China)
+        exchange_code_credit(CardNo, China)
     if curname == "Japan":
         Japan = 'JPY'
-        CurrencyExchange_Credit(CardNo, Japan)
+        exchange_code_credit(CardNo, Japan)
     if curname == "India":
         India = 'INR'
-        CurrencyExchange_Credit(CardNo, India)
+        exchange_code_credit(CardNo, India)
     if curname == "South Korea":
         South_Korea = 'KRW'
-        CurrencyExchange_Credit(CardNo, South_Korea)
+        exchange_code_credit(CardNo, South_Korea)
     if curname == "Indonesia":
         Indonesia = 'IDR'
-        CurrencyExchange_Credit(CardNo, Indonesia)
+        exchange_code_credit(CardNo, Indonesia)
     if curname == "Saudi Arabia":
         Saudi_Arabia = 'SAR'
-        CurrencyExchange_Credit(CardNo, Saudi_Arabia)
+        exchange_code_credit(CardNo, Saudi_Arabia)
     if curname == "Taiwan":
         Taiwan = 'TWD'
-        CurrencyExchange_Credit(CardNo, Taiwan)
+        exchange_code_credit(CardNo, Taiwan)
     if curname == "Thailand":
         Thailand = 'THB'
-        CurrencyExchange_Credit(CardNo, Thailand)
+        exchange_code_credit(CardNo, Thailand)
     if curname == "UAE":
         UAE = 'AED'
-        CurrencyExchange_Credit(CardNo, UAE)
+        exchange_code_credit(CardNo, UAE)
     if curname == "Israel":
         Israel = 'ILS'
-        CurrencyExchange_Credit(CardNo, Israel)
+        exchange_code_credit(CardNo, Israel)
     if curname == "Philippines":
         Philippines = 'PHP'
-        CurrencyExchange_Credit(CardNo, Philippines)
+        exchange_code_credit(CardNo, Philippines)
     if curname == "Hong Kong":
         Hong_Kong = 'HKD'
-        CurrencyExchange_Credit(CardNo, Hong_Kong)
+        exchange_code_credit(CardNo, Hong_Kong)
     if curname == "Singapore":
         Singapore = 'SGD'
-        CurrencyExchange_Credit(CardNo, Singapore)
+        exchange_code_credit(CardNo, Singapore)
     if curname == "Malaysia":
         Malaysia = 'MYR'
-        CurrencyExchange_Credit(CardNo, Malaysia)
+        exchange_code_credit(CardNo, Malaysia)
     if curname == "Bangladesh":
         Bangladesh = 'BDT'
-        CurrencyExchange_Credit(CardNo, Bangladesh)
+        exchange_code_credit(CardNo, Bangladesh)
     if curname == "Vietnam":
         Vietnam = 'VND'
-        CurrencyExchange_Credit(CardNo, Vietnam)
+        exchange_code_credit(CardNo, Vietnam)
     # Carribean
     if curname == "Antigua":
         Antigua = 'XCD'
-        CurrencyExchange_Credit(CardNo, Antigua)
+        exchange_code_credit(CardNo, Antigua)
     if curname == "Bahamas":
         Bahamas = 'BSD'
-        CurrencyExchange_Credit(CardNo, Bahamas)
+        exchange_code_credit(CardNo, Bahamas)
     if curname == "Belize":
         Belize = 'BZD'
-        CurrencyExchange_Credit(CardNo, Belize)
+        exchange_code_credit(CardNo, Belize)
     if curname == "Dominica":
         Dominica = 'DOP'
-        CurrencyExchange_Credit(CardNo, Dominica)
+        exchange_code_credit(CardNo, Dominica)
     if curname == "Grenada":
         Grenada = 'XCD'
-        CurrencyExchange_Credit(CardNo, Grenada)
+        exchange_code_credit(CardNo, Grenada)
     if curname == "Guyana":
         Guyana = 'GYD'
-        CurrencyExchange_Credit(CardNo, Guyana)
+        exchange_code_credit(CardNo, Guyana)
     if curname == "Jamaica":
         Jamaica = 'JMD'
-        CurrencyExchange_Credit(CardNo, Jamaica)
+        exchange_code_credit(CardNo, Jamaica)
     if curname == "Puerto Rico":
         Puerto_Rico = 'GYD'
-        CurrencyExchange_Credit(CardNo, Puerto_Rico)
+        exchange_code_credit(CardNo, Puerto_Rico)
     if curname == "St. Kitts":
         St_Kitts = 'XCD'
-        CurrencyExchange_Credit(CardNo, St_Kitts)
+        exchange_code_credit(CardNo, St_Kitts)
     if curname == "St. Lucia":
         st_lucia = 'XCD'
-        CurrencyExchange_Credit(CardNo, st_lucia)
+        exchange_code_credit(CardNo, st_lucia)
     if curname == "St. Vincent & Grenadines":
         st_vincent = 'XCD'
-        CurrencyExchange_Credit(CardNo, st_vincent)
+        exchange_code_credit(CardNo, st_vincent)
     if curname == "Suriname":
         Suriname = 'SRD'
-        CurrencyExchange_Credit(CardNo, Suriname)
+        exchange_code_credit(CardNo, Suriname)
     if curname == "Trinidad & Tobago":
         Trinidad = 'TTD'
-        CurrencyExchange_Credit(CardNo, Trinidad)
+        exchange_code_credit(CardNo, Trinidad)
     # reg = "Central America"
     if curname == "Guatemala":
         Guatemala = 'GTQ'
-        CurrencyExchange_Credit(CardNo, Guatemala)
+        exchange_code_credit(CardNo, Guatemala)
     if curname == "Panama":
         Panama = 'PAB'
-        CurrencyExchange_Credit(CardNo, Panama)
+        exchange_code_credit(CardNo, Panama)
     if curname == "Costa Rica":
         Costa_Rica = 'CRC'
-        CurrencyExchange_Credit(CardNo, Costa_Rica)
+        exchange_code_credit(CardNo, Costa_Rica)
     if curname == "El Salvador":
         El_Salvador = 'PAB'
         # link = c.convert(cur2, cur, val)
-        CurrencyExchange_Credit(CardNo, El_Salvador)
+        exchange_code_credit(CardNo, El_Salvador)
     if curname == "Honduras":
         Honduras = 'HNL'
-        CurrencyExchange_Credit(CardNo, Honduras)
+        exchange_code_credit(CardNo, Honduras)
     if curname == "Nicaragua":
         Nicaragua = 'NIO'
-        CurrencyExchange_Credit(CardNo, Nicaragua)
+        exchange_code_credit(CardNo, Nicaragua)
 
 
 # Currency change (allows account users to convert currency cash account into any of the 70 currencies we support)
 # USD
+def exchange_code_credit(CardNo=int, country_name=str):
+    String_url = 'https://v6.exchangerate-api.com/v6/2816493d654f23cda23c4ccc/pair/USD/'
+    combine = String_url + country_name
+    url = combine
+    access = requests.get(url)
+    data = json.loads(access.text)
+    rate = data['conversion_rate']
+    new_rate = float.__round__(rate)
+    CurrencyExchange_Credit(CardNo, new_rate, country_name)
+
+
+def exchange_code_debit(CardNo=int, country_name=str):
+    String_url = 'https://v6.exchangerate-api.com/v6/2816493d654f23cda23c4ccc/pair/USD/'
+    combine = String_url + country_name
+    url = combine
+    access = requests.get(url)
+    data = json.loads(access.text)
+    rate = data['conversion_rate']
+    new_rate = float.__round__(rate)
+    CurrencyExchange_Debit(CardNo, new_rate, country_name)
+
 
 # Credit
-def CurrencyExchange_Credit(credit_CardNo=int, credit_gbc=str):
+def CurrencyExchange_Credit(credit_CardNo=int, credit_gbc=float, country_name=str):
     # Connecting to postgres database server
     conn = psycopg2.connect(
         database="inov", user='postgres', password='', host='localhost', port='5432'
     )
     # Creating a cursor object using the cursor() method
     CurrencyExchange_USD_credit_curr = conn.cursor()
-    c = CurrencyRates()
-    USD_credit_var = "USD"
-    USD_Currency_credit_convert = credit_gbc
-    USD_credit_convert_check = c.get_rate(USD_Currency_credit_convert, USD_credit_var)
-    checking_price = float(USD_credit_convert_check)
-    USD_credit_convert_sav = c.get_rate(USD_Currency_credit_convert, USD_credit_var)
-    saving_price = float(USD_credit_convert_sav)
     rate_r = 0.013
     CurrencyExchange_USD_credit_curr.execute('''SELECT * FROM CreditInov WHERE CardNo=%s''', [credit_CardNo])
     for row1 in CurrencyExchange_USD_credit_curr.fetchall():
@@ -475,27 +489,20 @@ def CurrencyExchange_Credit(credit_CardNo=int, credit_gbc=str):
         # CurrencyExchange_USD_credit_curr.execute('''UPDATE BusinessInov SET Checking=Checking+? WHERE name=INOVBank''',
         # [db_checking_fee])
         CurrencyExchange_USD_credit_curr.execute('''UPDATE CreditInov SET Checking=Checking*%s, Saving=Saving*%s, Currency=%s 
-        WHERE CardNo=%s''', [checking_price, saving_price, USD_credit_var, credit_CardNo])
+        WHERE CardNo=%s''', [credit_gbc, credit_gbc, country_name, credit_CardNo])
         conn.commit()
         print("exchange complete")
-        inov.send_mail_for_currency_exchange(USD_credit_var, mail_currency_exchange_credit)
+        inov.send_mail_for_currency_exchange(country_name, mail_currency_exchange_credit)
 
 
 # Debit
-def CurrencyExchange_Debit(debit_CardNo=int, debit_gbc=str):
+def CurrencyExchange_Debit(debit_CardNo=int, debit_gbc=float, country_name=str):
     # Connecting to postgres database server
     conn = psycopg2.connect(
         database="inov", user='postgres', password='', host='localhost', port='5432'
     )
     # Creating a cursor object using the cursor() method
     CurrencyExchange_EUR_debit_curr = conn.cursor()
-    c = CurrencyRates()
-    var1 = "USD"
-    var2 = debit_gbc
-    cex1 = c.get_rate(var1, var2)
-    checking_price = float(cex1)
-    cex2 = c.get_rate(var1, var2)
-    saving_price = float(cex2)
     rate_r = 0.013
     CurrencyExchange_EUR_debit_curr.execute('''SELECT * FROM DebitInov WHERE CardNo=%s''', [debit_CardNo])
     for row1 in CurrencyExchange_EUR_debit_curr.fetchall():
@@ -508,7 +515,8 @@ def CurrencyExchange_Debit(debit_CardNo=int, debit_gbc=str):
         # CurrencyExchange_EUR_debit_curr.execute('''UPDATE BusinessInov SET Checking=Checking+? WHERE name=INOVBank''',
         # [db_checking_fee])
         CurrencyExchange_EUR_debit_curr.execute('''UPDATE DebitInov SET Checking=Checking*%s, Saving=Saving*%s, Currency=%s 
-            WHERE CardNo=%s''', [checking_price, saving_price, var2, debit_CardNo])
+            WHERE CardNo=%s''', [debit_gbc, debit_gbc, country_name, debit_CardNo])
         conn.commit()
         print("exchange complete")
-        inov.send_mail_for_currency_exchange(var2, mail_currency_exchange_debit)
+        inov.send_mail_for_currency_exchange(country_name, mail_currency_exchange_debit)
+
