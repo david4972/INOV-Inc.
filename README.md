@@ -16,7 +16,8 @@ Executive Team :
 - Zachary Merrill - Investor Relations 
 - Ebuka Momah - COO
 
-
+Written in Java & Python 
+Currently being developed in C
 
 
 
