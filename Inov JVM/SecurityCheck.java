@@ -45,7 +45,7 @@ public class SecurityCheck {
                             if (Objects.equals(i, 3)) {
                                 System.out.println("You have been blocked from Logging in at this moment/" +
                                     "You will recieve an email on how to fix this shortly.");
-                                //email
+                                // email notification
                                 break;
                             }
                     }
