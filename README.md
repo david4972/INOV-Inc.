@@ -17,7 +17,7 @@ Executive Team :
 - Ebuka Momah - COO
 - Osaemi Ahonsi - President
 
-Written in Java, Python & SQL . 
+Written in Java, Python. 
 
 
 
