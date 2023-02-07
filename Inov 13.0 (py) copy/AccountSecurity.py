@@ -81,10 +81,10 @@ def reactivate_accnt_credit(cardcode):
             print("Directing to login page...")
             # Direct to page for Login_accnt(cardNo) to read input
         else:
-            Security_Code_Check()
+            Security_Code_Check_Credit()
 
 
-def Security_Code_Check():
+def Security_Code_Check_Credit():
     # Connecting to postgres database server
     conn = psycopg2.connect(
         database="inov", user='postgres', password='', host='localhost', port='5432'
@@ -103,6 +103,25 @@ def Security_Code_Check():
             print("Retrieve account page Loading...")
             # Direct to page for retrieve_account(accnt_name, accnt_choice) to read input
 
+            
+def Security_Code_Check_Debit():
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
+    # Creating a cursor object using the cursor() method
+    curr = conn.cursor()
+    print("enter security code: ")
+    sec_code = input()
+    curr.execute("SELECT * FROM DebitInov WHERE SecurityCode=%s", [sec_code])
+    for row in curr.fetchall():
+        code = row[4]
+        if sec_code == code:
+            print("Directing to login page...")
+            # Direct to page for Login_accnt(cardNo) to read input
+        else:
+            print("Retrieve account page Loading...")
+            # Direct to page for retrieve_account(accnt_name, accnt_choice) to read input
 
 def retrieve_account(accnt_name, accnt_choice):
     # Connecting to postgres database server
