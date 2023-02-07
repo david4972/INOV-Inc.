@@ -11,12 +11,13 @@ We build Software for:
 
 
 Executive Team : 
-- David Okoronkwo - President, CTO 
+- David Okoronkwo - CTO 
 - Patrick Crispino - CEO 
-- Zachary Merrill - Investor Relations 
+- Zachary Merrill - CRO 
 - Ebuka Momah - COO
+- Osaemi Ahonsi - President
 
-Written in Java & Python. C++ version on the way.
+Written in Java, Python & SQL . 
 
 
 
