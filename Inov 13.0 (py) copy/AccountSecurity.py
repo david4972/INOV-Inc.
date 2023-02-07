@@ -4,8 +4,8 @@ import random
 import inov
 
 
-# Virtual Credit and Debit accounts (USD only)
-def Login_accnt():
+# Virtual Credit and Debit accounts (US only)
+def Login_accnt(cardNo):
     # Connecting to postgres database server
     conn = psycopg2.connect(
         database="inov", user='postgres', password='', host='localhost', port='5432'
@@ -14,11 +14,8 @@ def Login_accnt():
     curr = conn.cursor()
     print("temporary crypt password generating...")
     Security = str(Fernet.generate_key())
-    print(Security)
     while Security.isascii():
         num_of_tries = 0
-        print("please enter card number: ")
-        cardNo = int(input())
         curr.execute("SELECT * FROM DebitInov WHERE CardNo=%s", [cardNo])
         for row in curr.fetchall():
             debit_card_num = row[2]
@@ -38,80 +35,76 @@ def Login_accnt():
                     elif count == 3:
                         print("You have been locked lout of logging in")
                         # Email to notify
-        break
-    conn.commit()
+                    conn.commit()
+                    break
 
 
 # Process of securing account if breached.
 # Select Account type to be reviewed
-def secure_accnt():
-    print("1. Debit")
-    print("2. Credit")
-    accnt = input()
-    if accnt == "1":
-        reactivate_accnt_debit()
-    elif accnt == "2":
-        reactivate_accnt_credit()
+def secure_accnt(accnt, c_code):
+    if accnt == "Debit":
+        reactivate_accnt_debit(c_code)
+    elif accnt == "Credit":
+        reactivate_accnt_credit(c_code)
 
 
 # Check For Debit Account (Based On Input From User)
-def reactivate_accnt_debit():
+def reactivate_accnt_debit(cardcode):
     # Connecting to postgres database server
     conn = psycopg2.connect(
         database="inov", user='postgres', password='', host='localhost', port='5432'
     )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
-    print("please enter card code: ")
-    card_code = input()
-    curr.execute("SELECT * FROM DebitInov WHERE SecurityCode=%s", [card_code])
+    curr.execute("SELECT * FROM DebitInov WHERE CardCode=%s", [cardcode])
     for row in curr.fetchall():
         code = row[4]
-        if card_code == code:
-            Login_accnt()
+        if cardcode == code:
+            print("Directing to login page...")
+            # Direct to page for Login_accnt(cardNo) to read input
         else:
-            Card_Code_Check()
+            Security_Code_Check()
 
 
 # Check For Credit Account (Based On Input From User)
-def reactivate_accnt_credit():
+def reactivate_accnt_credit(cardcode):
     # Connecting to postgres database server
     conn = psycopg2.connect(
         database="inov", user='postgres', password='', host='localhost', port='5432'
     )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
-    print("please enter card code: ")
-    card_code = input()
-    curr.execute("SELECT * FROM CreditInov WHERE SecurityCode=%s", [card_code])
+    curr.execute("SELECT * FROM CreditInov WHERE SecurityCode=%s", [cardcode])
     for row in curr.fetchall():
         code = row[4]
-        if card_code == code:
-            Login_accnt()
+        if cardcode == code:
+            print("Directing to login page...")
+            # Direct to page for Login_accnt(cardNo) to read input
         else:
-            Card_Code_Check()
+            Security_Code_Check()
 
 
-def Card_Code_Check():
+def Security_Code_Check():
     # Connecting to postgres database server
     conn = psycopg2.connect(
         database="inov", user='postgres', password='', host='localhost', port='5432'
     )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
-    print("please enter card code: ")
-    card_code = input()
-    curr.execute("SELECT * FROM CreditInov WHERE CardCode=%s", [card_code])
+    print("enter security code: ")
+    sec_code = input()
+    curr.execute("SELECT * FROM CreditInov WHERE SecurityCode=%s", [sec_code])
     for row in curr.fetchall():
-        code = row[3]
-        if card_code == code:
-            Login_accnt()
+        code = row[4]
+        if sec_code == code:
+            print("Directing to login page...")
+            # Direct to page for Login_accnt(cardNo) to read input
         else:
-            retrieve_account()
+            print("Retrieve account page Loading...")
+            # Direct to page for retrieve_account(accnt_name, accnt_choice) to read input
 
 
-
-def retrieve_account():
+def retrieve_account(accnt_name, accnt_choice):
     # Connecting to postgres database server
     conn = psycopg2.connect(
         database="inov", user='postgres', password='', host='localhost', port='5432'
@@ -123,13 +116,7 @@ def retrieve_account():
     Sec_code = str(Security[:10])
     Crypt = str(Security[:5])
     CardCode = Crypt
-    print("please enter the name your account is in: ")
-    accnt_name = input()
-    print("please select")
-    print("1. Debit")
-    print("2. Credit")
-    accnt_choice = input()
-    if accnt_choice == "1":
+    if accnt_choice == "Debit":
         curr.execute("SELECT * FROM DebitInov WHERE name=%s", [accnt_name])
         for row in curr.fetchall():
             email = row[1]
@@ -138,7 +125,7 @@ def retrieve_account():
                          [CardNo, CardCode, Sec_code, accnt_name])
             inov.send_mail_for_account_recovery(CardNo, CardCode, mail_e)
             print("account recovered")
-    if accnt_choice == "2":
+    elif accnt_choice == "Credit":
         curr.execute("SELECT * FROM CreditInov WHERE name=%s", [accnt_name])
         for row in curr.fetchall():
             email = row[1]
@@ -150,11 +137,7 @@ def retrieve_account():
 
 
 # Virtual International Debit Accounts
-def get_back_accnt_Inter():
-    reactivate_accnt_debit_Inter()
-
-
-def Login_accnt_International():
+def Login_accnt_International(cardNo):
     # Connecting to postgres database server
     conn = psycopg2.connect(
         database="inov", user='postgres', password='', host='localhost', port='5432'
@@ -165,52 +148,77 @@ def Login_accnt_International():
     Security = str(Fernet.generate_key())
     print(Security)
     while Security.isascii():
-        print("please enter card number: ")
-        cardNo = int(input())
+        tries = 0
         curr.execute("SELECT * FROM InterDebitInov WHERE CardNo=%s", [cardNo])
         for row in curr.fetchall():
             debit_card_num = row[2]
             if cardNo == debit_card_num:
                 print("login successful")
             else:
-                print("account not found please try again")
+                count = tries + 1
+                if count < 3:
+                    print("account not found please try again")
+                elif count == 3:
+                    print("You have been locked lout of logging in, an email will be sent to you shortly.")
+                    # Email to notify
                 break
-    Login_accnt_International()
 
 
-def reactivate_accnt_debit_Inter():
+def secure_international_account(c_code):
+    reactivate_International_accnt(c_code)
+
+
+def reactivate_International_accnt(c_code):
     # Connecting to postgres database server
     conn = psycopg2.connect(
         database="inov", user='postgres', password='', host='localhost', port='5432'
     )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
-    print("please enter card code: ")
-    card_code = input()
-    curr.execute("SELECT * FROM InterDebitInov WHERE SecurityCode=%s", [card_code])
+    curr.execute("SELECT * FROM InterDebitInov WHERE SecurityCode=%s", [c_code])
     for row in curr.fetchall():
         code = row[4]
-        if card_code == code:
-            Login_accnt_International()
+        if c_code == code:
+            print("Directing to login page...")
+            # Direct to page for Login_accnt_International(cardNo) to read input
         else:
-            retrieve_account_Inter()
+            Security_code_International_debit()
 
 
-def retrieve_account_Inter():
+def Security_code_International_debit():
     # Connecting to postgres database server
     conn = psycopg2.connect(
         database="inov", user='postgres', password='', host='localhost', port='5432'
     )
     # Creating a cursor object using the cursor() method
     curr = conn.cursor()
+    print("enter security code: ")
+    sec_code = input()
+    curr.execute("SELECT * FROM InterDebitInov WHERE SecurityCode=%s", [sec_code])
+    for row in curr.fetchall():
+        code = row[4]
+        if sec_code == code:
+            print("Directing to login page...")
+            # Direct to page for Login_accnt_International(cardNo) to read input
+        else:
+            print("Retrieve account page Loading...")
+            # Direct to page for retrieve_account(accnt_name) to read input
+
+
+def retrieve_account_Inter(accnt_name):
+    # Connecting to postgres database server
+    conn = psycopg2.connect(
+        database="inov", user='postgres', password='', host='localhost', port='5432'
+    )
+    # Creating a cursor object using the cursor() method
+    curr = conn.cursor()
+    # generating new credentials, security data included.
     CardNo = random.randint(11111, 99999)
     Security = str(Fernet.generate_key())
     Sec_code = str(Security[:10])
     Crypt = str(Security[:5])
     CardCode = Crypt
-    print("please enter the name your account is in: ")
-    accnt_name = input()
-    curr.execute("SELECT * FROM DebitInov WHERE name=%s", [accnt_name])
+    curr.execute("SELECT * FROM InterDebitInov WHERE name=%s", [accnt_name])
     for row in curr.fetchall():
         email = row[1]
         mail_e = str(email)
@@ -222,3 +230,4 @@ def retrieve_account_Inter():
 
 if __name__ == '__main__':
     Login_accnt()
+
